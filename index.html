@@ -1,0 +1,353 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Basel Möbelmontage</title>
+<link href="https://fonts.googleapis.com/css2?family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&family=Source+Sans+3:wght@300;400;600&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+:root { --black: #111; --white: #fafafa; --off: #f2f2f2; --mid: #777; --line: #ddd; }
+html { scroll-behavior: smooth; }
+body { font-family: 'Source Sans 3', sans-serif; background: var(--white); color: var(--black); }
+
+/* NAV */
+nav { background: var(--black); display: flex; align-items: center; justify-content: space-between; padding: 0 48px; height: 58px; position: sticky; top: 0; z-index: 100; }
+.nav-logo { font-family: 'Libre Baskerville', serif; font-size: 16px; color: var(--white); text-decoration: none; }
+.nav-links { display: flex; gap: 28px; }
+.nav-links a { color: #888; text-decoration: none; font-size: 14px; transition: color .2s; }
+.nav-links a:hover { color: var(--white); }
+
+/* HERO */
+.hero { position: relative; min-height: 78vh; display: flex; align-items: flex-end; border-bottom: 1px solid var(--line); overflow: hidden; }
+.hero-bg { position: absolute; inset: 0; }
+.hero-bg img { width: 100%; height: 100%; object-fit: cover; display: block; filter: brightness(.42); }
+.hero-left { position: relative; z-index: 2; padding: 56px 48px; max-width: 640px; }
+.hero-eyebrow { font-size: 11px; letter-spacing: .2em; text-transform: uppercase; color: rgba(255,255,255,.5); margin-bottom: 18px; }
+.hero-title { font-family: 'Libre Baskerville', serif; font-size: clamp(36px, 5vw, 64px); font-weight: 700; line-height: 1.1; margin-bottom: 18px; color: #fff; }
+.hero-title span { font-style: italic; font-weight: 400; }
+.hero-desc { font-size: 16px; font-weight: 300; color: rgba(255,255,255,.68); line-height: 1.8; max-width: 440px; margin-bottom: 32px; }
+.btn { display: inline-block; background: var(--white); color: var(--black); padding: 13px 28px; font-family: 'Source Sans 3', sans-serif; font-size: 13px; font-weight: 600; letter-spacing: .08em; text-transform: uppercase; text-decoration: none; border: 2px solid var(--white); cursor: pointer; transition: background .2s, color .2s; width: fit-content; }
+.btn:hover { background: transparent; color: var(--white); }
+.btn-ghost { background: transparent; color: var(--white); border-color: rgba(255,255,255,.5); margin-left: 10px; }
+.btn-ghost:hover { background: var(--white); color: var(--black); border-color: var(--white); }
+
+/* SERVICES */
+#services { padding: 56px 48px; border-bottom: 1px solid var(--line); }
+.block-label { font-size: 11px; letter-spacing: .2em; text-transform: uppercase; color: var(--mid); margin-bottom: 8px; }
+.block-title { font-family: 'Libre Baskerville', serif; font-size: clamp(26px, 3vw, 38px); font-weight: 700; margin-bottom: 8px; }
+.block-sub { font-size: 15px; font-weight: 300; color: var(--mid); line-height: 1.8; max-width: 500px; margin-bottom: 36px; }
+.services-list { display: grid; grid-template-columns: repeat(3,1fr); border-top: 2px solid var(--black); }
+.svc { padding: 28px 28px 28px 0; border-right: 1px solid var(--line); }
+.svc:not(:first-child) { padding-left: 28px; }
+.svc:last-child { border-right: none; }
+.svc-n { font-size: 11px; color: var(--mid); letter-spacing: .1em; margin-bottom: 10px; }
+.svc-name { font-family: 'Libre Baskerville', serif; font-size: 19px; font-weight: 700; margin-bottom: 10px; }
+.svc-desc { font-size: 13px; font-weight: 300; color: var(--mid); line-height: 1.8; }
+
+/* BOOKING */
+#booking { border-bottom: 1px solid var(--line); }
+.booking-split { display: grid; grid-template-columns: 1fr 1fr; }
+.booking-left { background: var(--black); color: var(--white); padding: 52px 48px; }
+.booking-left .block-label { color: #555; }
+.info-stack { display: flex; flex-direction: column; gap: 0; }
+.info-item-v { display: flex; flex-direction: column; padding: 14px 0; border-bottom: 1px solid #222; }
+.info-item-v:first-child { border-top: 1px solid #222; }
+.info-item-v strong { font-size: 11px; letter-spacing: .14em; text-transform: uppercase; color: #555; margin-bottom: 3px; font-weight: 600; }
+.info-item-v span { font-size: 15px; color: #ccc; }
+.booking-right { padding: 52px 48px; background: var(--off); }
+.form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin-bottom: 14px; }
+.field { display: flex; flex-direction: column; gap: 5px; }
+.field label { font-size: 11px; letter-spacing: .14em; text-transform: uppercase; color: var(--mid); }
+.field input, .field textarea, .field select { background: var(--white); border: 1px solid var(--line); border-bottom: 2px solid var(--line); padding: 10px 12px; font-family: 'Source Sans 3', sans-serif; font-size: 14px; font-weight: 300; color: var(--black); outline: none; transition: border-color .2s; resize: none; appearance: none; }
+.field input:focus, .field textarea:focus, .field select:focus { border-bottom-color: var(--black); background: #fff; }
+.btn-black { background: var(--black) !important; color: var(--white) !important; border-color: var(--black) !important; }
+.btn-black:hover { background: #333 !important; }
+
+/* REVIEWS */
+#reviews { padding: 56px 48px; border-bottom: 1px solid var(--line); }
+.reviews-wrap { display: grid; grid-template-columns: 1fr 1fr; gap: 52px; align-items: start; }
+.review-item { padding: 22px 0; border-bottom: 1px solid var(--line); }
+.review-item:first-child { border-top: 2px solid var(--black); }
+.review-text { font-family: 'Libre Baskerville', serif; font-size: 14px; font-style: italic; line-height: 1.75; color: #333; margin-bottom: 10px; }
+.review-author { font-size: 11px; letter-spacing: .14em; text-transform: uppercase; color: var(--mid); }
+
+/* CONTACT */
+#contact { background: var(--off); border-bottom: 1px solid var(--line); padding: 56px 48px; }
+.contact-wrap { display: grid; grid-template-columns: 1fr 1fr; gap: 56px; align-items: start; }
+.contact-rows { display: flex; flex-direction: column; }
+.contact-row { display: flex; align-items: center; gap: 18px; padding: 16px 0; border-bottom: 1px solid var(--line); }
+.contact-row:first-child { border-top: 2px solid var(--black); }
+.c-lbl { font-size: 11px; letter-spacing: .15em; text-transform: uppercase; color: var(--mid); margin-bottom: 2px; }
+.c-val { font-size: 15px; }
+.c-icon { font-size: 18px; flex-shrink: 0; }
+
+/* FOOTER */
+footer { background: var(--black); padding: 18px 48px; display: flex; align-items: center; justify-content: space-between; }
+.f-logo { font-family: 'Libre Baskerville', serif; font-size: 14px; color: var(--white); }
+footer p { font-size: 12px; color: #555; }
+
+/* WHATSAPP */
+.whatsapp { position: fixed; bottom: 24px; right: 24px; background: var(--black); color: var(--white); width: 48px; height: 48px; display: flex; align-items: center; justify-content: center; font-size: 20px; text-decoration: none; border: 1px solid #333; transition: background .2s; z-index: 99; }
+.whatsapp:hover { background: #25D366; border-color: #25D366; }
+
+@keyframes fadeUp { from { opacity: 0; transform: translateY(16px); } to { opacity: 1; transform: translateY(0); } }
+.hero-left > * { animation: fadeUp .5s ease both; }
+.hero-eyebrow { animation-delay: .1s; }
+.hero-title   { animation-delay: .2s; }
+.hero-desc    { animation-delay: .3s; }
+.hero-btns    { animation-delay: .4s; }
+
+@media (max-width: 860px) {
+  nav { padding: 0 20px; }
+  .hero-left { padding: 40px 20px; }
+  #services { padding: 40px 20px; }
+  .services-list { grid-template-columns: 1fr; }
+  .svc, .svc:not(:first-child) { padding: 22px 0; border-right: none; border-bottom: 1px solid var(--line); }
+  .booking-split { grid-template-columns: 1fr; }
+  .booking-left { padding: 40px 20px; }
+  .booking-right { padding: 40px 20px; }
+  .form-row { grid-template-columns: 1fr; }
+  #reviews { padding: 40px 20px; }
+  .reviews-wrap, .contact-wrap { grid-template-columns: 1fr; }
+  #contact { padding: 40px 20px; }
+  footer { padding: 14px 20px; flex-direction: column; gap: 6px; text-align: center; }
+}
+</style>
+</head>
+<body>
+
+<nav>
+  <a href="#" class="nav-logo">Basel Möbelmontage</a>
+  <div class="nav-links">
+    <a href="#services">Leistungen</a>
+    <a href="#booking">Buchung</a>
+    <a href="#reviews">Bewertungen</a>
+    <a href="#contact">Kontakt</a>
+  </div>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-bg"><img src="img1.jpg" alt="Möbellieferung Basel"></div>
+  <div class="hero-left">
+    <p class="hero-eyebrow">Basel, Schweiz</p>
+    <h1 class="hero-title">Möbelmontage<br><span>der Sie vertrauen können.</span></h1>
+    <p class="hero-desc">Professionell, sorgfältig und zuverlässig. Wir kümmern uns um Ihre Möbel — beim ersten Mal richtig gemacht, ohne Stress und ohne Schäden.</p>
+    <div class="hero-btns">
+      <a href="#booking" class="btn">Jetzt buchen</a>
+      <a href="#services" class="btn btn-ghost">Unsere Leistungen</a>
+    </div>
+  </div>
+</section>
+
+<!-- SERVICES -->
+<section id="services">
+  <p class="block-label">Was wir anbieten</p>
+  <h2 class="block-title">Unsere Leistungen</h2>
+  <p class="block-sub">Jeder Auftrag wird persönlich bearbeitet — keine Subunternehmer, keine Abkürzungen. Nur solide, zuverlässige Arbeit.</p>
+  <div class="services-list">
+    <div class="svc">
+      <div class="svc-n">01 —</div>
+      <div class="svc-name">IKEA-Montage</div>
+      <p class="svc-desc">Alle IKEA-Produkte werden korrekt und sicher montiert — Kleiderschränke, Betten, Regale, Schreibtische und mehr.</p>
+    </div>
+    <div class="svc">
+      <div class="svc-n">02 —</div>
+      <div class="svc-name">Schränke & Garderoben</div>
+      <p class="svc-desc">Einbau von Einbau- und freistehenden Kleiderschränken inkl. Wandbefestigung, Nivellierung und Innenausstattung.</p>
+    </div>
+    <div class="svc">
+      <div class="svc-n">03 —</div>
+      <div class="svc-name">Büroeinrichtung</div>
+      <p class="svc-desc">Vollständige Möbelmontage für Heim- und Geschäftsbüros — Schreibtische, Regale, Stauraum und mehr.</p>
+    </div>
+  </div>
+</section>
+
+<!-- BOOKING -->
+<section id="booking">
+  <div class="booking-split">
+    <div class="booking-left">
+      <p class="block-label">Kontakt aufnehmen</p>
+      <h2 class="block-title" style="color:var(--white);margin-bottom:12px;">Termin buchen</h2>
+      <p style="font-size:14px;color:#888;line-height:1.8;margin-bottom:32px;">Füllen Sie das Formular aus und wir melden uns innerhalb von 24 Stunden bei Ihnen zur Terminbestätigung.</p>
+      <div class="info-stack">
+        <div class="info-item-v"><strong>Telefon</strong><span>+41 XX XXX XX XX</span></div>
+        <div class="info-item-v"><strong>Standort</strong><span>Basel &amp; Umgebung</span></div>
+        <div class="info-item-v"><strong>Öffnungszeiten</strong><span>Mo–Sa, 8–19 Uhr</span></div>
+        <div class="info-item-v"><strong>E-Mail</strong><span>hello@baselfurniture.ch</span></div>
+      </div>
+    </div>
+    <div class="booking-right">
+      <form id="bookingForm">
+        <div class="form-row">
+          <div class="field"><label>Vollständiger Name</label><input type="text" id="name" placeholder="Ihr Name" required></div>
+          <div class="field">
+            <label>Telefonnummer</label>
+            <div style="display:flex;gap:6px;align-items:center;">
+              <select id="countryCode" style="width:120px;flex-shrink:0;font-size:14px;">
+                <option value="+41">🇨🇭 +41</option>
+                <option value="+49">🇩🇪 +49</option>
+                <option value="+33">🇫🇷 +33</option>
+                <option value="+39">🇮🇹 +39</option>
+                <option value="+43">🇦🇹 +43</option>
+                <option value="+32">🇧🇪 +32</option>
+                <option value="+31">🇳🇱 +31</option>
+                <option value="+34">🇪🇸 +34</option>
+                <option value="+351">🇵🇹 +351</option>
+                <option value="+44">🇬🇧 +44</option>
+                <option value="+1">🇺🇸 +1</option>
+                <option value="+961">🇱🇧 +961</option>
+                <option value="+212">🇲🇦 +212</option>
+                <option value="+213">🇩🇿 +213</option>
+                <option value="+216">🇹🇳 +216</option>
+                <option value="+20">🇪🇬 +20</option>
+                <option value="+966">🇸🇦 +966</option>
+                <option value="+971">🇦🇪 +971</option>
+                <option value="+90">🇹🇷 +90</option>
+                <option value="+7">🇷🇺 +7</option>
+                <option value="+86">🇨🇳 +86</option>
+                <option value="+91">🇮🇳 +91</option>
+                <option value="+62">🇮🇩 +62</option>
+                <option value="+55">🇧🇷 +55</option>
+                <option value="+52">🇲🇽 +52</option>
+                <option value="+27">🇿🇦 +27</option>
+                <option value="+234">🇳🇬 +234</option>
+              </select>
+              <input type="tel" id="phone" placeholder="XX XXX XX XX" required style="flex:1;">
+            </div>
+          </div>
+        </div>
+        <div class="form-row">
+          <div class="field">
+            <label>Bestätigungsmethode</label>
+            <select id="contactMethod" onchange="toggleEmailField()">
+              <option value="whatsapp">WhatsApp</option>
+              <option value="email">E-Mail</option>
+            </select>
+          </div>
+          <div class="field" id="servicePlaceholder">
+            <label>Leistung</label>
+            <select id="service">
+              <option value="">Bitte wählen...</option>
+              <option>IKEA-Montage</option>
+              <option>Schrank / Garderobe</option>
+              <option>Büroeinrichtung</option>
+              <option>Sonstiges</option>
+            </select>
+          </div>
+        </div>
+        <div class="form-row">
+          <div class="field" id="emailField" style="display:none;">
+            <label>E-Mail-Adresse</label>
+            <input type="email" id="email" placeholder="ihre@email.ch">
+          </div>
+          <div class="field"><label>Wunschdatum</label><input type="date" id="date"></div>
+        </div>
+        <div class="field" style="margin-bottom:14px;"><label>Adresse</label><input type="text" id="address" placeholder="Strasse, Ort" required></div>
+        <div class="field" style="margin-bottom:20px;"><label>Weitere Angaben</label><textarea id="details" rows="3" placeholder="Was soll montiert werden? Besondere Hinweise zum Zugang..."></textarea></div>
+        <button type="submit" class="btn btn-black">Anfrage senden</button>
+      </form>
+    </div>
+  </div>
+</section>
+
+<!-- REVIEWS -->
+<section id="reviews">
+  <p class="block-label">Kundenbewertungen</p>
+  <h2 class="block-title">Was unsere Kunden sagen</h2>
+  <div class="reviews-wrap">
+    <div id="reviewsList"></div>
+    <div>
+      <p class="block-sub" style="margin-bottom:20px;">Zufrieden mit unserer Arbeit? Wir freuen uns über eine kurze Bewertung.</p>
+      <form id="reviewForm">
+        <div class="field" style="margin-bottom:14px;"><label>Ihr Name</label><input type="text" id="rname" placeholder="Vollständiger Name" required></div>
+        <div class="field" style="margin-bottom:14px;"><label>Ihre Bewertung</label><textarea id="rtext" rows="4" placeholder="Teilen Sie Ihre Erfahrung..." required></textarea></div>
+        <button type="submit" class="btn btn-black" style="font-size:12px;padding:11px 22px;">Bewertung absenden</button>
+      </form>
+    </div>
+  </div>
+</section>
+
+<!-- CONTACT -->
+<section id="contact">
+  <div class="contact-wrap">
+    <div>
+      <p class="block-label">So finden Sie uns</p>
+      <h2 class="block-title">Kontakt</h2>
+      <p class="block-sub" style="margin-bottom:0;">Wir sind in Basel ansässig und bedienen die gesamte Region. Melden Sie sich — wir antworten schnell.</p>
+    </div>
+    <div class="contact-rows">
+      <div class="contact-row"><span class="c-icon">📞</span><div><div class="c-lbl">Telefon</div><div class="c-val">+41 XX XXX XX XX</div></div></div>
+      <div class="contact-row"><span class="c-icon">✉️</span><div><div class="c-lbl">E-Mail</div><div class="c-val">hello@baselfurniture.ch</div></div></div>
+      <div class="contact-row"><span class="c-icon">📍</span><div><div class="c-lbl">Standort</div><div class="c-val">Basel, Schweiz</div></div></div>
+      <div class="contact-row"><span class="c-icon">🕐</span><div><div class="c-lbl">Öffnungszeiten</div><div class="c-val">Mo – Sa, 8:00 – 19:00 Uhr</div></div></div>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <span class="f-logo">Basel Möbelmontage</span>
+  <p>© 2026 — Alle Rechte vorbehalten</p>
+</footer>
+
+<a class="whatsapp" href="https://wa.me/41XXXXXXXXX" title="WhatsApp">💬</a>
+
+<script>
+function toggleEmailField() {
+  const method = document.getElementById('contactMethod').value;
+  const emailField = document.getElementById('emailField');
+  const svcPlaceholder = document.getElementById('servicePlaceholder');
+  // Always show service, only show email field when email is selected
+  svcPlaceholder.style.display = '';
+  emailField.style.display = (method === 'email') ? '' : 'none';
+}
+
+fetch('/reviews')
+  .then(res => res.json())
+  .then(data => {
+    const container = document.getElementById('reviewsList');
+    if (!data.length) { container.innerHTML = '<p style="font-size:14px;color:#888;font-style:italic;">Noch keine Bewertungen — seien Sie der Erste!</p>'; return; }
+    data.forEach(r => {
+      const div = document.createElement('div');
+      div.className = 'review-item';
+      div.innerHTML = '<div class="review-text">"' + r.text + '"</div><div class="review-author">' + r.name + '</div>';
+      container.appendChild(div);
+    });
+  }).catch(() => {});
+
+document.getElementById('reviewForm').onsubmit = function(e) {
+  e.preventDefault();
+  fetch('/reviews', { method: 'POST', headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ name: document.getElementById('rname').value, text: document.getElementById('rtext').value }) })
+  .then(() => { alert('Vielen Dank. Ihre Bewertung erscheint nach Freigabe.'); document.getElementById('reviewForm').reset(); })
+  .catch(() => alert('Fehler beim Senden. Läuft der Server?'));
+};
+
+document.getElementById('bookingForm').onsubmit = function(e) {
+  e.preventDefault();
+  const contactMethod = document.getElementById('contactMethod').value;
+  const emailEl = document.getElementById('email');
+  fetch('/book', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({
+      name:          document.getElementById('name').value,
+      countryCode:   document.getElementById('countryCode').value,
+      phone:         document.getElementById('phone').value,
+      contactMethod: contactMethod,
+      email:         emailEl ? emailEl.value : '',
+      service:       document.getElementById('service').value,
+      date:          document.getElementById('date').value,
+      address:       document.getElementById('address').value,
+      details:       document.getElementById('details').value
+    })
+  })
+  .then(res => res.json())
+  .then(() => { alert('Ihre Anfrage wurde erhalten. Wir melden uns innerhalb von 24 Stunden.'); document.getElementById('bookingForm').reset(); toggleEmailField(); })
+  .catch(() => alert('Fehler beim Senden. Läuft der Server?'));
+};
+</script>
+</body>
+</html>
