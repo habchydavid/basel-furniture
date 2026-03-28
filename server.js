@@ -1,12 +1,11 @@
 /**
  * Basel Furniture Installation — Backend
- * Stack: Node.js + Express + JSON file + Nodemailer
+ * Stack: Node.js + Express + MongoDB Atlas (on Railway) / JSON file (local) + Nodemailer
  */
 
 const express    = require('express');
 const cors       = require('cors');
 const path       = require('path');
-const fs         = require('fs');
 const nodemailer = require('nodemailer');
 
 const app  = express();
@@ -25,25 +24,6 @@ const transporter = nodemailer.createTransport({
   }
 });
 
-// ── JSON database ──────────────────────────────────────────
-const DB_FILE = path.join(__dirname, 'basel-db.json');
-
-function loadDB() {
-  if (!fs.existsSync(DB_FILE)) {
-    const empty = { bookings: [], reviews: [], nextBookingId: 1, nextReviewId: 1 };
-    fs.writeFileSync(DB_FILE, JSON.stringify(empty, null, 2));
-  }
-  return JSON.parse(fs.readFileSync(DB_FILE, 'utf8'));
-}
-
-function saveDB(db) {
-  fs.writeFileSync(DB_FILE, JSON.stringify(db, null, 2));
-}
-
-function now() {
-  return new Date().toISOString().replace('T', ' ').substring(0, 19);
-}
-
 // ── Admin Auth ─────────────────────────────────────────────
 const ADMIN_TOKEN = process.env.ADMIN_TOKEN || 'basel-admin-2026';
 
@@ -54,63 +34,140 @@ function requireAdmin(req, res, next) {
   next();
 }
 
+function now() {
+  return new Date().toISOString().replace('T', ' ').substring(0, 19);
+}
+
+// ── DB: MongoDB or JSON fallback ───────────────────────────
+const MONGO_URL = process.env.MONGO_URL;
+let usesMongo = false;
+let db;
+
+async function initDB() {
+  if (MONGO_URL) {
+    const { MongoClient, ServerApiVersion } = require('mongodb');
+    const client = new MongoClient(MONGO_URL, {
+      serverApi: { version: ServerApiVersion.v1, strict: true, deprecationErrors: true }
+    });
+    await client.connect();
+    db = client.db('basel');
+    usesMongo = true;
+    console.log('✅  MongoDB connected!');
+  } else {
+    console.log('📁  Using local JSON database');
+  }
+}
+
+// ── JSON fallback helpers ──────────────────────────────────
+const fs = require('fs');
+const DB_FILE = path.join(__dirname, 'basel-db.json');
+
+function loadDB() {
+  if (!fs.existsSync(DB_FILE)) {
+    fs.writeFileSync(DB_FILE, JSON.stringify({ bookings: [], reviews: [], nextBookingId: 1, nextReviewId: 1 }, null, 2));
+  }
+  return JSON.parse(fs.readFileSync(DB_FILE, 'utf8'));
+}
+
+function saveDB(data) {
+  fs.writeFileSync(DB_FILE, JSON.stringify(data, null, 2));
+}
+
+// ── Confirmation message builder ───────────────────────────
+function buildMessage(booking) {
+  return [
+    'Sehr geehrte/r ' + booking.name + ',',
+    '',
+    'Ihr Möbelmontage-Termin wurde bestätigt.',
+    '',
+    '📋 Leistung: ' + booking.service,
+    booking.date    ? '📅 Datum: ' + booking.date       : null,
+    booking.address ? '📍 Adresse: ' + booking.address  : null,
+    booking.details ? '📝 Details: ' + booking.details  : null,
+    '',
+    'Bei Fragen stehen wir Ihnen gerne zur Verfügung.',
+    '',
+    'Basel Möbelmontage',
+    '+41 XX XXX XX XX'
+  ].filter(l => l !== null).join('\n');
+}
+
 // ══════════════════════════════════════════════════════════
 //  PUBLIC ROUTES
 // ══════════════════════════════════════════════════════════
 
-app.get('/reviews', (req, res) => {
-  const db = loadDB();
-  res.json(db.reviews.filter(r => r.approved === 1).reverse());
+app.get('/reviews', async (req, res) => {
+  try {
+    if (usesMongo) {
+      const reviews = await db.collection('reviews').find({ approved: 1 }).sort({ created_at: -1 }).toArray();
+      return res.json(reviews.map(r => ({ ...r, id: r._id.toString() })));
+    }
+    const data = loadDB();
+    res.json(data.reviews.filter(r => r.approved === 1).reverse());
+  } catch (e) { res.status(500).json({ error: e.message }); }
 });
 
-app.post('/reviews', (req, res) => {
+app.post('/reviews', async (req, res) => {
   const { name, text } = req.body;
   if (!name || !text) return res.status(400).json({ error: 'name and text required' });
-  const db = loadDB();
-  const review = {
-    id: db.nextReviewId++,
-    name: name.trim(),
-    text: text.trim(),
-    approved: 0,
-    created_at: now()
-  };
-  db.reviews.push(review);
-  saveDB(db);
-  res.status(201).json({ id: review.id, message: 'Review submitted for approval' });
+  try {
+    if (usesMongo) {
+      const result = await db.collection('reviews').insertOne({ name: name.trim(), text: text.trim(), approved: 0, created_at: now() });
+      return res.status(201).json({ id: result.insertedId, message: 'Bewertung eingereicht' });
+    }
+    const data = loadDB();
+    const review = { id: data.nextReviewId++, name: name.trim(), text: text.trim(), approved: 0, created_at: now() };
+    data.reviews.push(review);
+    saveDB(data);
+    res.status(201).json({ id: review.id, message: 'Bewertung eingereicht' });
+  } catch (e) { res.status(500).json({ error: e.message }); }
 });
 
-app.post('/book', (req, res) => {
+app.post('/book', async (req, res) => {
   const { name, countryCode, phone, contactMethod, email, service, date, address, details } = req.body;
   if (!name || !phone || !service) return res.status(400).json({ error: 'name, phone and service required' });
-  const db = loadDB();
   const booking = {
-    id: db.nextBookingId++,
-    name:          name.trim(),
-    countryCode:   (countryCode || '+41').trim(),
-    phone:         phone.trim(),
+    name: name.trim(),
+    countryCode: (countryCode || '+41').trim(),
+    phone: phone.trim(),
     contactMethod: contactMethod || 'whatsapp',
-    email:         (email || '').trim(),
-    service:       service.trim(),
-    date:          (date || '').trim(),
-    address:       (address || '').trim(),
-    details:       (details || '').trim(),
-    status:        'pending',
-    created_at:    now()
+    email: (email || '').trim(),
+    service: service.trim(),
+    date: (date || '').trim(),
+    address: (address || '').trim(),
+    details: (details || '').trim(),
+    status: 'pending',
+    created_at: now()
   };
-  db.bookings.push(booking);
-  saveDB(db);
-  res.status(201).json({ id: booking.id, message: 'Booking received' });
+  try {
+    if (usesMongo) {
+      const result = await db.collection('bookings').insertOne(booking);
+      return res.status(201).json({ id: result.insertedId, message: 'Anfrage erhalten' });
+    }
+    const data = loadDB();
+    booking.id = data.nextBookingId++;
+    data.bookings.push(booking);
+    saveDB(data);
+    res.status(201).json({ id: booking.id, message: 'Anfrage erhalten' });
+  } catch (e) { res.status(500).json({ error: e.message }); }
 });
 
 // ══════════════════════════════════════════════════════════
 //  ADMIN ROUTES
 // ══════════════════════════════════════════════════════════
 
-app.get('/admin/bookings', requireAdmin, (req, res) => {
-  const db = loadDB();
-  const { status } = req.query;
-  const result = status ? db.bookings.filter(b => b.status === status) : db.bookings;
-  res.json([...result].reverse());
+app.get('/admin/bookings', requireAdmin, async (req, res) => {
+  try {
+    if (usesMongo) {
+      const { ObjectId } = require('mongodb');
+      const filter = req.query.status ? { status: req.query.status } : {};
+      const bookings = await db.collection('bookings').find(filter).sort({ created_at: -1 }).toArray();
+      return res.json(bookings.map(b => ({ ...b, id: b._id.toString() })));
+    }
+    const data = loadDB();
+    const result = req.query.status ? data.bookings.filter(b => b.status === req.query.status) : data.bookings;
+    res.json([...result].reverse());
+  } catch (e) { res.status(500).json({ error: e.message }); }
 });
 
 app.patch('/admin/bookings/:id', requireAdmin, async (req, res) => {
@@ -118,105 +175,144 @@ app.patch('/admin/bookings/:id', requireAdmin, async (req, res) => {
   const allowed = ['pending', 'confirmed', 'done', 'cancelled'];
   if (!allowed.includes(status)) return res.status(400).json({ error: 'Invalid status' });
 
-  const db = loadDB();
-  const booking = db.bookings.find(b => b.id === Number(req.params.id));
-  if (!booking) return res.status(404).json({ error: 'Not found' });
-
-  booking.status = status;
-  saveDB(db);
-
-  let emailSent = false;
-  let whatsappLink = null;
-
-  if (status === 'confirmed') {
-    const fullPhone = (booking.countryCode + booking.phone).replace(/\s+/g, '');
-
-    const msgLines = [
-      `Dear ${booking.name},`,
-      ``,
-      `Your furniture installation appointment has been confirmed.`,
-      ``,
-      `📋 Service: ${booking.service}`,
-      booking.date    ? `📅 Date: ${booking.date}`       : null,
-      booking.address ? `📍 Address: ${booking.address}` : null,
-      booking.details ? `📝 Details: ${booking.details}` : null,
-      ``,
-      `If you have any questions, feel free to contact us.`,
-      ``,
-      `Basel Furniture Installation`,
-      `+41 XX XXX XX XX`
-    ].filter(l => l !== null).join('\n');
-
-    if (booking.email) {
-      try {
-        await transporter.sendMail({
-          from:    '"Basel Furniture Installation" <iserena054@gmail.com>',
-          to:      booking.email,
-          subject: `Booking Confirmed — ${booking.service}`,
-          text:    msgLines,
-          html:    msgLines.replace(/\n/g, '<br>')
-        });
-        emailSent = true;
-      } catch (err) {
-        console.error('Email error:', err.message);
-      }
+  try {
+    let booking;
+    if (usesMongo) {
+      const { ObjectId } = require('mongodb');
+      booking = await db.collection('bookings').findOneAndUpdate(
+        { _id: new ObjectId(req.params.id) },
+        { $set: { status } },
+        { returnDocument: 'after' }
+      );
+      if (!booking) return res.status(404).json({ error: 'Not found' });
+    } else {
+      const data = loadDB();
+      booking = data.bookings.find(b => b.id === Number(req.params.id));
+      if (!booking) return res.status(404).json({ error: 'Not found' });
+      booking.status = status;
+      saveDB(data);
     }
 
-    whatsappLink = `https://wa.me/${fullPhone.replace('+', '')}?text=${encodeURIComponent(msgLines)}`;
-  }
+    let emailSent = false;
+    let whatsappLink = null;
 
-  res.json({ message: 'Updated', emailSent, whatsappLink });
+    if (status === 'confirmed') {
+      const fullPhone = (booking.countryCode + booking.phone).replace(/\s+/g, '');
+      const msgLines = buildMessage(booking);
+
+      if (booking.email) {
+        try {
+          await transporter.sendMail({
+            from:    '"Basel Möbelmontage" <iserena054@gmail.com>',
+            to:      booking.email,
+            subject: 'Terminbestätigung — ' + booking.service,
+            text:    msgLines,
+            html:    msgLines.replace(/\n/g, '<br>')
+          });
+          emailSent = true;
+        } catch (err) { console.error('Email error:', err.message); }
+      }
+      whatsappLink = 'https://wa.me/' + fullPhone.replace('+', '') + '?text=' + encodeURIComponent(msgLines);
+    }
+
+    res.json({ message: 'Aktualisiert', emailSent, whatsappLink });
+  } catch (e) { res.status(500).json({ error: e.message }); }
 });
 
-app.delete('/admin/bookings/:id', requireAdmin, (req, res) => {
-  const db = loadDB();
-  const idx = db.bookings.findIndex(b => b.id === Number(req.params.id));
-  if (idx === -1) return res.status(404).json({ error: 'Not found' });
-  db.bookings.splice(idx, 1);
-  saveDB(db);
-  res.json({ message: 'Deleted' });
+app.delete('/admin/bookings/:id', requireAdmin, async (req, res) => {
+  try {
+    if (usesMongo) {
+      const { ObjectId } = require('mongodb');
+      await db.collection('bookings').deleteOne({ _id: new ObjectId(req.params.id) });
+      return res.json({ message: 'Gelöscht' });
+    }
+    const data = loadDB();
+    const idx = data.bookings.findIndex(b => b.id === Number(req.params.id));
+    if (idx === -1) return res.status(404).json({ error: 'Not found' });
+    data.bookings.splice(idx, 1);
+    saveDB(data);
+    res.json({ message: 'Gelöscht' });
+  } catch (e) { res.status(500).json({ error: e.message }); }
 });
 
-app.get('/admin/reviews', requireAdmin, (req, res) => {
-  const db = loadDB();
-  const { approved } = req.query;
-  const result = approved !== undefined
-    ? db.reviews.filter(r => r.approved === Number(approved))
-    : db.reviews;
-  res.json([...result].reverse());
+app.get('/admin/reviews', requireAdmin, async (req, res) => {
+  try {
+    if (usesMongo) {
+      const filter = req.query.approved !== undefined ? { approved: Number(req.query.approved) } : {};
+      const reviews = await db.collection('reviews').find(filter).sort({ created_at: -1 }).toArray();
+      return res.json(reviews.map(r => ({ ...r, id: r._id.toString() })));
+    }
+    const data = loadDB();
+    const result = req.query.approved !== undefined ? data.reviews.filter(r => r.approved === Number(req.query.approved)) : data.reviews;
+    res.json([...result].reverse());
+  } catch (e) { res.status(500).json({ error: e.message }); }
 });
 
-app.patch('/admin/reviews/:id', requireAdmin, (req, res) => {
-  const db = loadDB();
-  const review = db.reviews.find(r => r.id === Number(req.params.id));
-  if (!review) return res.status(404).json({ error: 'Not found' });
-  review.approved = Number(req.body.approved);
-  saveDB(db);
-  res.json({ message: review.approved ? 'Approved' : 'Hidden' });
+app.patch('/admin/reviews/:id', requireAdmin, async (req, res) => {
+  try {
+    if (usesMongo) {
+      const { ObjectId } = require('mongodb');
+      await db.collection('reviews').findOneAndUpdate(
+        { _id: new ObjectId(req.params.id) },
+        { $set: { approved: Number(req.body.approved) } }
+      );
+      return res.json({ message: req.body.approved ? 'Freigegeben' : 'Versteckt' });
+    }
+    const data = loadDB();
+    const review = data.reviews.find(r => r.id === Number(req.params.id));
+    if (!review) return res.status(404).json({ error: 'Not found' });
+    review.approved = Number(req.body.approved);
+    saveDB(data);
+    res.json({ message: review.approved ? 'Freigegeben' : 'Versteckt' });
+  } catch (e) { res.status(500).json({ error: e.message }); }
 });
 
-app.delete('/admin/reviews/:id', requireAdmin, (req, res) => {
-  const db = loadDB();
-  const idx = db.reviews.findIndex(r => r.id === Number(req.params.id));
-  if (idx === -1) return res.status(404).json({ error: 'Not found' });
-  db.reviews.splice(idx, 1);
-  saveDB(db);
-  res.json({ message: 'Deleted' });
+app.delete('/admin/reviews/:id', requireAdmin, async (req, res) => {
+  try {
+    if (usesMongo) {
+      const { ObjectId } = require('mongodb');
+      await db.collection('reviews').deleteOne({ _id: new ObjectId(req.params.id) });
+      return res.json({ message: 'Gelöscht' });
+    }
+    const data = loadDB();
+    const idx = data.reviews.findIndex(r => r.id === Number(req.params.id));
+    if (idx === -1) return res.status(404).json({ error: 'Not found' });
+    data.reviews.splice(idx, 1);
+    saveDB(data);
+    res.json({ message: 'Gelöscht' });
+  } catch (e) { res.status(500).json({ error: e.message }); }
 });
 
-app.get('/admin/stats', requireAdmin, (req, res) => {
-  const db = loadDB();
-  res.json({
-    totalBookings:   db.bookings.length,
-    pendingBookings: db.bookings.filter(b => b.status === 'pending').length,
-    totalReviews:    db.reviews.length,
-    pendingReviews:  db.reviews.filter(r => r.approved === 0).length,
+app.get('/admin/stats', requireAdmin, async (req, res) => {
+  try {
+    if (usesMongo) {
+      const [totalBookings, pendingBookings, totalReviews, pendingReviews] = await Promise.all([
+        db.collection('bookings').countDocuments(),
+        db.collection('bookings').countDocuments({ status: 'pending' }),
+        db.collection('reviews').countDocuments(),
+        db.collection('reviews').countDocuments({ approved: 0 })
+      ]);
+      return res.json({ totalBookings, pendingBookings, totalReviews, pendingReviews });
+    }
+    const data = loadDB();
+    res.json({
+      totalBookings:   data.bookings.length,
+      pendingBookings: data.bookings.filter(b => b.status === 'pending').length,
+      totalReviews:    data.reviews.length,
+      pendingReviews:  data.reviews.filter(r => r.approved === 0).length,
+    });
+  } catch (e) { res.status(500).json({ error: e.message }); }
+});
+
+// ── Start ──────────────────────────────────────────────────
+initDB().then(() => {
+  app.listen(PORT, () => {
+    console.log('\n✅  Basel backend running!');
+    console.log('🌐  Website:  http://localhost:' + PORT + '/index.html');
+    console.log('🔧  Admin:    http://localhost:' + PORT + '/admin.html');
+    console.log('🔑  Token:    ' + ADMIN_TOKEN + '\n');
   });
-});
-
-app.listen(PORT, () => {
-  console.log(`\n✅  Basel backend running!`);
-  console.log(`🌐  Website:  http://localhost:${PORT}/index.html`);
-  console.log(`🔧  Admin:    http://localhost:${PORT}/admin.html`);
-  console.log(`🔑  Token:    ${ADMIN_TOKEN}\n`);
+}).catch(err => {
+  console.error('❌  Startup failed:', err.message);
+  process.exit(1);
 });
