@@ -588,16 +588,17 @@ function renderBookings(data, tbodyId, showActions) {
       b.address ? '📍 ' + esc(b.address) : '',
       b.details ? '📝 ' + esc(b.details) : ''
     ].filter(Boolean).join('<br>');
+    var bid = b.id || b._id;
     return '<tr>' +
       '<td><div class="cell-name">' + esc(b.name) + '</div><div class="cell-date">' + fmtDate(b.created_at) + '</div></td>' +
       '<td><div style="font-size:13px;">' + contact + '</div></td>' +
       '<td><div class="cell-details" style="font-size:12px;line-height:1.6;">' + infoLines + '</div></td>' +
       '<td><span class="pill pill-' + b.status + '">' + b.status + '</span></td>' +
       (showActions ? '<td><div class="actions">' +
-        (b.status !== 'confirmed' ? '<button class="action-btn confirm" onclick="updateBooking(' + b.id + ',\'confirmed\')">✓ Confirm</button>' : '') +
-        (b.status !== 'done'      ? '<button class="action-btn done"    onclick="updateBooking(' + b.id + ',\'done\')">Done</button>' : '') +
-        (b.status !== 'cancelled' ? '<button class="action-btn cancel"  onclick="updateBooking(' + b.id + ',\'cancelled\')">Cancel</button>' : '') +
-        '<button class="action-btn delete" onclick="deleteBooking(' + b.id + ')">Delete</button>' +
+        (b.status !== 'confirmed' ? '<button class="action-btn confirm" onclick="updateBooking(\'' + bid + '\',\'confirmed\')">✓ Confirm</button>' : '') +
+        (b.status !== 'done'      ? '<button class="action-btn done"    onclick="updateBooking(\'' + bid + '\',\'done\')">Done</button>' : '') +
+        (b.status !== 'cancelled' ? '<button class="action-btn cancel"  onclick="updateBooking(\'' + bid + '\',\'cancelled\')">Cancel</button>' : '') +
+        '<button class="action-btn delete" onclick="deleteBooking(\'' + bid + '\')">Delete</button>' +
       '</div></td>' : '<td></td>') +
     '</tr>';
   }).join('');
@@ -658,9 +659,9 @@ function renderReviews(data) {
       '<td><span class="pill ' + (r.approved ? 'pill-approved' : 'pill-hidden') + '">' + (r.approved ? 'Approved' : 'Pending') + '</span></td>' +
       '<td><div class="cell-date">' + fmtDate(r.created_at) + '</div></td>' +
       '<td><div class="actions">' +
-        (!r.approved ? '<button class="action-btn approve" onclick="updateReview(' + r.id + ',1)">Approve</button>' : '') +
-        (r.approved  ? '<button class="action-btn cancel"  onclick="updateReview(' + r.id + ',0)">Hide</button>' : '') +
-        '<button class="action-btn delete" onclick="deleteReview(' + r.id + ')">Delete</button>' +
+        (!r.approved ? '<button class="action-btn approve" onclick="updateReview(\'' + (r.id||r._id) + '\',1)">Approve</button>' : '') +
+        (r.approved  ? '<button class="action-btn cancel"  onclick="updateReview(\'' + (r.id||r._id) + '\',0)">Hide</button>' : '') +
+        '<button class="action-btn delete" onclick="deleteReview(\'' + (r.id||r._id) + '\')">Delete</button>' +
       '</div></td>' +
     '</tr>';
   }).join('');
