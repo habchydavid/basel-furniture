@@ -1,0 +1,839 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#fff;color:#000}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style><title>Sonbol Deir El Ahmar</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Vollkorn:ital,wght@0,500;0,600;0,700;1,500&family=Karla:wght@400;500;600;700&family=Noto+Kufi+Arabic:wght@400;500;700&display=swap">
+</head>
+<body>
+
+<style>
+/* Layout: one continuous scroll through stone-coloured bands — hero, table, menu, booking, visit.
+   A wheat stalk (sonbol) rules the section breaks. Menu is a sticky-tab ledger, not cards. */
+:root{
+  --bg:#E8E3D7;         /* limestone */
+  --surface:#F3EFE6;    /* plaster */
+  --surface-2:#DFD8C8;  /* dust */
+  --ink:#241F19;
+  --muted:#6C6354;
+  --wheat:#B07E22;      /* ripe sonbol */
+  --ember:#8E3B2F;      /* brick oven */
+  --vine:#4E5742;       /* field green */
+  --line:#CCC2AE;
+  --shadow:rgba(36,31,25,.10);
+
+  --display:'Vollkorn',Georgia,'Times New Roman',serif;
+  --body:'Karla',system-ui,-apple-system,'Segoe UI',sans-serif;
+  --arabic:'Noto Kufi Arabic','Segoe UI',system-ui,sans-serif;
+}
+@media (prefers-color-scheme:dark){
+  :root:not([data-theme="light"]){
+    --bg:#17150F;
+    --surface:#201D16;
+    --surface-2:#2A261D;
+    --ink:#EFE9DB;
+    --muted:#A1977F;
+    --wheat:#D7A647;
+    --ember:#C66049;
+    --vine:#90A179;
+    --line:#39342A;
+    --shadow:rgba(0,0,0,.45);
+    color-scheme:dark;
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#17150F; --surface:#201D16; --surface-2:#2A261D; --ink:#EFE9DB;
+  --muted:#A1977F; --wheat:#D7A647; --ember:#C66049; --vine:#90A179;
+  --line:#39342A; --shadow:rgba(0,0,0,.45); color-scheme:dark;
+}
+
+*{box-sizing:border-box}
+body{
+  background:var(--bg); color:var(--ink);
+  font-family:var(--body); font-size:16px; line-height:1.6;
+  margin:0; overflow-x:hidden;
+  -webkit-font-smoothing:antialiased;
+}
+html[dir="rtl"] body{font-family:var(--arabic)}
+html[dir="rtl"] .display{font-family:var(--arabic)}
+h1,h2,h3,h4{font-family:var(--display); font-weight:600; text-wrap:balance; margin:0; line-height:1.15}
+html[dir="rtl"] h1,html[dir="rtl"] h2,html[dir="rtl"] h3,html[dir="rtl"] h4{font-family:var(--arabic); font-weight:700}
+p{margin:0}
+a{color:inherit}
+button{font-family:inherit; font-size:inherit; color:inherit; cursor:pointer}
+:focus-visible{outline:2px solid var(--wheat); outline-offset:3px; border-radius:2px}
+
+.wrap{width:100%; max-width:1080px; margin-inline:auto; padding-inline:20px}
+.narrow{max-width:680px}
+.eyebrow{
+  font-size:.72rem; letter-spacing:.18em; text-transform:uppercase;
+  font-weight:700; color:var(--wheat);
+}
+html[dir="rtl"] .eyebrow{letter-spacing:0}
+
+/* ---------- top bar ---------- */
+#bar{
+  position:sticky; top:env(safe-area-inset-top,0px); z-index:50;
+  background:color-mix(in srgb, var(--bg) 88%, transparent);
+  backdrop-filter:blur(10px);
+  border-bottom:1px solid var(--line);
+}
+.bar-in{
+  display:flex; align-items:center; gap:16px;
+  padding-block:12px; min-height:60px;
+}
+.mark{display:flex; align-items:center; gap:10px; text-decoration:none; margin-inline-end:auto}
+.mark svg{flex:none}
+.mark b{font-family:var(--display); font-size:1.3rem; letter-spacing:.02em; font-weight:700}
+.mark span{display:block; font-size:.62rem; letter-spacing:.2em; text-transform:uppercase; color:var(--muted); margin-top:-2px}
+html[dir="rtl"] .mark span{letter-spacing:0}
+
+.navlinks{display:flex; gap:22px}
+.navlinks a{
+  text-decoration:none; font-size:.85rem; font-weight:600; color:var(--muted);
+  padding-block:4px; border-bottom:2px solid transparent; transition:color .2s,border-color .2s;
+}
+.navlinks a:hover{color:var(--ink); border-color:var(--wheat)}
+@media (max-width:860px){.navlinks{display:none}}
+
+.langs{display:flex; border:1px solid var(--line); border-radius:999px; overflow:hidden; flex:none}
+.langs button{
+  background:none; border:0; padding:5px 11px; font-size:.72rem; font-weight:700;
+  letter-spacing:.06em; color:var(--muted); transition:background .2s,color .2s;
+}
+.langs button[aria-pressed="true"]{background:var(--wheat); color:#1B1710}
+
+/* ---------- hero ---------- */
+#hero{position:relative; overflow:hidden; border-bottom:1px solid var(--line)}
+#hero::after{
+  content:""; position:absolute; inset:0; pointer-events:none;
+  background:
+    radial-gradient(70% 55% at 78% 8%, color-mix(in srgb,var(--wheat) 20%,transparent), transparent 70%),
+    radial-gradient(60% 50% at 6% 92%, color-mix(in srgb,var(--vine) 18%,transparent), transparent 72%);
+}
+.hero-in{
+  position:relative; z-index:1;
+  display:grid; grid-template-columns:1.15fr .85fr; gap:40px; align-items:center;
+  padding-block:clamp(48px,7vw,84px);
+}
+@media (max-width:820px){.hero-in{grid-template-columns:1fr; gap:32px; padding-block:40px}}
+.hero h1{font-size:clamp(2.6rem,7vw,4.6rem); letter-spacing:-.015em; margin-block:14px 18px}
+.hero h1 em{font-style:italic; color:var(--ember)}
+.hero .lede{font-size:clamp(1rem,1.9vw,1.15rem); color:var(--muted); max-width:46ch}
+.hero-cta{display:flex; flex-wrap:wrap; gap:12px; margin-top:28px}
+.btn{
+  display:inline-flex; align-items:center; gap:8px;
+  padding:13px 22px; border-radius:2px; border:1px solid transparent;
+  font-weight:700; font-size:.9rem; text-decoration:none; transition:transform .15s,background .2s,color .2s;
+}
+.btn:hover{transform:translateY(-2px)}
+.btn-fill{background:var(--ember); color:#FBF6EC}
+.btn-line{border-color:var(--ink); color:var(--ink)}
+.btn-line:hover{background:var(--ink); color:var(--bg)}
+
+.badge-row{display:flex; flex-wrap:wrap; gap:10px 22px; margin-top:30px; font-size:.82rem; color:var(--muted)}
+.badge-row b{color:var(--ink); font-weight:700}
+
+/* hero plate */
+.plate{
+  position:relative; aspect-ratio:1; max-width:100%;
+  border-radius:50%; border:1px solid var(--line);
+  background:
+    repeating-conic-gradient(from 0deg, color-mix(in srgb,var(--surface) 92%,var(--wheat)) 0 6deg, var(--surface) 6deg 12deg);
+  box-shadow:0 24px 60px -24px var(--shadow);
+  display:grid; place-items:center; text-align:center;
+}
+.plate-in{
+  width:68%; aspect-ratio:1; border-radius:50%; background:var(--bg);
+  border:1px solid var(--line); display:grid; place-content:center; gap:4px; padding:16px;
+}
+.plate-in .score{font-family:var(--display); font-size:clamp(2.2rem,6vw,3.2rem); font-weight:700; line-height:1; color:var(--wheat)}
+.plate-in small{font-size:.68rem; letter-spacing:.14em; text-transform:uppercase; color:var(--muted)}
+html[dir="rtl"] .plate-in small{letter-spacing:0}
+@media (max-width:820px){.plate{max-width:280px; margin-inline:auto}}
+
+/* ---------- stalk divider ---------- */
+.stalk{display:flex; align-items:center; gap:14px; color:var(--line)}
+.stalk::before,.stalk::after{content:""; height:1px; background:currentColor; flex:1}
+.stalk svg{flex:none; color:var(--wheat)}
+
+/* ---------- sections ---------- */
+section{padding-block:clamp(48px,6vw,80px)}
+.band{background:var(--surface); border-block:1px solid var(--line)}
+.sec-head{max-width:60ch; margin-bottom:34px}
+.sec-head h2{font-size:clamp(1.8rem,4vw,2.6rem); margin-block:10px 14px}
+.sec-head p{color:var(--muted)}
+
+/* story */
+.story-grid{display:grid; grid-template-columns:repeat(auto-fit,minmax(220px,1fr)); gap:26px; margin-top:34px}
+.story-grid article{min-width:0}
+.story-grid h3{font-size:1.15rem; margin-bottom:8px}
+.story-grid p{color:var(--muted); font-size:.92rem}
+.story-grid .num{
+  font-family:var(--display); font-size:.78rem; font-weight:700; color:var(--wheat);
+  display:block; margin-bottom:10px; letter-spacing:.1em;
+}
+
+/* ---------- menu ---------- */
+.menu-tabs{
+  display:flex; gap:8px; overflow-x:auto; padding-bottom:12px; margin-bottom:8px;
+  scrollbar-width:thin; -webkit-overflow-scrolling:touch;
+}
+.menu-tabs button{
+  flex:none; background:none; border:1px solid var(--line); border-radius:999px;
+  padding:8px 16px; font-size:.82rem; font-weight:600; color:var(--muted);
+  white-space:nowrap; transition:all .18s;
+}
+.menu-tabs button:hover{border-color:var(--wheat); color:var(--ink)}
+.menu-tabs button[aria-selected="true"]{background:var(--ink); border-color:var(--ink); color:var(--bg)}
+
+.menu-panel{padding-top:18px}
+.menu-panel[hidden]{display:none!important}
+.panel-note{
+  font-size:.86rem; color:var(--muted); font-style:italic;
+  margin-bottom:20px; padding-inline-start:14px; border-inline-start:2px solid var(--wheat);
+}
+.items{list-style:none; margin:0; padding:0; display:grid; gap:2px}
+.items li{
+  display:flex; align-items:baseline; gap:12px; min-width:0;
+  padding:13px 4px; border-bottom:1px dashed var(--line);
+}
+.items .nm{font-weight:600; min-width:0}
+.items .nm small{display:block; font-weight:400; font-size:.78rem; color:var(--muted); font-style:italic; margin-top:1px}
+.items .dots{flex:1; border-bottom:1px dotted var(--line); min-width:18px; transform:translateY(-4px)}
+.items .pr{
+  font-family:var(--display); font-weight:700; font-size:1.02rem; color:var(--ember);
+  font-variant-numeric:tabular-nums; flex:none;
+}
+
+/* formule */
+.formule{
+  margin-top:40px; background:var(--surface-2); border:1px solid var(--line);
+  border-radius:3px; padding:clamp(22px,4vw,36px);
+}
+.formule-head{display:flex; flex-wrap:wrap; align-items:baseline; gap:10px 20px; margin-bottom:6px}
+.formule-head h3{font-size:clamp(1.4rem,3vw,1.9rem)}
+.formule-head .price{font-family:var(--display); font-weight:700; color:var(--ember); font-size:1.3rem; font-variant-numeric:tabular-nums}
+.formule > p{color:var(--muted); font-size:.92rem; margin-bottom:22px}
+.spread{list-style:none; margin:0; padding:0; display:grid; grid-template-columns:repeat(auto-fill,minmax(160px,1fr)); gap:10px 20px}
+.spread li{display:flex; align-items:center; gap:9px; font-size:.9rem; min-width:0}
+.spread li::before{content:""; width:5px; height:5px; border-radius:50%; background:var(--wheat); flex:none}
+
+/* ---------- booking ---------- */
+.book-grid{display:grid; grid-template-columns:1fr 1fr; gap:44px; align-items:start}
+@media (max-width:820px){.book-grid{grid-template-columns:1fr; gap:32px}}
+form{display:grid; gap:16px; min-width:0}
+.row{display:grid; grid-template-columns:1fr 1fr; gap:14px}
+@media (max-width:520px){.row{grid-template-columns:1fr}}
+.field{display:grid; gap:6px; min-width:0}
+.field label{font-size:.75rem; font-weight:700; letter-spacing:.1em; text-transform:uppercase; color:var(--muted)}
+html[dir="rtl"] .field label{letter-spacing:0}
+.field input,.field select,.field textarea{
+  font-family:inherit; font-size:.95rem; color:var(--ink);
+  background:var(--bg); border:1px solid var(--line); border-radius:2px;
+  padding:11px 13px; width:100%; min-width:0; transition:border-color .2s;
+}
+.field input:focus,.field select:focus,.field textarea:focus{border-color:var(--wheat)}
+.field textarea{resize:vertical; min-height:80px}
+.form-note{font-size:.8rem; color:var(--muted)}
+#confirm{
+  background:var(--surface-2); border:1px solid var(--wheat); border-radius:3px;
+  padding:20px; display:grid; gap:12px;
+}
+#confirm h3{font-size:1.15rem}
+#confirm p{font-size:.9rem; color:var(--muted)}
+.recap{
+  font-family:var(--display); font-size:.95rem; background:var(--bg);
+  border:1px solid var(--line); padding:14px; white-space:pre-wrap; word-break:break-word;
+}
+.confirm-actions{display:flex; flex-wrap:wrap; gap:10px}
+
+/* visit */
+.visit-card{background:var(--surface); border:1px solid var(--line); border-radius:3px; padding:26px; display:grid; gap:20px; align-content:start}
+.visit-row{display:grid; gap:4px}
+.visit-row .k{font-size:.72rem; letter-spacing:.14em; text-transform:uppercase; font-weight:700; color:var(--muted)}
+html[dir="rtl"] .visit-row .k{letter-spacing:0}
+.visit-row .v{font-family:var(--display); font-size:1.08rem; font-weight:600}
+.copyline{display:flex; align-items:center; gap:10px; flex-wrap:wrap}
+.copybtn{
+  background:none; border:1px solid var(--line); border-radius:2px; padding:4px 10px;
+  font-size:.72rem; font-weight:700; color:var(--muted); transition:all .18s;
+}
+.copybtn:hover{border-color:var(--wheat); color:var(--ink)}
+
+/* footer */
+footer{border-top:1px solid var(--line); padding-block:34px; font-size:.84rem; color:var(--muted)}
+.foot-in{display:flex; flex-wrap:wrap; gap:16px 28px; align-items:center; justify-content:space-between}
+.foot-in a{text-decoration:none; font-weight:600}
+.foot-in a:hover{color:var(--wheat)}
+
+@media (prefers-reduced-motion:reduce){*{animation:none!important; transition:none!important}.btn:hover{transform:none}}
+</style>
+
+<header id="bar">
+  <div class="wrap bar-in">
+    <a class="mark" href="#hero">
+      <svg width="22" height="32" viewBox="0 0 22 32" fill="none" aria-hidden="true">
+        <path d="M11 31V9" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/>
+        <g fill="#B07E22">
+          <ellipse cx="11" cy="4" rx="2.4" ry="3.6"/>
+          <ellipse cx="6.4" cy="9.5" rx="2.2" ry="3.3" transform="rotate(-28 6.4 9.5)"/>
+          <ellipse cx="15.6" cy="9.5" rx="2.2" ry="3.3" transform="rotate(28 15.6 9.5)"/>
+          <ellipse cx="6.4" cy="16" rx="2.2" ry="3.3" transform="rotate(-28 6.4 16)"/>
+          <ellipse cx="15.6" cy="16" rx="2.2" ry="3.3" transform="rotate(28 15.6 16)"/>
+          <ellipse cx="6.4" cy="22.5" rx="2.2" ry="3.3" transform="rotate(-28 6.4 22.5)"/>
+          <ellipse cx="15.6" cy="22.5" rx="2.2" ry="3.3" transform="rotate(28 15.6 22.5)"/>
+        </g>
+      </svg>
+      <span style="display:block">
+        <b>Sonbol</b>
+        <span data-i18n="brandSub">Deir El Ahmar</span>
+      </span>
+    </a>
+    <nav class="navlinks">
+      <a href="#story" data-i18n="navStory">The house</a>
+      <a href="#menu" data-i18n="navMenu">Menu</a>
+      <a href="#book" data-i18n="navBook">Reserve</a>
+      <a href="#visit" data-i18n="navVisit">Visit</a>
+    </nav>
+    <div class="langs" role="group" aria-label="Language">
+      <button type="button" data-lang="en" aria-pressed="true">EN</button>
+      <button type="button" data-lang="fr" aria-pressed="false">FR</button>
+      <button type="button" data-lang="ar" aria-pressed="false">AR</button>
+    </div>
+  </div>
+</header>
+
+<main>
+<section id="hero">
+  <div class="wrap hero-in">
+    <div class="hero">
+      <span class="eyebrow" data-i18n="heroEyebrow">Bekaa Valley · Baalbek–Hermel</span>
+      <h1><span data-i18n="heroTitle1">A table in the middle of</span> <em data-i18n="heroTitle2">the village</em></h1>
+      <p class="lede" data-i18n="heroLede">Wood-fired pizza, charcoal chicken, mezze and arguileh — served in the heart of Deir El Ahmar, between the vineyards and the cedars.</p>
+      <div class="hero-cta">
+        <a class="btn btn-fill" href="#book" data-i18n="ctaBook">Reserve a table</a>
+        <a class="btn btn-line" href="#menu" data-i18n="ctaMenu">Winter menu</a>
+      </div>
+      <div class="badge-row">
+        <span><b>4.7</b> <span data-i18n="badgeRating">on Google · 121 reviews</span></span>
+        <span data-i18n="badgeOpen"><b>Open daily</b> · lunch through late</span>
+        <span data-i18n="badgeGroups"><b>Groups welcome</b> · set menu for 4+</span>
+      </div>
+    </div>
+    <div class="plate" aria-hidden="true">
+      <div class="plate-in">
+        <span class="score">4.7</span>
+        <small data-i18n="plateCap">Google rating</small>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="story" class="band">
+  <div class="wrap">
+    <div class="sec-head">
+      <span class="eyebrow" data-i18n="storyEyebrow">The house</span>
+      <h2 data-i18n="storyTitle">Named for the ear of wheat</h2>
+      <p data-i18n="storyLede">Sonbol sits in the centre of Deir El Ahmar, a farming town 22 km north-west of Baalbek where the plain gives way to the hills. Everything we cook belongs to that plain.</p>
+    </div>
+    <div class="story-grid">
+      <article>
+        <span class="num" data-i18n="s1k">The kitchen</span>
+        <h3 data-i18n="s1t">Lebanese, with a wide door</h3>
+        <p data-i18n="s1b">Mezze and charcoal-grilled farrouj next to pizza, pasta and burgers — the menu people in the village actually order from, cooked properly.</p>
+      </article>
+      <article>
+        <span class="num" data-i18n="s2k">The room</span>
+        <h3 data-i18n="s2t">Modern, not formal</h3>
+        <p data-i18n="s2b">Built for long tables and loud evenings. Arguileh on the terrace, a full bar, and space for a family of twelve without rearranging the place.</p>
+      </article>
+      <article>
+        <span class="num" data-i18n="s3k">The region</span>
+        <h3 data-i18n="s3t">Wine country</h3>
+        <p data-i18n="s3b">We pour local Bekaa wine, including Couvent Rouge, grown on some of the highest vineyards in the Middle East — a short drive from the door.</p>
+      </article>
+    </div>
+  </div>
+</section>
+
+<section id="menu">
+  <div class="wrap">
+    <div class="sec-head">
+      <span class="eyebrow" data-i18n="menuEyebrow">Winter menu</span>
+      <h2 data-i18n="menuTitle">What we are serving</h2>
+      <p data-i18n="menuLede">Prices in US dollars. The full year-round list, including platters and the kids' corner, is on the table QR code.</p>
+    </div>
+    <div class="menu-tabs" role="tablist" id="tabs"></div>
+    <div id="panels"></div>
+
+    <div class="formule">
+      <div class="formule-head">
+        <h3 data-i18n="formuleTitle">La Formule</h3>
+        <span class="price">$60 <span style="font-weight:400;color:var(--muted);font-size:.85rem" data-i18n="formuleFor">for 4 · $15 per person</span></span>
+      </div>
+      <p data-i18n="formuleLede">A full village spread brought to the table, with tea or a glass of wine to finish.</p>
+      <ul class="spread" id="spread"></ul>
+    </div>
+  </div>
+</section>
+
+<section id="book" class="band">
+  <div class="wrap">
+    <div class="book-grid">
+      <div>
+        <span class="eyebrow" data-i18n="bookEyebrow">Reservations</span>
+        <h2 style="font-size:clamp(1.8rem,4vw,2.6rem);margin-block:10px 14px" data-i18n="bookTitle">Hold us a table</h2>
+        <p style="color:var(--muted)" data-i18n="bookLede">Fill this in and we'll confirm by phone or WhatsApp. For parties over 10, or for La Formule, give us a day's notice if you can.</p>
+        <div style="margin-top:26px" class="visit-row">
+          <span class="k" data-i18n="bookPhoneK">Or call us directly</span>
+          <div class="copyline">
+            <span class="v" id="phone2">+961 70 782 071</span>
+            <button type="button" class="copybtn" data-copy="+96170782071" data-i18n="copy">Copy</button>
+          </div>
+        </div>
+      </div>
+
+      <form id="resform" novalidate>
+        <div class="row">
+          <div class="field">
+            <label for="rname" data-i18n="fName">Name</label>
+            <input id="rname" name="name" required autocomplete="name">
+          </div>
+          <div class="field">
+            <label for="rphone" data-i18n="fPhone">Phone</label>
+            <input id="rphone" name="phone" required inputmode="tel" autocomplete="tel" placeholder="70 000 000">
+          </div>
+        </div>
+        <div class="row">
+          <div class="field">
+            <label for="rdate" data-i18n="fDate">Date</label>
+            <input id="rdate" name="date" type="date" required>
+          </div>
+          <div class="field">
+            <label for="rtime" data-i18n="fTime">Time</label>
+            <input id="rtime" name="time" type="time" required value="20:00">
+          </div>
+        </div>
+        <div class="row">
+          <div class="field">
+            <label for="rguests" data-i18n="fGuests">Guests</label>
+            <select id="rguests" name="guests">
+              <option>2</option><option>3</option><option selected>4</option><option>5</option>
+              <option>6</option><option>8</option><option>10</option><option>12</option>
+              <option value="15+">15+</option>
+            </select>
+          </div>
+          <div class="field">
+            <label for="rarea" data-i18n="fArea">Seating</label>
+            <select id="rarea" name="area">
+              <option value="inside" data-i18n="optInside">Inside</option>
+              <option value="arguileh" data-i18n="optArg">Arguileh section</option>
+              <option value="formule" data-i18n="optFormule">La Formule (set menu)</option>
+            </select>
+          </div>
+        </div>
+        <div class="field">
+          <label for="rnote" data-i18n="fNote">Anything we should know</label>
+          <textarea id="rnote" name="note" placeholder=""></textarea>
+        </div>
+        <button type="submit" class="btn btn-fill" style="justify-content:center" data-i18n="fSubmit">Request this table</button>
+        <p class="form-note" data-i18n="fFoot">A request isn't a confirmation — we'll come back to you to lock it in.</p>
+      </form>
+
+      <div id="confirm" hidden>
+        <h3 data-i18n="okTitle">Your request is ready to send</h3>
+        <p data-i18n="okLede">Send it to us on WhatsApp, or copy the details and call. We'll confirm the table with you.</p>
+        <div class="recap" id="recap"></div>
+        <div class="confirm-actions">
+          <a class="btn btn-fill" id="walink" href="#" target="_blank" rel="noopener" data-i18n="okWa">Send on WhatsApp</a>
+          <button type="button" class="btn btn-line" id="copyrecap" data-i18n="okCopy">Copy details</button>
+          <button type="button" class="btn btn-line" id="again" data-i18n="okAgain">Start over</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="visit">
+  <div class="wrap">
+    <div class="stalk" style="margin-bottom:40px">
+      <svg width="18" height="26" viewBox="0 0 22 32" fill="none" aria-hidden="true">
+        <path d="M11 31V9" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/>
+        <g fill="currentColor">
+          <ellipse cx="11" cy="4" rx="2.4" ry="3.6"/>
+          <ellipse cx="6.4" cy="11" rx="2.2" ry="3.3" transform="rotate(-28 6.4 11)"/>
+          <ellipse cx="15.6" cy="11" rx="2.2" ry="3.3" transform="rotate(28 15.6 11)"/>
+          <ellipse cx="6.4" cy="18" rx="2.2" ry="3.3" transform="rotate(-28 6.4 18)"/>
+          <ellipse cx="15.6" cy="18" rx="2.2" ry="3.3" transform="rotate(28 15.6 18)"/>
+        </g>
+      </svg>
+    </div>
+    <div class="book-grid">
+      <div>
+        <span class="eyebrow" data-i18n="visitEyebrow">Visit</span>
+        <h2 style="font-size:clamp(1.8rem,4vw,2.6rem);margin-block:10px 14px" data-i18n="visitTitle">Finding us</h2>
+        <p style="color:var(--muted)" data-i18n="visitLede">We're in the middle of Deir El Ahmar village — 22 km north-west of Baalbek, about 100 km from Beirut. Easy to reach from the Cedars road, and ten minutes from Our Lady of Bechwat.</p>
+        <div class="hero-cta">
+          <a class="btn btn-line" href="https://maps.google.com/?cid=10095242434537142898" target="_blank" rel="noopener" data-i18n="visitMap">Open in Google Maps</a>
+        </div>
+      </div>
+      <div class="visit-card">
+        <div class="visit-row">
+          <span class="k" data-i18n="vPhone">Phone &amp; WhatsApp</span>
+          <div class="copyline">
+            <span class="v">+961 70 782 071</span>
+            <button type="button" class="copybtn" data-copy="+96170782071" data-i18n="copy">Copy</button>
+          </div>
+        </div>
+        <div class="visit-row">
+          <span class="k" data-i18n="vWhere">Where</span>
+          <span class="v" data-i18n="vWhereV">Main road, Deir El Ahmar<br>Baalbek–Hermel, Lebanon</span>
+        </div>
+        <div class="visit-row">
+          <span class="k" data-i18n="vHours">Hours</span>
+          <span class="v" data-i18n="vHoursV">Open daily · lunch through late</span>
+        </div>
+        <div class="visit-row">
+          <span class="k" data-i18n="vGood">Good to know</span>
+          <span class="v" style="font-family:var(--body);font-size:.92rem;font-weight:400;color:var(--muted)" data-i18n="vGoodV">Full bar · arguileh · large groups · parking on the street</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+</main>
+
+<footer>
+  <div class="wrap foot-in">
+    <span>© <span id="yr">2026</span> Sonbol · Deir El Ahmar, Bekaa</span>
+    <span><a href="#menu" data-i18n="navMenu">Menu</a> · <a href="#book" data-i18n="navBook">Reserve</a> · <a href="https://maps.google.com/?cid=10095242434537142898" target="_blank" rel="noopener" data-i18n="footMap">Directions</a></span>
+  </div>
+</footer>
+
+<script>
+/* ---------- content ---------- */
+var MENU = [
+  { id:'salads', t:{en:'Salads',fr:'Salades',ar:'سلطات'},
+    note:{en:'Crisp, generous, built to share while the grill gets going.',
+          fr:'Croquantes, généreuses, à partager pendant que le grill chauffe.',
+          ar:'طازجة وبحصص سخية — تُشارَك ريثما يجهز المشاوي.'},
+    items:[
+      {n:{en:'Chicken Caesar',fr:'César au poulet',ar:'سيزر بالدجاج'},p:'8.5'},
+      {n:{en:'Greek salad',fr:'Salade grecque',ar:'سلطة يونانية'},p:'7'}
+    ]},
+  { id:'appetizers', t:{en:'Appetizers',fr:'Entrées',ar:'مقبلات'},
+    note:{en:'To start, or to keep the table busy.',fr:'Pour commencer, ou pour occuper la table.',ar:'للبداية، أو لتبقى الطاولة مشغولة.'},
+    items:[{n:{en:'Cheese nachos',fr:'Nachos au fromage',ar:'ناتشوز بالجبنة'},p:'5'}]},
+  { id:'pizza', t:{en:'Pizza',fr:'Pizza',ar:'بيتزا'},
+    note:{en:'Thin base, baked to order.',fr:'Pâte fine, cuite à la commande.',ar:'عجينة رقيقة تُخبز عند الطلب.'},
+    items:[
+      {n:{en:'Margherita',fr:'Margherita',ar:'مارغريتا'},p:'7.5'},
+      {n:{en:'Lebanese',fr:'Libanaise',ar:'لبنانية'},p:'9'},
+      {n:{en:'Vegetarian',fr:'Végétarienne',ar:'نباتية'},p:'8'},
+      {n:{en:'Pepperoni',fr:'Pepperoni',ar:'بيبروني'},p:'9'}
+    ]},
+  { id:'sandwiches', t:{en:'Sandwiches',fr:'Sandwichs',ar:'سندويشات'},
+    note:{en:'All served with fries.',fr:'Servis avec des frites.',ar:'تُقدَّم مع البطاطا المقلية.'},
+    items:[
+      {n:{en:'Riki sandwich',fr:'Sandwich Riki',ar:'سندويش ريكي'},p:'9'},
+      {n:{en:'Submarine',fr:'Submarine',ar:'سبمارين'},p:'7.5'},
+      {n:{en:'Ham &amp; cheese',fr:'Jambon-fromage',ar:'هام وجبنة'},p:'5.5'},
+      {n:{en:'Halloumi',fr:'Halloumi',ar:'حلوم'},p:'7'},
+      {n:{en:'Chicken mexicano',fr:'Poulet mexicano',ar:'دجاج مكسيكانو'},p:'9'}
+    ]},
+  { id:'sweets', t:{en:'Sweets',fr:'Desserts',ar:'حلويات'},
+    note:{en:'Crêpes made to order at the counter.',fr:'Crêpes préparées à la commande.',ar:'كريب يُحضَّر عند الطلب.'},
+    items:[
+      {n:{en:'Jello',fr:'Gelée',ar:'جيلو'},p:'2.5'},
+      {n:{en:'Custard',fr:'Crème anglaise',ar:'كاسترد'},p:'3'},
+      {n:{en:'Crêpe Nutella',fr:'Crêpe Nutella',ar:'كريب نوتيلا'},p:'5'},
+      {n:{en:'Crêpe Nutella &amp; Kinder',fr:'Crêpe Nutella &amp; Kinder',ar:'كريب نوتيلا وكيندر'},p:'6.5'},
+      {n:{en:'Crêpe Nutella &amp; Lotus',fr:'Crêpe Nutella &amp; Lotus',ar:'كريب نوتيلا ولوتس'},p:'7'}
+    ]},
+  { id:'drinks', t:{en:'Drinks',fr:'Boissons',ar:'مشروبات'},
+    note:{en:'',fr:'',ar:''},
+    items:[
+      {n:{en:'Soft drink',fr:'Boisson gazeuse',ar:'مشروب غازي'},p:'1.5'},
+      {n:{en:'Energy drink',fr:'Boisson énergisante',ar:'مشروب طاقة'},p:'3'},
+      {n:{en:'Perrier',fr:'Perrier',ar:'بيريه'},p:'2'},
+      {n:{en:'Beer',fr:'Bière',ar:'بيرا'},p:'2'},
+      {n:{en:'Iced tea',fr:'Thé glacé',ar:'شاي مثلج'},p:'2'},
+      {n:{en:'Water · small',fr:'Eau · petite',ar:'مياه · صغيرة'},p:'0.5'},
+      {n:{en:'Water · large',fr:'Eau · grande',ar:'مياه · كبيرة'},p:'1.5'}
+    ]},
+  { id:'hot', t:{en:'Hot drinks',fr:'Boissons chaudes',ar:'مشروبات ساخنة'},
+    note:{en:'',fr:'',ar:''},
+    items:[
+      {n:{en:'Tea',fr:'Thé',ar:'شاي'},p:'1.5'},
+      {n:{en:'Coffee',fr:'Café',ar:'قهوة'},p:'2.5'},
+      {n:{en:'Nescafé',fr:'Nescafé',ar:'نسكافيه'},p:'2.5'},
+      {n:{en:'Cappuccino',fr:'Cappuccino',ar:'كابتشينو'},p:'2'}
+    ]},
+  { id:'wine', t:{en:'Wine',fr:'Vins',ar:'نبيذ'},
+    note:{en:'Grown in the Bekaa, a few minutes from the table.',
+          fr:'Produits dans la Bekaa, à quelques minutes d’ici.',
+          ar:'من كروم البقاع، على بُعد دقائق من الطاولة.'},
+    items:[
+      {n:{en:'Wine Dayaa',fr:'Vin Dayaa',ar:'نبيذ ضيعة'},p:'10'},
+      {n:{en:'Couvent Rouge',fr:'Couvent Rouge',ar:'كوفان روج'},p:'16'}
+    ]},
+  { id:'chicha', t:{en:'Arguileh',fr:'Narguilé',ar:'أرجيلة'},
+    note:{en:'Served inside and on the terrace.',fr:'Servi en salle et en terrasse.',ar:'تُقدَّم في الداخل وعلى التراس.'},
+    items:[{n:{en:'Arguileh',fr:'Narguilé',ar:'أرجيلة'},p:'6'}]}
+];
+
+var SPREAD = [
+  {en:'Labneh',fr:'Labneh',ar:'لبنة'},
+  {en:'Jebneh baladiyeh',fr:'Jebneh baladiyeh',ar:'جبنة بلدية'},
+  {en:'Mortadella with olives',fr:'Mortadelle aux olives',ar:'مرتديلا بالزيتون'},
+  {en:'Tolyene',fr:'Tolyene',ar:'طلياني'},
+  {en:'Ach2awen',fr:'Ach2awen',ar:'أشقوان'},
+  {en:'Salame',fr:'Salami',ar:'سلامي'},
+  {en:'Olives',fr:'Olives',ar:'زيتون'},
+  {en:'Eggs with awarma',fr:'Œufs à l’awarma',ar:'بيض بقاورما'},
+  {en:'Jat khodra',fr:'Crudités',ar:'جاط خضرة'},
+  {en:'Brik',fr:'Brik',ar:'بريك'},
+  {en:'Tea or wine',fr:'Thé ou vin',ar:'شاي أو نبيذ'}
+];
+
+var T = {
+  en:{},
+  fr:{
+    brandSub:'Deir El Ahmar',
+    navStory:'La maison', navMenu:'Carte', navBook:'Réserver', navVisit:'Nous trouver',
+    heroEyebrow:'Vallée de la Bekaa · Baalbek–Hermel',
+    heroTitle1:'Une table au cœur', heroTitle2:'du village',
+    heroLede:'Pizza au feu de bois, poulet au charbon, mezzé et narguilé — au centre de Deir El Ahmar, entre les vignes et les cèdres.',
+    ctaBook:'Réserver une table', ctaMenu:'Carte d’hiver',
+    badgeRating:'sur Google · 121 avis',
+    badgeOpen:'<b>Ouvert tous les jours</b> · du déjeuner jusqu’à tard',
+    badgeGroups:'<b>Groupes bienvenus</b> · formule dès 4 personnes',
+    plateCap:'Note Google',
+    storyEyebrow:'La maison', storyTitle:'Nommé d’après l’épi de blé',
+    storyLede:'Sonbol est au centre de Deir El Ahmar, bourg agricole à 22 km au nord-ouest de Baalbek, là où la plaine rejoint les collines. Tout ce que nous cuisinons vient de cette plaine.',
+    s1k:'La cuisine', s1t:'Libanaise, grande ouverte',
+    s1b:'Mezzé et farrouj au charbon à côté des pizzas, pâtes et burgers — la carte que le village commande vraiment, bien faite.',
+    s2k:'La salle', s2t:'Moderne, pas guindée',
+    s2b:'Faite pour les longues tablées et les soirées bruyantes. Narguilé en terrasse, bar complet, et de la place pour douze sans déplacer les meubles.',
+    s3k:'La région', s3t:'Terre de vin',
+    s3b:'Nous servons les vins de la Bekaa, dont le Couvent Rouge, issus de vignobles parmi les plus hauts du Moyen-Orient — à quelques minutes d’ici.',
+    menuEyebrow:'Carte d’hiver', menuTitle:'Ce que nous servons',
+    menuLede:'Prix en dollars américains. La carte complète de l’année, plateaux et coin enfants compris, est sur le QR code en salle.',
+    formuleTitle:'La Formule', formuleFor:'pour 4 · 15 $ par personne',
+    formuleLede:'Une table de village complète, servie d’un coup, avec thé ou verre de vin pour finir.',
+    bookEyebrow:'Réservations', bookTitle:'Gardez-nous une table',
+    bookLede:'Remplissez ceci et nous confirmons par téléphone ou WhatsApp. Pour plus de 10 personnes, ou pour La Formule, prévenez-nous d’un jour si possible.',
+    bookPhoneK:'Ou appelez-nous directement', copy:'Copier',
+    fName:'Nom', fPhone:'Téléphone', fDate:'Date', fTime:'Heure', fGuests:'Couverts', fArea:'Placement',
+    optInside:'En salle', optArg:'Espace narguilé', optFormule:'La Formule',
+    fNote:'Ce que nous devrions savoir', fSubmit:'Demander cette table',
+    fFoot:'Une demande n’est pas une confirmation — nous revenons vers vous pour la valider.',
+    okTitle:'Votre demande est prête', okLede:'Envoyez-la sur WhatsApp, ou copiez les détails et appelez. Nous confirmerons la table.',
+    okWa:'Envoyer sur WhatsApp', okCopy:'Copier les détails', okAgain:'Recommencer',
+    visitEyebrow:'Nous trouver', visitTitle:'Pour venir',
+    visitLede:'Nous sommes au centre du village de Deir El Ahmar — 22 km au nord-ouest de Baalbek, à environ 100 km de Beyrouth. Accès facile depuis la route des Cèdres, à dix minutes de Notre-Dame de Bechwat.',
+    visitMap:'Ouvrir dans Google Maps',
+    vPhone:'Téléphone et WhatsApp', vWhere:'Adresse',
+    vWhereV:'Route principale, Deir El Ahmar<br>Baalbek–Hermel, Liban',
+    vHours:'Horaires', vHoursV:'Tous les jours · du déjeuner jusqu’à tard',
+    vGood:'Bon à savoir', vGoodV:'Bar complet · narguilé · grands groupes · stationnement dans la rue',
+    footMap:'Itinéraire'
+  },
+  ar:{
+    brandSub:'دير الأحمر',
+    navStory:'عن المطعم', navMenu:'القائمة', navBook:'احجز', navVisit:'الموقع',
+    heroEyebrow:'سهل البقاع · بعلبك–الهرمل',
+    heroTitle1:'طاولة في قلب', heroTitle2:'الضيعة',
+    heroLede:'بيتزا على الحطب، فروج على الفحم، مقبلات وأرجيلة — في وسط دير الأحمر، بين الكروم والأرز.',
+    ctaBook:'احجز طاولة', ctaMenu:'قائمة الشتاء',
+    badgeRating:'على غوغل · ١٢١ تقييم',
+    badgeOpen:'<b>مفتوح يومياً</b> · من الغداء حتى وقت متأخر',
+    badgeGroups:'<b>أهلاً بالمجموعات</b> · قائمة محددة من ٤ أشخاص',
+    plateCap:'تقييم غوغل',
+    storyEyebrow:'عن المطعم', storyTitle:'سُمّي على سنبلة القمح',
+    storyLede:'سنبل في وسط دير الأحمر، بلدة زراعية على بعد ٢٢ كلم شمال غرب بعلبك، حيث ينتهي السهل وتبدأ التلال. كل ما نطبخه من هذا السهل.',
+    s1k:'المطبخ', s1t:'لبناني، وبابه واسع',
+    s1b:'مقبلات وفروج على الفحم إلى جانب البيتزا والباستا والبرغر — القائمة التي تطلبها الضيعة فعلاً، مطبوخة كما يجب.',
+    s2k:'المكان', s2t:'عصري بلا تكلّف',
+    s2b:'مصمّم للطاولات الطويلة والسهرات الطويلة. أرجيلة على التراس، بار كامل، ومتّسع لعائلة من اثني عشر دون تغيير ترتيب المكان.',
+    s3k:'المنطقة', s3t:'أرض النبيذ',
+    s3b:'نقدّم نبيذ البقاع، ومنه كوفان روج، من كروم تُعدّ من الأعلى في الشرق الأوسط — على بعد دقائق من الباب.',
+    menuEyebrow:'قائمة الشتاء', menuTitle:'ما نقدّمه',
+    menuLede:'الأسعار بالدولار الأميركي. القائمة الكاملة للسنة، بما فيها الصحون وركن الأولاد، متوفرة على رمز QR على الطاولة.',
+    formuleTitle:'الفورمول', formuleFor:'لأربعة أشخاص · ١٥$ للشخص',
+    formuleLede:'سفرة ضيعة كاملة تُقدَّم على الطاولة، مع شاي أو كأس نبيذ في الختام.',
+    bookEyebrow:'الحجوزات', bookTitle:'احجز طاولتك',
+    bookLede:'املأ هذه الخانات ونؤكد لك عبر الهاتف أو واتساب. للمجموعات فوق العشرة، أو للفورمول، أعلمنا قبل يوم إن أمكن.',
+    bookPhoneK:'أو اتصل بنا مباشرة', copy:'نسخ',
+    fName:'الاسم', fPhone:'الهاتف', fDate:'التاريخ', fTime:'الوقت', fGuests:'عدد الأشخاص', fArea:'الجلسة',
+    optInside:'في الداخل', optArg:'قسم الأرجيلة', optFormule:'الفورمول',
+    fNote:'ملاحظات', fSubmit:'اطلب هذه الطاولة',
+    fFoot:'الطلب ليس تأكيداً — سنعاود الاتصال بك لتثبيت الحجز.',
+    okTitle:'طلبك جاهز للإرسال', okLede:'أرسله عبر واتساب، أو انسخ التفاصيل واتصل. سنؤكد لك الطاولة.',
+    okWa:'أرسل عبر واتساب', okCopy:'انسخ التفاصيل', okAgain:'ابدأ من جديد',
+    visitEyebrow:'الموقع', visitTitle:'كيف تصل إلينا',
+    visitLede:'نحن في وسط ضيعة دير الأحمر — ٢٢ كلم شمال غرب بعلبك، وحوالي ١٠٠ كلم عن بيروت. الوصول سهل من طريق الأرز، وعلى بعد عشر دقائق من سيدة بشوات.',
+    visitMap:'افتح في خرائط غوغل',
+    vPhone:'الهاتف وواتساب', vWhere:'العنوان',
+    vWhereV:'الطريق العام، دير الأحمر<br>بعلبك–الهرمل، لبنان',
+    vHours:'أوقات العمل', vHoursV:'يومياً · من الغداء حتى وقت متأخر',
+    vGood:'معلومات مفيدة', vGoodV:'بار كامل · أرجيلة · مجموعات كبيرة · ركن السيارات على الطريق',
+    footMap:'الاتجاهات'
+  }
+};
+
+/* capture English defaults from the markup */
+(function(){
+  var els = document.querySelectorAll('[data-i18n]');
+  for (var i=0;i<els.length;i++){ T.en[els[i].getAttribute('data-i18n')] = els[i].innerHTML; }
+})();
+
+var lang = 'en';
+
+function renderMenu(){
+  var tabs = document.getElementById('tabs');
+  var panels = document.getElementById('panels');
+  tabs.innerHTML = ''; panels.innerHTML = '';
+  MENU.forEach(function(cat, idx){
+    var b = document.createElement('button');
+    b.type='button'; b.setAttribute('role','tab'); b.id='tab-'+cat.id;
+    b.setAttribute('aria-controls','p-'+cat.id);
+    b.setAttribute('aria-selected', idx===0 ? 'true':'false');
+    b.textContent = cat.t[lang];
+    b.addEventListener('click', function(){ selectTab(cat.id); });
+    tabs.appendChild(b);
+
+    var p = document.createElement('div');
+    p.className='menu-panel'; p.id='p-'+cat.id; p.setAttribute('role','tabpanel');
+    p.setAttribute('aria-labelledby','tab-'+cat.id);
+    p.hidden = idx!==0;
+    var html = '';
+    if (cat.note && cat.note[lang]) html += '<p class="panel-note">'+cat.note[lang]+'</p>';
+    html += '<ul class="items">';
+    cat.items.forEach(function(it){
+      html += '<li><span class="nm">'+it.n[lang]+'</span><span class="dots"></span><span class="pr">$'+it.p+'</span></li>';
+    });
+    html += '</ul>';
+    p.innerHTML = html;
+    panels.appendChild(p);
+  });
+
+  var sp = document.getElementById('spread');
+  sp.innerHTML = SPREAD.map(function(s){ return '<li>'+s[lang]+'</li>'; }).join('');
+}
+
+function selectTab(id){
+  var tabs = document.querySelectorAll('#tabs button');
+  for (var i=0;i<tabs.length;i++){
+    tabs[i].setAttribute('aria-selected', tabs[i].id==='tab-'+id ? 'true':'false');
+  }
+  var ps = document.querySelectorAll('.menu-panel');
+  for (var j=0;j<ps.length;j++){ ps[j].hidden = ps[j].id!=='p-'+id; }
+}
+
+function setLang(code){
+  lang = code;
+  var dict = T[code] || {};
+  var els = document.querySelectorAll('[data-i18n]');
+  for (var i=0;i<els.length;i++){
+    var k = els[i].getAttribute('data-i18n');
+    var v = (dict[k] !== undefined) ? dict[k] : T.en[k];
+    if (v !== undefined) els[i].innerHTML = v;
+  }
+  document.documentElement.setAttribute('dir', code==='ar' ? 'rtl':'ltr');
+  document.documentElement.setAttribute('lang', code);
+  var btns = document.querySelectorAll('.langs button');
+  for (var j=0;j<btns.length;j++){
+    btns[j].setAttribute('aria-pressed', btns[j].getAttribute('data-lang')===code ? 'true':'false');
+  }
+  var sel = document.querySelector('#tabs button[aria-selected="true"]');
+  var keep = sel ? sel.id.replace('tab-','') : MENU[0].id;
+  renderMenu(); selectTab(keep);
+  try{ localStorage.setItem('sonbol-lang', code); }catch(e){}
+}
+
+/* ---------- copy ---------- */
+function copyText(text, btn){
+  var done = function(){
+    var old = btn.textContent; btn.textContent = '✓';
+    setTimeout(function(){ btn.textContent = old; }, 1400);
+  };
+  try{
+    navigator.clipboard.writeText(text).then(done, function(){ fallback(text, done); });
+  }catch(e){ fallback(text, done); }
+}
+function fallback(text, done){
+  var ta = document.createElement('textarea');
+  ta.value = text; ta.style.position='fixed'; ta.style.opacity='0';
+  document.body.appendChild(ta); ta.select();
+  try{ document.execCommand('copy'); done(); }catch(e){}
+  document.body.removeChild(ta);
+}
+document.addEventListener('click', function(e){
+  var b = e.target.closest ? e.target.closest('[data-copy]') : null;
+  if (b) copyText(b.getAttribute('data-copy'), b);
+});
+
+/* ---------- reservation ---------- */
+var LBL = {
+  en:{n:'Name',p:'Phone',d:'Date',t:'Time',g:'Guests',s:'Seating',note:'Notes',head:'Table request — Sonbol'},
+  fr:{n:'Nom',p:'Téléphone',d:'Date',t:'Heure',g:'Couverts',s:'Placement',note:'Notes',head:'Demande de table — Sonbol'},
+  ar:{n:'الاسم',p:'الهاتف',d:'التاريخ',t:'الوقت',g:'عدد الأشخاص',s:'الجلسة',note:'ملاحظات',head:'طلب حجز — سنبل'}
+};
+var AREA = {
+  inside:{en:'Inside',fr:'En salle',ar:'في الداخل'},
+  arguileh:{en:'Arguileh section',fr:'Espace narguilé',ar:'قسم الأرجيلة'},
+  formule:{en:'La Formule (set menu)',fr:'La Formule',ar:'الفورمول'}
+};
+
+var form = document.getElementById('resform');
+var confirmBox = document.getElementById('confirm');
+
+form.addEventListener('submit', function(e){
+  e.preventDefault();
+  var f = new FormData(form);
+  var L = LBL[lang] || LBL.en;
+  var area = AREA[f.get('area')] ? AREA[f.get('area')][lang] : f.get('area');
+  var lines = [
+    L.head,
+    L.n + ': ' + (f.get('name')||'—'),
+    L.p + ': ' + (f.get('phone')||'—'),
+    L.d + ': ' + (f.get('date')||'—') + '  ' + L.t + ': ' + (f.get('time')||'—'),
+    L.g + ': ' + f.get('guests'),
+    L.s + ': ' + area
+  ];
+  if ((f.get('note')||'').trim()) lines.push(L.note + ': ' + f.get('note').trim());
+  var msg = lines.join('\n');
+
+  document.getElementById('recap').textContent = msg;
+  document.getElementById('walink').href = 'https://wa.me/96170782071?text=' + encodeURIComponent(msg);
+  form.hidden = true;
+  confirmBox.hidden = false;
+  confirmBox.scrollIntoView({behavior:'smooth', block:'center'});
+});
+
+document.getElementById('copyrecap').addEventListener('click', function(){
+  copyText(document.getElementById('recap').textContent, this);
+});
+document.getElementById('again').addEventListener('click', function(){
+  confirmBox.hidden = true; form.hidden = false;
+  form.scrollIntoView({behavior:'smooth', block:'center'});
+});
+
+/* ---------- boot ---------- */
+document.getElementById('yr').textContent = new Date().getFullYear();
+(function(){
+  var d = new Date(); d.setDate(d.getDate()+1);
+  document.getElementById('rdate').value = d.toISOString().slice(0,10);
+  document.getElementById('rdate').min = new Date().toISOString().slice(0,10);
+})();
+var saved = null;
+try{ saved = localStorage.getItem('sonbol-lang'); }catch(e){}
+renderMenu();
+document.querySelectorAll('.langs button').forEach(function(b){
+  b.addEventListener('click', function(){ setLang(b.getAttribute('data-lang')); });
+});
+if (saved && T[saved]) setLang(saved);
+</script>
+
+</body></html>
