@@ -1,0 +1,1559 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Ascend Supply Co.</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<meta name="description" content="Jet lighters, organic rolling papers and premium butane.">
+<!--
+  ASSET GUIDE
+  - Images: every <figure class="media"> takes data-src="your-image.jpg" (e.g. data-src="https://placehold.co/800x600").
+    Leave it empty to show the styled placeholder. data-ph picks the placeholder art: lighter | papers | gas | collab.
+  - Hero video: set data-video="hero.mp4" (and optional data-poster) on #heroMedia.
+  - Brand name, discount code, prices and products live in the CONFIG / PRODUCTS objects at the top of the script.
+-->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Big+Shoulders+Display:wght@700;800;900&family=Hanken+Grotesk:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap">
+<script src="https://cdn.tailwindcss.com/3.4.17"></script>
+<script>
+  if (window.tailwind) tailwind.config = {
+    corePlugins: { preflight: false },
+    theme: { extend: { screens: { xs: '480px' } } }
+  };
+</script>
+<style>
+  /* Layout: full-bleed dark bands; 12-col content at 1320px; zig-zag product rows; overlays slide from the edges */
+  :root {
+    --ink: #0C0B0A;        /* page ground: warm black */
+    --pit: #070606;        /* footer */
+    --coal: #151412;       /* surfaces */
+    --smoke: #201E1B;      /* raised / hover */
+    --line: #302C27;       /* hairlines */
+    --ash: #A39D94;        /* muted text */
+    --bone: #F3EFE9;       /* primary text */
+    --flame: #FF5A14;      /* electric orange accent */
+    --flame-hi: #FF8B42;
+    --on-flame: #140904;
+    --glow: rgba(255, 90, 20, .30);
+    --grid: rgba(243, 239, 233, .035);
+    --header-bg: rgba(12, 11, 10, .84);
+    --scrim: rgba(5, 4, 4, .72);
+
+    --f-display: "Big Shoulders Display", Impact, "Arial Narrow", sans-serif;
+    --f-body: "Hanken Grotesk", system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+    --f-mono: "JetBrains Mono", ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+    --ease: cubic-bezier(.2, .7, .1, 1);
+    --gutter-l: max(20px, env(safe-area-inset-left, 0px));
+    --gutter-r: max(20px, env(safe-area-inset-right, 0px));
+    color-scheme: dark;
+  }
+
+  /* ---------- Reset (Tailwind preflight is off) ---------- */
+  *, *::before, *::after { box-sizing: border-box; }
+  html { background: var(--ink); scroll-behavior: smooth; -webkit-text-size-adjust: 100%; }
+  html.is-locked { overflow: hidden; }
+  body { margin: 0; background: var(--ink); color: var(--bone); font-family: var(--f-body); font-size: 16px; line-height: 1.6; -webkit-font-smoothing: antialiased; overflow-x: clip; }
+  body::before { content: ""; position: fixed; inset: 0 0 auto; height: env(safe-area-inset-top, 0px); z-index: 60; background: var(--ink); }
+  h1, h2, h3, h4, p, figure, ul, ol, dl, dd, fieldset { margin: 0; padding: 0; }
+  ul, ol { list-style: none; }
+  fieldset { border: 0; min-width: 0; }
+  a { color: inherit; text-decoration: none; }
+  button, input, select { font: inherit; color: inherit; }
+  button { background: none; border: 0; padding: 0; cursor: pointer; }
+  img, video, canvas, svg { display: block; max-width: 100%; }
+  [hidden] { display: none !important; }
+  :focus-visible { outline: 2px solid var(--flame); outline-offset: 3px; }
+  ::selection { background: var(--flame); color: var(--on-flame); }
+  .sr-only { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+  .ico { width: 20px; height: 20px; flex: none; fill: none; stroke: currentColor; stroke-width: 1.6; stroke-linecap: round; stroke-linejoin: round; }
+
+  .wrap { max-width: 1320px; margin-inline: auto; padding-left: var(--gutter-l); padding-right: var(--gutter-r); }
+  .skip { position: absolute; left: 12px; top: -60px; z-index: 100; background: var(--flame); color: var(--on-flame); padding: 10px 14px; font-weight: 700; }
+  .skip:focus { top: 12px; }
+
+  /* ---------- Type ---------- */
+  .display-xl, .display-l, .display-m, .display-s { font-family: var(--f-display); text-transform: uppercase; text-wrap: balance; letter-spacing: .005em; }
+  .display-xl { font-weight: 900; font-size: clamp(3.9rem, 12.5vw, 10.75rem); line-height: .84; }
+  .display-l { font-weight: 900; font-size: clamp(2.9rem, 7.5vw, 6.25rem); line-height: .88; }
+  .display-m { font-weight: 800; font-size: clamp(2.1rem, 4.2vw, 3.4rem); line-height: .92; }
+  .display-s { font-weight: 800; font-size: 1.5rem; line-height: 1; letter-spacing: .02em; }
+  .eyebrow { display: inline-flex; align-items: center; gap: 10px; font-family: var(--f-mono); font-size: 12px; letter-spacing: .18em; text-transform: uppercase; color: var(--ash); }
+  .eyebrow::before { content: ""; width: 7px; height: 7px; background: var(--flame); }
+  .lede { color: var(--ash); font-size: clamp(1.02rem, 1.3vw, 1.15rem); line-height: 1.65; max-width: 52ch; }
+  .mono { font-family: var(--f-mono); }
+  .hot { color: var(--flame); }
+
+  /* ---------- Buttons ---------- */
+  .btn { position: relative; isolation: isolate; overflow: hidden; display: inline-flex; align-items: center; justify-content: center; gap: 12px; min-height: 52px; padding: 0 28px; font-weight: 700; font-size: 13px; letter-spacing: .14em; text-transform: uppercase; border: 1px solid transparent; transition: color .35s var(--ease), border-color .35s var(--ease), transform .35s var(--ease); white-space: nowrap; }
+  .btn::before { content: ""; position: absolute; inset: 0; z-index: -1; transform: scaleX(0); transform-origin: right; transition: transform .45s var(--ease); }
+  .btn:hover::before, .btn:focus-visible::before { transform: scaleX(1); transform-origin: left; }
+  .btn:active { transform: scale(.98); }
+  .btn .ico { width: 18px; height: 18px; transition: transform .35s var(--ease); }
+  .btn:hover .ico-arrow { transform: translateX(4px); }
+  .btn[disabled] { opacity: .4; cursor: not-allowed; }
+  .btn[disabled]::before { display: none; }
+  .btn-primary { background: var(--flame); color: var(--on-flame); }
+  .btn-primary::before { background: var(--bone); }
+  .btn-primary:hover { color: var(--ink); }
+  .btn-ghost { border-color: var(--line); color: var(--bone); }
+  .btn-ghost::before { background: var(--bone); }
+  .btn-ghost:hover { color: var(--ink); border-color: var(--bone); }
+  .btn-block { width: 100%; }
+  .btn-lg { min-height: 60px; padding: 0 34px; font-size: 14px; }
+  .link-u { position: relative; display: inline-flex; align-items: center; gap: 8px; font-weight: 700; font-size: 13px; letter-spacing: .14em; text-transform: uppercase; }
+  .link-u::after { content: ""; position: absolute; left: 0; right: 0; bottom: -4px; height: 1px; background: var(--flame); transform: scaleX(.35); transform-origin: left; transition: transform .4s var(--ease); }
+  .link-u:hover::after { transform: scaleX(1); }
+
+  /* ---------- Announcement + Header ---------- */
+  .announce { background: var(--flame); color: var(--on-flame); font-family: var(--f-mono); font-size: 11.5px; letter-spacing: .14em; text-transform: uppercase; text-align: center; padding-block: 9px; }
+  .site-header { position: sticky; top: env(safe-area-inset-top, 0px); z-index: 50; background: var(--header-bg); -webkit-backdrop-filter: blur(14px) saturate(140%); backdrop-filter: blur(14px) saturate(140%); border-bottom: 1px solid transparent; transition: border-color .3s; }
+  .site-header.is-scrolled { border-bottom-color: var(--line); }
+  .header-row { display: flex; align-items: center; justify-content: space-between; gap: 16px; height: 72px; }
+  .logo { display: inline-flex; align-items: center; gap: 8px; font-family: var(--f-display); font-weight: 900; font-size: 30px; letter-spacing: .06em; line-height: 1; }
+  .logo-mark { width: 14px; height: 18px; background: var(--flame); clip-path: polygon(50% 0, 100% 100%, 0 100%); }
+  .nav-primary { display: none; }
+  .nav-link { position: relative; display: inline-flex; align-items: center; gap: 6px; height: 72px; font-size: 13px; font-weight: 700; letter-spacing: .16em; text-transform: uppercase; color: var(--ash); transition: color .25s; }
+  .nav-link:hover, .nav-link[aria-expanded="true"] { color: var(--bone); }
+  .nav-link::after { content: ""; position: absolute; left: 0; right: 0; bottom: 20px; height: 2px; background: var(--flame); transform: scaleX(0); transform-origin: left; transition: transform .35s var(--ease); }
+  .nav-link:hover::after, .nav-link[aria-expanded="true"]::after { transform: scaleX(1); }
+  .nav-link .ico { width: 14px; height: 14px; transition: transform .3s var(--ease); }
+  .nav-link[aria-expanded="true"] .ico { transform: rotate(180deg); }
+  .header-actions { display: flex; align-items: center; gap: 6px; }
+  .icon-btn { position: relative; display: inline-flex; align-items: center; gap: 8px; height: 44px; padding: 0 12px; font-size: 13px; font-weight: 700; letter-spacing: .14em; text-transform: uppercase; color: var(--bone); transition: color .25s; }
+  .icon-btn:hover { color: var(--flame-hi); }
+  .cart-count { display: inline-grid; place-items: center; min-width: 22px; height: 22px; padding: 0 6px; border-radius: 11px; background: var(--flame); color: var(--on-flame); font-family: var(--f-mono); font-size: 11px; font-weight: 500; letter-spacing: 0; transition: transform .3s var(--ease); }
+  .cart-count.bump { animation: bump .45s var(--ease); }
+  @keyframes bump { 40% { transform: scale(1.35); } }
+  .hide-sm { display: none; }
+  @media (min-width: 1024px) {
+    .nav-primary { display: flex; gap: 36px; }
+    .burger { display: none !important; }
+    .hide-sm { display: inline; }
+  }
+
+  /* Megamenu */
+  .mega { position: absolute; left: 0; right: 0; top: 100%; background: var(--coal); border-block: 1px solid var(--line); opacity: 0; visibility: hidden; transform: translateY(-8px); transition: opacity .3s var(--ease), transform .3s var(--ease), visibility 0s linear .3s; }
+  .mega.is-open { opacity: 1; visibility: visible; transform: none; transition-delay: 0s; }
+  @media (max-width: 1023px) { .mega { display: none; } }
+  .mega-grid { display: grid; grid-template-columns: repeat(3, 1fr) 1.4fr; gap: 40px; padding-block: 40px 44px; }
+  .mega-col h3 { display: flex; align-items: center; gap: 10px; font-family: var(--f-display); font-weight: 800; font-size: 26px; text-transform: uppercase; letter-spacing: .02em; padding-bottom: 14px; margin-bottom: 14px; border-bottom: 1px solid var(--line); }
+  .mega-col h3 .ico { color: var(--flame); width: 22px; height: 22px; }
+  .mega-col ul { display: grid; gap: 4px; }
+  .mega-col a { display: inline-block; padding: 5px 0; color: var(--ash); font-size: 15px; transition: color .2s, transform .3s var(--ease); }
+  .mega-col a:hover { color: var(--bone); transform: translateX(4px); }
+  .mega-col .all { margin-top: 10px; color: var(--flame-hi); font-weight: 600; }
+  .mega-feature { position: relative; display: block; }
+  .mega-feature .media { --ratio: 16 / 10; }
+  .mega-feature-cap { display: flex; justify-content: space-between; align-items: baseline; gap: 12px; margin-top: 14px; }
+
+  /* ---------- Hero ---------- */
+  .hero { position: relative; isolation: isolate; overflow: hidden; min-height: min(88vh, 860px); display: flex; align-items: flex-end; border-bottom: 1px solid var(--line); }
+  .hero-media { position: absolute; inset: 0; z-index: -2; background:
+      radial-gradient(70% 60% at 78% 105%, var(--glow), transparent 70%),
+      radial-gradient(50% 45% at 12% -5%, var(--smoke), transparent 70%),
+      var(--ink); }
+  .hero-media video { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
+  .hero-media canvas { position: absolute; inset: 0; width: 100%; height: 100%; }
+  .hero-media::after { content: ""; position: absolute; inset: 0; opacity: .09; mix-blend-mode: overlay; pointer-events: none; background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='160' height='160'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='3' stitchTiles='stitch'/></filter><rect width='100%' height='100%' filter='url(%23n)'/></svg>"); }
+  .hero-scrim { position: absolute; inset: 0; z-index: -1; background: linear-gradient(180deg, transparent 30%, var(--ink) 100%); pointer-events: none; }
+  .hero-inner { width: 100%; padding-block: clamp(96px, 14vh, 160px) 40px; }
+  .hero-title .line { display: block; overflow: hidden; padding-bottom: .02em; }
+  .hero-title .line > span { display: inline-block; animation: rise 1.1s var(--ease) both; }
+  .hero-title .line:nth-child(2) > span { animation-delay: .12s; }
+  .hero-fade { animation: fadeUp 1s var(--ease) both; animation-delay: .35s; }
+  .hero-fade.d2 { animation-delay: .5s; }
+  .hero-fade.d3 { animation-delay: .65s; }
+  @keyframes rise { from { transform: translateY(105%); } to { transform: none; } }
+  @keyframes fadeUp { from { opacity: 0; transform: translateY(18px); } to { opacity: 1; transform: none; } }
+  .pulse-dot { position: relative; width: 8px; height: 8px; border-radius: 50%; background: var(--flame); }
+  .pulse-dot::after { content: ""; position: absolute; inset: -5px; border-radius: 50%; border: 1px solid var(--flame); animation: ring 2.2s ease-out infinite; }
+  @keyframes ring { from { transform: scale(.4); opacity: 1; } to { transform: scale(1.8); opacity: 0; } }
+  .hero-specs { display: grid; grid-template-columns: 1fr; border-top: 1px solid var(--line); margin-top: clamp(48px, 8vh, 88px); }
+  .hero-specs > div { display: flex; gap: 14px; align-items: baseline; padding: 16px 0; border-bottom: 1px solid var(--line); font-family: var(--f-mono); font-size: 12px; letter-spacing: .12em; text-transform: uppercase; }
+  .hero-specs dt { color: var(--flame-hi); min-width: 7ch; }
+  .hero-specs dd { color: var(--bone); }
+  @media (min-width: 768px) {
+    .hero-specs { grid-template-columns: repeat(3, 1fr); }
+    .hero-specs > div { border-bottom: 0; padding: 18px 24px 0 0; }
+    .hero-specs > div + div { border-left: 1px solid var(--line); padding-left: 24px; }
+  }
+
+  /* ---------- Ticker ---------- */
+  .ticker { overflow: hidden; background: var(--coal); border-bottom: 1px solid var(--line); }
+  .ticker-track { display: flex; width: max-content; animation: tick 42s linear infinite; }
+  .ticker:hover .ticker-track { animation-play-state: paused; }
+  .ticker-group { display: flex; align-items: center; gap: 36px; padding: 18px 18px; }
+  .ticker-item { font-family: var(--f-display); font-weight: 800; font-size: clamp(22px, 3vw, 34px); text-transform: uppercase; letter-spacing: .03em; white-space: nowrap; }
+  .ticker-item.outline { color: transparent; -webkit-text-stroke: 1px var(--ash); }
+  .ticker .ico { width: 18px; height: 18px; color: var(--flame); }
+  @keyframes tick { to { transform: translateX(-50%); } }
+
+  /* ---------- Sections ---------- */
+  .section { padding-block: clamp(80px, 11vw, 150px); scroll-margin-top: 72px; }
+  .section-head { display: grid; gap: 24px; align-items: end; margin-bottom: clamp(56px, 8vw, 110px); }
+  @media (min-width: 900px) { .section-head { grid-template-columns: 1.4fr 1fr; gap: 60px; } }
+
+  /* Media frames (placeholders or real images) */
+  .media { position: relative; overflow: hidden; background: var(--coal); aspect-ratio: var(--ratio, 4 / 3); width: 100%; max-width: 100%; border: 1px solid var(--line); }
+  .media-parallax { position: absolute; inset: -7% 0; will-change: transform; }
+  .media-fill { position: absolute; inset: 0; transition: transform 1.2s var(--ease); }
+  .media-fill > img, .media-fill > video { width: 100%; height: 100%; object-fit: cover; }
+  .media:hover .media-fill, .card:hover .media-fill, .mega-feature:hover .media-fill, .collab:hover .media-fill { transform: scale(1.05); }
+  .ph { position: absolute; inset: 0; display: grid; place-items: center; background:
+      radial-gradient(55% 45% at 50% 40%, var(--glow), transparent 72%),
+      linear-gradient(var(--grid) 1px, transparent 1px) 0 0 / 44px 44px,
+      linear-gradient(90deg, var(--grid) 1px, transparent 1px) 0 0 / 44px 44px,
+      var(--coal); }
+  .ph svg { width: clamp(72px, 34%, 230px); height: auto; color: var(--ash); fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+  .ph svg .h { stroke: var(--flame); }
+  .ph svg .f { fill: var(--flame); stroke: none; opacity: .9; }
+  .ph-label { position: absolute; left: 14px; bottom: 14px; max-width: calc(100% - 28px); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; font-family: var(--f-mono); font-size: 10.5px; letter-spacing: .1em; text-transform: uppercase; color: var(--ash); background: var(--ink); border: 1px solid var(--line); padding: 5px 8px; }
+  .ticks { position: absolute; inset: 14px; pointer-events: none; opacity: .55; background-repeat: no-repeat; background-image:
+      linear-gradient(var(--bone), var(--bone)), linear-gradient(var(--bone), var(--bone)),
+      linear-gradient(var(--bone), var(--bone)), linear-gradient(var(--bone), var(--bone)),
+      linear-gradient(var(--bone), var(--bone)), linear-gradient(var(--bone), var(--bone)),
+      linear-gradient(var(--bone), var(--bone)), linear-gradient(var(--bone), var(--bone));
+    background-size: 16px 1px, 1px 16px, 16px 1px, 1px 16px, 16px 1px, 1px 16px, 16px 1px, 1px 16px;
+    background-position: left top, left top, right top, right top, left bottom, left bottom, right bottom, right bottom; }
+  .media.is-small .ticks, .media.is-small .ph-label { display: none; }
+
+  /* Feature rows */
+  .feature { display: grid; gap: clamp(36px, 5vw, 88px); align-items: center; }
+  .feature + .feature { margin-top: clamp(88px, 12vw, 170px); }
+  @media (min-width: 900px) {
+    .feature { grid-template-columns: 7fr 5fr; }
+    .feature.reverse { grid-template-columns: 5fr 7fr; }
+    .feature.reverse .feature-media { order: 2; }
+  }
+  .feature-media { position: relative; min-width: 0; }
+  .feature-media .media { --ratio: 6 / 5; }
+  .float-chip { position: absolute; right: -1px; top: 28px; display: flex; align-items: center; gap: 10px; background: var(--flame); color: var(--on-flame); padding: 10px 14px; font-family: var(--f-mono); font-size: 11px; letter-spacing: .12em; text-transform: uppercase; }
+  .float-chip .ico { width: 16px; height: 16px; }
+  .feature-copy { min-width: 0; display: grid; gap: 28px; }
+  .specs { display: grid; gap: 26px 32px; padding-top: 30px; border-top: 1px solid var(--line); }
+  @media (min-width: 560px) { .specs { grid-template-columns: 1fr 1fr; } }
+  .spec { display: grid; grid-template-columns: 46px 1fr; gap: 16px; align-items: start; }
+  .spec-ico { display: grid; place-items: center; width: 46px; height: 46px; border: 1px solid var(--line); color: var(--flame); transition: background .3s, color .3s, border-color .3s; }
+  .spec:hover .spec-ico { background: var(--flame); color: var(--on-flame); border-color: var(--flame); }
+  .spec-ico .ico { width: 22px; height: 22px; }
+  .spec h4 { font-weight: 700; font-size: 15px; letter-spacing: .06em; text-transform: uppercase; line-height: 1.3; }
+  .spec p { color: var(--ash); font-size: 14.5px; line-height: 1.55; margin-top: 4px; }
+  .spec-strip { display: flex; flex-wrap: wrap; gap: 6px 18px; font-family: var(--f-mono); font-size: 11.5px; letter-spacing: .1em; text-transform: uppercase; color: var(--ash); }
+  .spec-strip b { color: var(--bone); font-weight: 500; }
+
+  /* Products */
+  .product-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 32px 16px; }
+  @media (min-width: 1024px) { .product-grid { grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 40px 24px; } }
+  .card { display: flex; flex-direction: column; gap: 14px; min-width: 0; }
+  .card-media { position: relative; }
+  .card-media .media { --ratio: 1 / 1; }
+  .chip { position: absolute; left: 12px; top: 12px; z-index: 1; font-family: var(--f-mono); font-size: 10.5px; letter-spacing: .12em; text-transform: uppercase; padding: 5px 9px; background: var(--ink); border: 1px solid var(--line); color: var(--bone); }
+  .chip.hot-chip { background: var(--flame); border-color: var(--flame); color: var(--on-flame); }
+  .card-body { display: flex; justify-content: space-between; align-items: start; gap: 12px; }
+  .card-title { font-weight: 700; font-size: 16px; line-height: 1.3; }
+  .card-variant { color: var(--ash); font-size: 14px; line-height: 1.4; margin-top: 2px; }
+  .card-price { font-family: var(--f-mono); font-size: 14px; font-variant-numeric: tabular-nums; white-space: nowrap; }
+  .card .btn { min-height: 46px; padding: 0 14px; font-size: 12px; }
+
+  /* Collabs */
+  .band { background: var(--coal); border-block: 1px solid var(--line); }
+  .collab-grid { display: grid; gap: 20px; }
+  @media (min-width: 768px) { .collab-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); } }
+  .collab { position: relative; display: block; min-width: 0; }
+  .collab .media { --ratio: 4 / 5; background: var(--ink); }
+  .collab-cap { display: flex; justify-content: space-between; align-items: end; gap: 16px; padding-top: 18px; }
+  .collab-cap p { color: var(--ash); font-size: 14.5px; margin-top: 6px; max-width: 36ch; }
+  .arrow-box { display: grid; place-items: center; width: 44px; height: 44px; flex: none; border: 1px solid var(--line); transition: background .3s, border-color .3s, color .3s; }
+  .collab:hover .arrow-box { background: var(--flame); border-color: var(--flame); color: var(--on-flame); }
+
+  /* About */
+  .about-grid { display: grid; gap: 56px; }
+  @media (min-width: 960px) { .about-grid { grid-template-columns: 1.25fr 1fr; gap: 96px; } }
+  .statement { font-family: var(--f-display); font-weight: 800; font-size: clamp(2rem, 4.4vw, 3.6rem); line-height: 1; text-transform: uppercase; text-wrap: balance; }
+  .statement em { font-style: normal; color: var(--flame); }
+  .values { display: grid; }
+  .values li { display: grid; grid-template-columns: 56px 1fr; gap: 12px; padding: 24px 0; border-top: 1px solid var(--line); }
+  .values li:last-child { border-bottom: 1px solid var(--line); }
+  .values .mono { color: var(--flame-hi); font-size: 12px; letter-spacing: .1em; padding-top: 3px; }
+  .values h3 { font-weight: 700; font-size: 17px; letter-spacing: .04em; text-transform: uppercase; }
+  .values p { color: var(--ash); font-size: 15px; margin-top: 4px; }
+  .trade { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: 24px; margin-top: clamp(64px, 9vw, 120px); padding: clamp(28px, 4vw, 48px); border: 1px solid var(--line); background: linear-gradient(110deg, var(--coal), var(--ink) 70%); }
+  .trade > div { min-width: 0; }
+
+  /* Footer */
+  .site-footer { background: var(--pit); border-top: 1px solid var(--line); padding-block: clamp(64px, 8vw, 104px) 0; scroll-margin-top: 72px; }
+  .footer-top { display: grid; gap: 56px; padding-bottom: 64px; border-bottom: 1px solid var(--line); }
+  .footer-top > * { min-width: 0; }
+  @media (min-width: 960px) { .footer-top { grid-template-columns: 1.3fr 2fr; gap: 80px; } }
+  .newsletter { display: flex; margin-top: 24px; border: 1px solid var(--line); max-width: 460px; }
+  .newsletter input { flex: 1; min-width: 0; background: transparent; border: 0; padding: 0 16px; height: 54px; font-size: 15px; }
+  .newsletter input::placeholder { color: var(--ash); }
+  .newsletter input:focus { outline: none; }
+  .newsletter:focus-within { border-color: var(--flame); }
+  .newsletter .btn { min-height: 54px; }
+  .form-note { font-size: 13.5px; color: var(--ash); margin-top: 10px; min-height: 1.5em; }
+  .footer-cols { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 40px 24px; }
+  @media (min-width: 640px) { .footer-cols { grid-template-columns: repeat(4, minmax(0, 1fr)); } }
+  .footer-cols h3 { font-family: var(--f-mono); font-size: 11.5px; font-weight: 500; letter-spacing: .16em; text-transform: uppercase; color: var(--ash); margin-bottom: 18px; }
+  .footer-cols ul { display: grid; gap: 10px; }
+  .footer-cols a { font-size: 15px; transition: color .2s; }
+  .footer-cols a:hover { color: var(--flame-hi); }
+  .footer-cols address { font-style: normal; font-size: 15px; display: grid; gap: 6px; overflow-wrap: anywhere; }
+  .footer-cols address span { color: var(--ash); font-size: 14px; }
+  .socials { display: flex; gap: 8px; margin-top: 22px; }
+  .socials a { display: grid; place-items: center; width: 42px; height: 42px; border: 1px solid var(--line); transition: background .3s, border-color .3s, color .3s; }
+  .socials a:hover { background: var(--flame); border-color: var(--flame); color: var(--on-flame); }
+  .socials .ico { width: 18px; height: 18px; }
+  .footer-word { font-family: var(--f-display); font-weight: 900; text-transform: uppercase; font-size: clamp(5rem, 22vw, 20rem); line-height: .78; letter-spacing: .02em; color: transparent; -webkit-text-stroke: 1px var(--line); text-align: center; padding-top: 40px; user-select: none; overflow: hidden; }
+  .footer-bottom { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 12px 24px; padding-block: 24px calc(24px + env(safe-area-inset-bottom, 0px)); font-size: 13px; color: var(--ash); border-top: 1px solid var(--line); }
+  .footer-bottom nav { display: flex; gap: 20px; flex-wrap: wrap; }
+  .footer-bottom a:hover { color: var(--bone); }
+
+  /* ---------- Overlays (layers) ---------- */
+  .layer { position: fixed; inset: 0; z-index: 80; visibility: hidden; transition: visibility 0s linear .5s; }
+  .layer.is-open { visibility: visible; transition-delay: 0s; }
+  .scrim { position: absolute; inset: 0; background: var(--scrim); opacity: 0; transition: opacity .45s var(--ease); -webkit-backdrop-filter: blur(3px); backdrop-filter: blur(3px); }
+  .layer.is-open .scrim { opacity: 1; }
+  .drawer { position: absolute; top: 0; bottom: 0; width: min(440px, 100%); display: flex; flex-direction: column; background: var(--coal); transition: transform .5s var(--ease); padding-top: env(safe-area-inset-top, 0px); padding-bottom: env(safe-area-inset-bottom, 0px); }
+  .drawer:focus { outline: none; }
+  .drawer-right { right: 0; border-left: 1px solid var(--line); transform: translateX(100%); padding-right: env(safe-area-inset-right, 0px); }
+  .drawer-left { left: 0; border-right: 1px solid var(--line); transform: translateX(-100%); padding-left: env(safe-area-inset-left, 0px); }
+  .layer.is-open .drawer { transform: none; }
+  .drawer-head { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 20px 24px; border-bottom: 1px solid var(--line); }
+  .close-btn { display: grid; place-items: center; width: 44px; height: 44px; border: 1px solid var(--line); transition: border-color .25s, transform .4s var(--ease); }
+  .close-btn:hover { border-color: var(--bone); transform: rotate(90deg); }
+  .drawer-body { flex: 1; overflow-y: auto; padding: 24px; }
+  .drawer-foot { padding: 20px 24px 24px; border-top: 1px solid var(--line); display: grid; gap: 12px; }
+  .ship-meter { padding: 16px 24px; border-bottom: 1px solid var(--line); font-size: 14px; color: var(--ash); }
+  .ship-meter b { color: var(--bone); }
+  .meter { height: 3px; background: var(--line); margin-top: 10px; overflow: hidden; }
+  .meter > i { display: block; height: 100%; width: 0; background: var(--flame); transition: width .6s var(--ease); }
+  .empty { display: grid; justify-items: center; text-align: center; gap: 14px; padding-block: 48px 24px; }
+  .empty-ico { display: grid; place-items: center; width: 84px; height: 84px; border: 1px dashed var(--line); color: var(--ash); }
+  .empty-ico .ico { width: 34px; height: 34px; stroke-width: 1.2; }
+  .empty p { color: var(--ash); max-width: 30ch; }
+  .subtotal { display: flex; justify-content: space-between; align-items: baseline; font-weight: 700; font-size: 15px; letter-spacing: .08em; text-transform: uppercase; }
+  .subtotal span:last-child { font-family: var(--f-mono); font-size: 18px; letter-spacing: 0; font-variant-numeric: tabular-nums; }
+  .fine { font-size: 13px; color: var(--ash); }
+  .line-items { display: grid; gap: 20px; }
+  .line-item { display: grid; grid-template-columns: 76px 1fr auto; gap: 14px; align-items: start; }
+  .line-item .media { --ratio: 1 / 1; }
+  .line-item h4 { font-weight: 700; font-size: 15px; line-height: 1.3; }
+  .line-item .fine { margin-top: 2px; }
+  .line-price { font-family: var(--f-mono); font-size: 14px; font-variant-numeric: tabular-nums; }
+  .qty { display: inline-flex; align-items: center; border: 1px solid var(--line); margin-top: 10px; }
+  .qty button { display: grid; place-items: center; width: 34px; height: 34px; color: var(--ash); }
+  .qty button:hover { color: var(--bone); }
+  .qty .ico { width: 14px; height: 14px; }
+  .qty output { min-width: 28px; text-align: center; font-family: var(--f-mono); font-size: 13px; }
+  .remove { display: block; margin-top: 10px; font-size: 12.5px; color: var(--ash); text-decoration: underline; text-underline-offset: 3px; }
+  .remove:hover { color: var(--flame-hi); }
+
+  /* Mobile nav */
+  .mnav { display: grid; }
+  .mnav > a, .mnav summary { display: flex; align-items: center; justify-content: space-between; padding: 18px 0; border-bottom: 1px solid var(--line); font-family: var(--f-display); font-weight: 800; font-size: 30px; text-transform: uppercase; letter-spacing: .02em; cursor: pointer; list-style: none; }
+  .mnav summary::-webkit-details-marker { display: none; }
+  .mnav summary .ico { transition: transform .3s var(--ease); }
+  .mnav details[open] summary .ico { transform: rotate(180deg); }
+  .mnav details > div { display: grid; gap: 22px; padding: 18px 0 24px; border-bottom: 1px solid var(--line); }
+  .mnav h3 { font-family: var(--f-mono); font-size: 11.5px; letter-spacing: .16em; text-transform: uppercase; color: var(--flame-hi); margin-bottom: 8px; font-weight: 500; }
+  .mnav details ul { display: grid; gap: 8px; }
+  .mnav details a { color: var(--ash); font-size: 16px; }
+
+  /* ---------- Perk modal ---------- */
+  .modal { display: grid; place-items: center; padding: max(16px, env(safe-area-inset-top, 0px)) max(16px, env(safe-area-inset-right, 0px)) max(16px, env(safe-area-inset-bottom, 0px)) max(16px, env(safe-area-inset-left, 0px)); z-index: 90; }
+  .modal-card { position: relative; width: min(900px, 100%); max-height: calc(100vh - 32px); max-height: calc(100dvh - 32px); overflow-y: auto; display: grid; background: var(--coal); border: 1px solid var(--line); opacity: 0; transform: translateY(28px) scale(.97); transition: opacity .45s var(--ease), transform .55s var(--ease); }
+  .layer.is-open .modal-card { opacity: 1; transform: none; }
+  .modal-card:focus { outline: none; }
+  @media (min-width: 820px) { .modal-card { grid-template-columns: 5fr 7fr; } }
+  .perk-visual { position: relative; overflow: hidden; background: var(--flame); color: var(--on-flame); padding: 22px 64px 22px 24px; display: flex; align-items: center; gap: 16px; }
+  .perk-visual::before { content: ""; position: absolute; inset: 0; opacity: .14; background: repeating-linear-gradient(-45deg, var(--on-flame) 0 1px, transparent 1px 14px); }
+  .perk-visual > * { position: relative; }
+  .perk-big { font-family: var(--f-display); font-weight: 900; font-size: 56px; line-height: .8; letter-spacing: -.01em; }
+  .perk-big small { font-size: .42em; letter-spacing: .02em; }
+  .perk-sub { font-weight: 700; font-size: 13px; letter-spacing: .14em; text-transform: uppercase; line-height: 1.35; }
+  .perk-foot { display: none; }
+  @media (min-width: 820px) {
+    .perk-visual { flex-direction: column; align-items: flex-start; justify-content: space-between; padding: 36px 32px; min-height: 560px; }
+    .perk-big { font-size: clamp(7rem, 11vw, 9.5rem); }
+    .perk-sub { font-size: 15px; }
+    .perk-foot { display: block; font-family: var(--f-mono); font-size: 11px; letter-spacing: .12em; text-transform: uppercase; opacity: .8; }
+  }
+  .perk-body { position: relative; padding: clamp(24px, 4vw, 44px); display: flex; flex-direction: column; min-width: 0; }
+  .modal-close { position: absolute; top: 14px; right: 14px; z-index: 2; background: var(--coal); }
+  @media (max-width: 819px) { .modal-close { top: -68px; background: transparent; border-color: var(--on-flame); color: var(--on-flame); } }
+  .progress { display: flex; align-items: center; gap: 14px; margin-bottom: 28px; padding-right: 56px; }
+  .progress-label { font-family: var(--f-mono); font-size: 11.5px; letter-spacing: .14em; text-transform: uppercase; color: var(--ash); white-space: nowrap; }
+  .segs { display: flex; gap: 6px; flex: 1; max-width: 160px; }
+  .segs i { flex: 1; height: 3px; background: var(--line); transition: background .4s; }
+  .segs i.on { background: var(--flame); }
+  @media (max-width: 819px) { .progress { padding-right: 0; } }
+  .step { display: grid; gap: 22px; }
+  .step:focus { outline: none; }
+  .step h2 { font-family: var(--f-display); font-weight: 800; text-transform: uppercase; font-size: clamp(1.9rem, 4vw, 2.6rem); line-height: .95; text-wrap: balance; }
+  .step-lede { color: var(--ash); font-size: 15px; margin-top: -8px; }
+  .in-fwd { animation: stepFwd .5s var(--ease) both; }
+  .in-back { animation: stepBack .5s var(--ease) both; }
+  @keyframes stepFwd { from { opacity: 0; transform: translateX(28px); } to { opacity: 1; transform: none; } }
+  @keyframes stepBack { from { opacity: 0; transform: translateX(-28px); } to { opacity: 1; transform: none; } }
+  .tiles { display: grid; gap: 10px; }
+  .tile { position: relative; display: grid; grid-template-columns: 48px 1fr 22px; gap: 16px; align-items: center; padding: 16px 18px; border: 1px solid var(--line); background: var(--ink); cursor: pointer; transition: border-color .25s, background .25s, transform .3s var(--ease); }
+  .tile:hover { border-color: var(--ash); }
+  .tile input { position: absolute; opacity: 0; pointer-events: none; }
+  .tile-ico { display: grid; place-items: center; width: 48px; height: 48px; border: 1px solid var(--line); color: var(--flame); transition: background .25s, color .25s, border-color .25s; }
+  .tile-ico .ico { width: 24px; height: 24px; }
+  .tile b { display: block; font-size: 15px; letter-spacing: .04em; text-transform: uppercase; }
+  .tile span.desc { display: block; color: var(--ash); font-size: 14px; line-height: 1.4; }
+  .tile-check { display: grid; place-items: center; width: 22px; height: 22px; border: 1px solid var(--line); border-radius: 50%; transition: background .25s, border-color .25s; }
+  .tile-check .ico { width: 14px; height: 14px; opacity: 0; color: var(--on-flame); stroke-width: 2.4; }
+  .tile:has(input:checked), .tile.is-checked { border-color: var(--flame); background: var(--smoke); }
+  .tile:has(input:checked) .tile-ico, .tile.is-checked .tile-ico { background: var(--flame); color: var(--on-flame); border-color: var(--flame); }
+  .tile:has(input:checked) .tile-check, .tile.is-checked .tile-check { background: var(--flame); border-color: var(--flame); }
+  .tile:has(input:checked) .tile-check .ico, .tile.is-checked .tile-check .ico { opacity: 1; }
+  .tile:has(input:focus-visible) { outline: 2px solid var(--flame); outline-offset: 2px; }
+  .step-actions { display: flex; gap: 10px; flex-wrap: wrap; }
+  .step-actions .btn { flex: 1 1 160px; }
+  .fields { display: grid; gap: 16px; }
+  @media (min-width: 520px) { .fields { grid-template-columns: 1fr 1fr; } .fields .full { grid-column: 1 / -1; } }
+  .field { display: grid; gap: 7px; min-width: 0; }
+  .field label { font-family: var(--f-mono); font-size: 11px; letter-spacing: .14em; text-transform: uppercase; color: var(--ash); }
+  .field label i { font-style: normal; opacity: .7; text-transform: none; letter-spacing: .02em; }
+  .field input, .field select { width: 100%; height: 50px; padding: 0 14px; background: var(--ink); border: 1px solid var(--line); border-radius: 0; font-size: 15px; transition: border-color .2s; -webkit-appearance: none; appearance: none; }
+  .field select { background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23A39D94' stroke-width='2'><path d='M6 9l6 6 6-6'/></svg>"); background-repeat: no-repeat; background-position: right 12px center; background-size: 16px; padding-right: 40px; }
+  .field input:focus, .field select:focus { outline: none; border-color: var(--flame); }
+  .field input[aria-invalid="true"], .field select[aria-invalid="true"] { border-color: var(--flame-hi); }
+  .err { font-size: 13px; color: var(--flame-hi); min-height: 0; }
+  .err:empty { display: none; }
+  .consent { font-size: 12.5px; color: var(--ash); line-height: 1.5; }
+  .success-ico { display: grid; place-items: center; width: 64px; height: 64px; border-radius: 50%; background: var(--flame); color: var(--on-flame); animation: pop .6s var(--ease) both .1s; }
+  .success-ico .ico { width: 30px; height: 30px; stroke-width: 2.4; }
+  @keyframes pop { from { transform: scale(.4); opacity: 0; } to { transform: none; opacity: 1; } }
+  .code-box { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 14px 14px 14px 20px; border: 1px dashed var(--flame); background: var(--ink); }
+  .code-box code { font-family: var(--f-mono); font-size: clamp(22px, 4vw, 30px); letter-spacing: .14em; color: var(--bone); }
+  .code-box .btn { min-height: 44px; padding: 0 16px; font-size: 12px; }
+
+  /* ---------- Floating: chat, perk pill, toast ---------- */
+  .chat-fab { position: fixed; right: calc(20px + env(safe-area-inset-right, 0px)); bottom: calc(20px + env(safe-area-inset-bottom, 0px)); z-index: 70; display: grid; place-items: center; width: 60px; height: 60px; border-radius: 50%; background: var(--flame); color: var(--on-flame); box-shadow: 0 10px 34px var(--glow); transition: transform .35s var(--ease), background .3s; }
+  .chat-fab:hover { transform: scale(1.07); background: var(--flame-hi); }
+  .chat-fab .ico { width: 26px; height: 26px; position: absolute; transition: transform .35s var(--ease), opacity .25s; }
+  .chat-fab .i-x { opacity: 0; transform: rotate(-90deg); }
+  .chat-fab[aria-expanded="true"] .i-c { opacity: 0; transform: rotate(90deg); }
+  .chat-fab[aria-expanded="true"] .i-x { opacity: 1; transform: none; }
+  .chat-panel { position: fixed; right: calc(20px + env(safe-area-inset-right, 0px)); bottom: calc(94px + env(safe-area-inset-bottom, 0px)); z-index: 70; width: min(370px, calc(100vw - 40px)); max-height: min(560px, calc(100vh - 140px)); display: flex; flex-direction: column; background: var(--coal); border: 1px solid var(--line); opacity: 0; visibility: hidden; transform: translateY(14px) scale(.98); transform-origin: bottom right; transition: opacity .3s var(--ease), transform .4s var(--ease), visibility 0s linear .4s; }
+  .chat-panel.is-open { opacity: 1; visibility: visible; transform: none; transition-delay: 0s; }
+  .chat-head { display: flex; align-items: center; gap: 12px; padding: 16px 18px; border-bottom: 1px solid var(--line); }
+  .avatar { display: grid; place-items: center; width: 38px; height: 38px; background: var(--flame); color: var(--on-flame); font-family: var(--f-display); font-weight: 900; font-size: 20px; }
+  .chat-head b { display: block; font-size: 15px; }
+  .chat-head span { display: flex; align-items: center; gap: 6px; font-size: 12.5px; color: var(--ash); }
+  .chat-head span::before { content: ""; width: 7px; height: 7px; border-radius: 50%; background: var(--flame-hi); }
+  .chat-log { flex: 1; overflow-y: auto; padding: 18px; display: flex; flex-direction: column; gap: 10px; min-height: 180px; }
+  .msg { max-width: 85%; padding: 10px 14px; font-size: 14.5px; line-height: 1.45; animation: fadeUp .35s var(--ease) both; overflow-wrap: anywhere; }
+  .msg.bot { background: var(--smoke); align-self: flex-start; }
+  .msg.me { background: var(--flame); color: var(--on-flame); align-self: flex-end; }
+  .quick { display: flex; flex-wrap: wrap; gap: 6px; padding: 0 18px 14px; }
+  .quick button { font-size: 13px; padding: 7px 12px; border: 1px solid var(--line); transition: border-color .2s, color .2s; }
+  .quick button:hover { border-color: var(--flame); color: var(--flame-hi); }
+  .chat-form { display: flex; border-top: 1px solid var(--line); }
+  .chat-form input { flex: 1; min-width: 0; height: 52px; padding: 0 16px; background: transparent; border: 0; font-size: 15px; }
+  .chat-form input:focus { outline: none; }
+  .chat-form input::placeholder { color: var(--ash); }
+  .chat-form button { display: grid; place-items: center; width: 52px; color: var(--flame); }
+  .perk-pill { position: fixed; left: calc(20px + env(safe-area-inset-left, 0px)); bottom: calc(26px + env(safe-area-inset-bottom, 0px)); z-index: 70; display: inline-flex; align-items: center; gap: 10px; height: 46px; padding: 0 18px; background: var(--bone); color: var(--ink); font-weight: 700; font-size: 12.5px; letter-spacing: .14em; text-transform: uppercase; animation: fadeUp .5s var(--ease) both; transition: background .3s, color .3s; }
+  .perk-pill:hover { background: var(--flame); color: var(--on-flame); }
+  .perk-pill .ico { width: 16px; height: 16px; }
+  .toast { position: fixed; left: 50%; bottom: calc(96px + env(safe-area-inset-bottom, 0px)); z-index: 100; max-width: calc(100vw - 40px); transform: translate(-50%, 20px); opacity: 0; pointer-events: none; padding: 12px 18px; background: var(--bone); color: var(--ink); font-size: 14px; font-weight: 600; transition: opacity .3s, transform .4s var(--ease); }
+  .toast.is-show { opacity: 1; transform: translate(-50%, 0); }
+
+  /* ---------- Scroll reveal ---------- */
+  .reveal { transition: opacity .9s var(--ease), transform .9s var(--ease); transition-delay: var(--d, 0ms); }
+  .reveal.is-pending { opacity: 0; transform: translateY(44px); }
+
+  @media (prefers-reduced-motion: reduce) {
+    html { scroll-behavior: auto; }
+    *, *::before, *::after { animation-duration: .001ms !important; animation-iteration-count: 1 !important; transition-duration: .001ms !important; transition-delay: 0s !important; }
+    .ticker-track { animation: none; }
+  }
+</style>
+</head>
+<body>
+
+<!-- ============ ICON SPRITE ============ -->
+<svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false">
+  <symbol id="i-flame" viewBox="0 0 24 24"><path d="M12 2.5c.6 3.2 4.5 5 4.5 9.5a4.5 4.5 0 0 1-9 0c0-2 1-3.4 2.2-4.4.2 1.6 1 2.6 2.1 2.9C11.2 8 11.3 5 12 2.5z"/><path d="M12 14.2c.9.7 1.5 1.4 1.5 2.3a1.5 1.5 0 0 1-3 0c0-.9.6-1.6 1.5-2.3z"/><path d="M6 21.5h12"/></symbol>
+  <symbol id="i-wind" viewBox="0 0 24 24"><path d="M3 8h10.5A2.75 2.75 0 1 0 10.75 5.25"/><path d="M3 12h15a3 3 0 1 1-3 3"/><path d="M3 16h7"/></symbol>
+  <symbol id="i-wand" viewBox="0 0 24 24"><path d="M4 20 15 9"/><path d="m13.5 10.5 2 2"/><path d="M17 3v3M15.5 4.5h3"/><path d="M20.5 9v2M19.5 10h2"/><path d="M11 3.5v1.5"/></symbol>
+  <symbol id="i-refill" viewBox="0 0 24 24"><path d="M12 3s5.5 5.8 5.5 10a5.5 5.5 0 0 1-11 0C6.5 8.8 12 3 12 3z"/><path d="M9.5 13.5a2.5 2.5 0 0 0 2.5 2.5"/></symbol>
+  <symbol id="i-gem" viewBox="0 0 24 24"><path d="M6.5 3.5h11l3.5 5.5L12 20.5 3 9z"/><path d="M3 9h18"/><path d="m9.5 3.5-1 5.5L12 20.5 15.5 9l-1-5.5"/></symbol>
+  <symbol id="i-tube" viewBox="0 0 24 24"><rect x="7.5" y="2.5" width="9" height="19" rx="4.5"/><path d="M7.5 7.5h9"/><path d="M12 11v6"/></symbol>
+  <symbol id="i-spark" viewBox="0 0 24 24"><path d="M11 3l1.8 5.2L18 10l-5.2 1.8L11 17l-1.8-5.2L4 10l5.2-1.8z"/><path d="M19 15v5M16.5 17.5h5"/></symbol>
+  <symbol id="i-leaf" viewBox="0 0 24 24"><path d="M5 19.5C5 11 10 4.5 20 4.5c0 10-6 15.5-14 15.5"/><path d="M5 19.5c3-4.5 6.5-7.5 10.5-9.5"/></symbol>
+  <symbol id="i-tree" viewBox="0 0 24 24"><path d="M12 2.5 17.5 10h-3l4 5.5h-13l4-5.5h-3z"/><path d="M12 15.5v6"/></symbol>
+  <symbol id="i-bag" viewBox="0 0 24 24"><path d="M5 8h14l-1.2 12.5H6.2z"/><path d="M9 10.5V6.5a3 3 0 0 1 6 0v4"/></symbol>
+  <symbol id="i-user" viewBox="0 0 24 24"><circle cx="12" cy="8" r="3.75"/><path d="M4.5 20.5c1.2-3.7 4.1-5.5 7.5-5.5s6.3 1.8 7.5 5.5"/></symbol>
+  <symbol id="i-close" viewBox="0 0 24 24"><path d="M6 6l12 12M18 6 6 18"/></symbol>
+  <symbol id="i-menu" viewBox="0 0 24 24"><path d="M3.5 7h17M3.5 12h17M3.5 17h11"/></symbol>
+  <symbol id="i-chat" viewBox="0 0 24 24"><path d="M4 4.5h16v11.5H9.5L4 20.5z"/><path d="M8.5 10.25h.01M12 10.25h.01M15.5 10.25h.01" stroke-width="2.4"/></symbol>
+  <symbol id="i-chev" viewBox="0 0 24 24"><path d="m6 9 6 6 6-6"/></symbol>
+  <symbol id="i-arrow" viewBox="0 0 24 24"><path d="M4.5 12h15M13.5 6l6 6-6 6"/></symbol>
+  <symbol id="i-arrow-ne" viewBox="0 0 24 24"><path d="M7 17 17 7M8.5 7H17v8.5"/></symbol>
+  <symbol id="i-plus" viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></symbol>
+  <symbol id="i-minus" viewBox="0 0 24 24"><path d="M5 12h14"/></symbol>
+  <symbol id="i-check" viewBox="0 0 24 24"><path d="m5 12.5 4.5 4.5L19 7.5"/></symbol>
+  <symbol id="i-copy" viewBox="0 0 24 24"><rect x="8.5" y="8.5" width="12" height="12" rx="1.5"/><path d="M15.5 8.5V5a1.5 1.5 0 0 0-1.5-1.5H5A1.5 1.5 0 0 0 3.5 5v9A1.5 1.5 0 0 0 5 15.5h3.5"/></symbol>
+  <symbol id="i-store" viewBox="0 0 24 24"><path d="M4 9.5 5.5 4h13L20 9.5"/><path d="M4.5 10.5v10h15v-10"/><path d="M4 9.5a2.7 2.7 0 0 0 5.3 0 2.7 2.7 0 0 0 5.4 0 2.7 2.7 0 0 0 5.3 0"/><path d="M10 20.5v-5h4v5"/></symbol>
+  <symbol id="i-truck" viewBox="0 0 24 24"><path d="M2.5 6h11.5v10H2.5z"/><path d="M14 9.5h4l3.5 3.5v3H14"/><circle cx="6.5" cy="17.5" r="1.75"/><circle cx="17.5" cy="17.5" r="1.75"/></symbol>
+  <symbol id="i-send" viewBox="0 0 24 24"><path d="M20.5 3.5 3.5 10.5l7 3 3 7z"/><path d="m10.5 13.5 4-4"/></symbol>
+  <symbol id="i-tag" viewBox="0 0 24 24"><path d="M3.5 12.5V3.5h9l8 8-9 9z"/><circle cx="8" cy="8" r="1.4"/></symbol>
+  <symbol id="i-ig" viewBox="0 0 24 24"><rect x="3.5" y="3.5" width="17" height="17" rx="5"/><circle cx="12" cy="12" r="4"/><path d="M17.2 6.8h.01" stroke-width="2.4"/></symbol>
+  <symbol id="i-tt" viewBox="0 0 24 24"><path d="M14 3.5v11a3.5 3.5 0 1 1-3.5-3.5"/><path d="M14 3.5c.4 2.6 2.4 4.6 5 4.8"/></symbol>
+  <symbol id="i-xs" viewBox="0 0 24 24"><path d="M4.5 4.5h4l11 15h-4z"/><path d="M19 4.5l-5.8 6.4M10.6 13.2 5 19.5"/></symbol>
+  <symbol id="i-yt" viewBox="0 0 24 24"><rect x="2.5" y="5.5" width="19" height="13" rx="4"/><path d="M10 9.3v5.4l4.6-2.7z"/></symbol>
+</svg>
+
+<a class="skip" href="#main">Skip to content</a>
+
+<div class="announce" id="top">Free US shipping over $50 &nbsp;/&nbsp; Must be 21+ to purchase</div>
+
+<!-- ============ HEADER ============ -->
+<header class="site-header" id="siteHeader">
+  <div class="wrap header-row">
+    <div class="flex items-center gap-2">
+      <button class="icon-btn burger" type="button" id="burger" aria-label="Open menu" aria-controls="navLayer" aria-expanded="false">
+        <svg class="ico" aria-hidden="true"><use href="#i-menu"/></svg>
+      </button>
+      <a href="#top" class="logo" aria-label="Home"><span class="logo-mark" aria-hidden="true"></span><span data-brand>ASCEND</span></a>
+    </div>
+
+    <nav class="nav-primary" aria-label="Primary">
+      <ul class="flex items-center" style="gap:36px">
+        <li id="megaLi">
+          <button class="nav-link" type="button" id="megaBtn" aria-expanded="false" aria-controls="mega">Shop <svg class="ico" aria-hidden="true"><use href="#i-chev"/></svg></button>
+        </li>
+        <li><a class="nav-link" href="#about">About</a></li>
+        <li><a class="nav-link" href="#collabs">Collabs</a></li>
+        <li><a class="nav-link" href="#contact">Contact</a></li>
+      </ul>
+    </nav>
+
+    <div class="header-actions">
+      <a class="icon-btn" href="#" aria-label="Log in"><svg class="ico" aria-hidden="true"><use href="#i-user"/></svg><span class="hide-sm">Log in</span></a>
+      <button class="icon-btn" type="button" data-open-cart aria-label="Open cart">
+        <svg class="ico" aria-hidden="true"><use href="#i-bag"/></svg><span class="hide-sm">Cart</span>
+        <span class="cart-count" id="cartCount" aria-live="polite">0</span>
+      </button>
+    </div>
+  </div>
+
+  <!-- Megamenu -->
+  <div class="mega" id="mega" inert>
+    <div class="wrap mega-grid">
+      <div class="mega-col">
+        <h3><svg class="ico" aria-hidden="true"><use href="#i-flame"/></svg>Lighters</h3>
+        <ul>
+          <li><a href="#shop">Jet Lighters</a></li>
+          <li><a href="#shop">Collectible Editions</a></li>
+          <li><a href="#collabs">Artist Collabs</a></li>
+          <li><a href="#shop">Magic Stick Tools</a></li>
+          <li><a class="all" href="#shop">Shop all lighters</a></li>
+        </ul>
+      </div>
+      <div class="mega-col">
+        <h3><svg class="ico" aria-hidden="true"><use href="#i-leaf"/></svg>Rolling Papers</h3>
+        <ul>
+          <li><a href="#papers">1¼ Size</a></li>
+          <li><a href="#papers">King Size Slim</a></li>
+          <li><a href="#papers">Multi-Doob Tubes</a></li>
+          <li><a href="#papers">Filter Tips</a></li>
+          <li><a class="all" href="#papers">Shop all papers</a></li>
+        </ul>
+      </div>
+      <div class="mega-col">
+        <h3><svg class="ico" aria-hidden="true"><use href="#i-refill"/></svg>Gas</h3>
+        <ul>
+          <li><a href="#bestsellers">Premium Butane 300 ml</a></li>
+          <li><a href="#bestsellers">Refill Bundles</a></li>
+          <li><a href="#bestsellers">Travel Size</a></li>
+          <li><a class="all" href="#bestsellers">Shop all gas</a></li>
+        </ul>
+      </div>
+      <a class="mega-feature" href="#bestsellers">
+        <figure class="media is-small" data-ph="lighter" data-src="" data-alt="Ember Edition jet lighter" data-label="mega-feature.jpg · 800×500"></figure>
+        <div class="mega-feature-cap">
+          <span class="display-s">New: Ember Edition</span>
+          <span class="link-u">Shop <svg class="ico" style="width:16px;height:16px" aria-hidden="true"><use href="#i-arrow"/></svg></span>
+        </div>
+      </a>
+    </div>
+  </div>
+</header>
+
+<main id="main">
+  <!-- ============ HERO ============ -->
+  <section class="hero" aria-labelledby="heroTitle">
+    <!-- Drop a background video: data-video="hero.mp4" data-poster="hero.jpg" -->
+    <div class="hero-media" id="heroMedia" data-video="" data-poster="">
+      <canvas id="embers" aria-hidden="true"></canvas>
+    </div>
+    <div class="hero-scrim" aria-hidden="true"></div>
+
+    <div class="wrap hero-inner">
+      <p class="eyebrow hero-fade" style="gap:12px"><span class="pulse-dot" aria-hidden="true"></span>Jet lighters &nbsp;/&nbsp; Organic papers &nbsp;/&nbsp; Butane</p>
+      <h1 class="display-xl hero-title" id="heroTitle" style="margin-top:22px">
+        <span class="line"><span>Keep your</span></span>
+        <span class="line"><span>head <span class="hot">high</span></span></span>
+      </h1>
+      <div class="flex flex-wrap items-end justify-between gap-8" style="margin-top:32px">
+        <p class="lede hero-fade d2" style="max-width:46ch">We've got state-of-the-art jet lighters and exceptional organic rolling papers that will turn heads and elevate your smoking game.</p>
+        <div class="flex flex-wrap gap-3 hero-fade d3">
+          <a class="btn btn-primary btn-lg" href="#shop">View Products <svg class="ico ico-arrow" aria-hidden="true"><use href="#i-arrow"/></svg></a>
+          <button class="btn btn-ghost btn-lg" type="button" data-open-perk>Unlock 15% off</button>
+        </div>
+      </div>
+      <dl class="hero-specs hero-fade d3">
+        <div><dt>Flame</dt><dd>Windproof jet</dd></div>
+        <div><dt>Papers</dt><dd>Organic, non-GMO hemp</dd></div>
+        <div><dt>Fuel</dt><dd>Refillable butane</dd></div>
+      </dl>
+    </div>
+  </section>
+
+  <!-- ============ TICKER ============ -->
+  <div class="ticker" aria-label="Product highlights">
+    <div class="ticker-track">
+      <div class="ticker-group">
+        <span class="ticker-item">Windproof jet flame</span><svg class="ico" aria-hidden="true"><use href="#i-spark"/></svg>
+        <span class="ticker-item outline">Organic hemp papers</span><svg class="ico" aria-hidden="true"><use href="#i-spark"/></svg>
+        <span class="ticker-item">Refillable for years</span><svg class="ico" aria-hidden="true"><use href="#i-spark"/></svg>
+        <span class="ticker-item outline">Multi-Doob tube</span><svg class="ico" aria-hidden="true"><use href="#i-spark"/></svg>
+        <span class="ticker-item">Collectible designs</span><svg class="ico" aria-hidden="true"><use href="#i-spark"/></svg>
+        <span class="ticker-item outline">Responsible forestry</span><svg class="ico" aria-hidden="true"><use href="#i-spark"/></svg>
+      </div>
+      <div class="ticker-group" aria-hidden="true">
+        <span class="ticker-item">Windproof jet flame</span><svg class="ico"><use href="#i-spark"/></svg>
+        <span class="ticker-item outline">Organic hemp papers</span><svg class="ico"><use href="#i-spark"/></svg>
+        <span class="ticker-item">Refillable for years</span><svg class="ico"><use href="#i-spark"/></svg>
+        <span class="ticker-item outline">Multi-Doob tube</span><svg class="ico"><use href="#i-spark"/></svg>
+        <span class="ticker-item">Collectible designs</span><svg class="ico"><use href="#i-spark"/></svg>
+        <span class="ticker-item outline">Responsible forestry</span><svg class="ico"><use href="#i-spark"/></svg>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============ SHOWCASE ============ -->
+  <section class="section" id="shop" aria-labelledby="flexTitle">
+    <div class="wrap">
+      <header class="section-head reveal">
+        <div>
+          <p class="eyebrow">Product lines</p>
+          <h2 class="display-l" id="flexTitle" style="margin-top:18px">The ultimate<br>smoker <span class="hot">flex</span></h2>
+        </div>
+        <p class="lede">Two product lines with one standard. Gear that performs every time and gets noticed when you set it on the table.</p>
+      </header>
+
+      <!-- Lighters -->
+      <article class="feature" id="lighters">
+        <div class="feature-media reveal">
+          <figure class="media" data-ph="lighter" data-src="" data-alt="Jet lighter with flame lit" data-label="lighter-feature.jpg · 1200×1000" data-parallax></figure>
+          <span class="float-chip"><svg class="ico" aria-hidden="true"><use href="#i-wind"/></svg>Windproof</span>
+        </div>
+        <div class="feature-copy reveal" style="--d:120ms">
+          <p class="eyebrow">Jet lighters</p>
+          <h3 class="display-m">A flame that holds in the wind</h3>
+          <p class="lede">Torch-style jet lighters with a focused flame, a built-in poker tool, and finishes made for collecting.</p>
+          <ul class="specs">
+            <li class="spec"><span class="spec-ico"><svg class="ico" aria-hidden="true"><use href="#i-gem"/></svg></span><div><h4>Collectible designs</h4><p>Limited finishes and artist editions worth keeping on the shelf.</p></div></li>
+            <li class="spec"><span class="spec-ico"><svg class="ico" aria-hidden="true"><use href="#i-wind"/></svg></span><div><h4>Windproof jet flame</h4><p>A tight torch flame that stays lit on rooftops, beaches and balconies.</p></div></li>
+            <li class="spec"><span class="spec-ico"><svg class="ico" aria-hidden="true"><use href="#i-wand"/></svg></span><div><h4>Multifunctional "Magic Stick"</h4><p>A poker tool tucked into the body for packing and clearing.</p></div></li>
+            <li class="spec"><span class="spec-ico"><svg class="ico" aria-hidden="true"><use href="#i-refill"/></svg></span><div><h4>Refillable</h4><p>Top up with butane in seconds. One lighter, years of use.</p></div></li>
+          </ul>
+          <p class="spec-strip"><span>Flame <b>Single jet</b></span><span>Fuel <b>Butane</b></span><span>Ignition <b>Push-button</b></span></p>
+          <div><a class="btn btn-primary" href="#bestsellers">Shop lighters <svg class="ico ico-arrow" aria-hidden="true"><use href="#i-arrow"/></svg></a></div>
+        </div>
+      </article>
+
+      <!-- Papers -->
+      <article class="feature reverse" id="papers" style="scroll-margin-top:100px">
+        <div class="feature-media reveal">
+          <figure class="media" data-ph="papers" data-src="" data-alt="Organic rolling papers with Multi-Doob tube" data-label="papers-feature.jpg · 1200×1000" data-parallax></figure>
+          <span class="float-chip"><svg class="ico" aria-hidden="true"><use href="#i-leaf"/></svg>Organic</span>
+        </div>
+        <div class="feature-copy reveal" style="--d:120ms">
+          <p class="eyebrow">Rolling papers</p>
+          <h3 class="display-m">Papers that roll clean and travel well</h3>
+          <p class="lede">Slow-burning organic hemp papers in original prints, packed with tips in a reusable Multi-Doob tube.</p>
+          <ul class="specs">
+            <li class="spec"><span class="spec-ico"><svg class="ico" aria-hidden="true"><use href="#i-tube"/></svg></span><div><h4>Packed in a Multi-Doob Tube</h4><p>Papers, tips and finished rolls ride together in one crush-proof tube.</p></div></li>
+            <li class="spec"><span class="spec-ico"><svg class="ico" aria-hidden="true"><use href="#i-spark"/></svg></span><div><h4>Unique designs</h4><p>Original artwork on every booklet, so your papers look like nobody else's.</p></div></li>
+            <li class="spec"><span class="spec-ico"><svg class="ico" aria-hidden="true"><use href="#i-leaf"/></svg></span><div><h4>Organic / Non-GMO</h4><p>Unbleached hemp with no chalk and no added burn agents.</p></div></li>
+            <li class="spec"><span class="spec-ico"><svg class="ico" aria-hidden="true"><use href="#i-tree"/></svg></span><div><h4>Responsible forestry</h4><p>Fiber from certified, responsibly managed sources.</p></div></li>
+          </ul>
+          <p class="spec-strip"><span>Size <b>1¼</b></span><span>Leaf <b>78 × 44 mm</b></span><span>Pack <b>50 leaves + tips</b></span></p>
+          <div><a class="btn btn-primary" href="#bestsellers">Shop papers <svg class="ico ico-arrow" aria-hidden="true"><use href="#i-arrow"/></svg></a></div>
+        </div>
+      </article>
+    </div>
+  </section>
+
+  <!-- ============ BEST SELLERS ============ -->
+  <section class="section" id="bestsellers" style="padding-top:0" aria-labelledby="bsTitle">
+    <div class="wrap">
+      <div class="flex flex-wrap items-end justify-between gap-6 reveal" style="margin-bottom:48px">
+        <div>
+          <p class="eyebrow">Shop</p>
+          <h2 class="display-l" id="bsTitle" style="margin-top:18px">Best sellers</h2>
+        </div>
+        <a class="link-u" href="#">Shop all <svg class="ico" style="width:16px;height:16px" aria-hidden="true"><use href="#i-arrow"/></svg></a>
+      </div>
+      <div class="product-grid" id="productGrid"><!-- rendered from PRODUCTS --></div>
+    </div>
+  </section>
+
+  <!-- ============ COLLABS ============ -->
+  <section class="section band" id="collabs" aria-labelledby="collabTitle">
+    <div class="wrap">
+      <header class="section-head reveal" style="margin-bottom:56px">
+        <div>
+          <p class="eyebrow">Collabs</p>
+          <h2 class="display-l" id="collabTitle" style="margin-top:18px">Made with friends</h2>
+        </div>
+        <p class="lede">We team up with artists, labels and shops on limited lighter and paper runs. When a drop sells out, it stays gone.</p>
+      </header>
+      <div class="collab-grid">
+        <a class="collab reveal" href="#">
+          <figure class="media" data-ph="collab" data-src="" data-alt="Artist series lighters" data-label="collab-artist.jpg · 800×1000"></figure>
+          <div class="collab-cap"><div><h3 class="display-s">Artist Series</h3><p>Lighters wrapped in work from illustrators and tattoo artists.</p></div><span class="arrow-box"><svg class="ico" aria-hidden="true"><use href="#i-arrow-ne"/></svg></span></div>
+        </a>
+        <a class="collab reveal" href="#" style="--d:100ms">
+          <figure class="media" data-ph="lighter" data-src="" data-alt="Streetwear capsule collection" data-label="collab-capsule.jpg · 800×1000"></figure>
+          <div class="collab-cap"><div><h3 class="display-s">Label Capsule</h3><p>Matching papers and lighters made with streetwear labels.</p></div><span class="arrow-box"><svg class="ico" aria-hidden="true"><use href="#i-arrow-ne"/></svg></span></div>
+        </a>
+        <a class="collab reveal" href="#contact" style="--d:200ms">
+          <figure class="media" data-ph="papers" data-src="" data-alt="Custom shop-exclusive papers" data-label="collab-shop.jpg · 800×1000"></figure>
+          <div class="collab-cap"><div><h3 class="display-s">Pitch a collab</h3><p>Run a brand, venue or shop? Let's put your art on a run.</p></div><span class="arrow-box"><svg class="ico" aria-hidden="true"><use href="#i-arrow-ne"/></svg></span></div>
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ ABOUT ============ -->
+  <section class="section" id="about" aria-labelledby="aboutTitle">
+    <div class="wrap">
+      <div class="about-grid">
+        <div class="reveal">
+          <p class="eyebrow" id="aboutTitle">About</p>
+          <p class="statement" style="margin-top:22px">We make the gear we wanted to pull out at the table. Lighters that <em>hold a flame</em>, papers grown clean, and fuel to keep both going.</p>
+        </div>
+        <ul class="values reveal" style="--d:120ms">
+          <li><span class="mono">A</span><div><h3>Built to be shown off</h3><p>Every lighter and booklet is designed to look as good as it works.</p></div></li>
+          <li><span class="mono">B</span><div><h3>Refill, don't replace</h3><p>Refillable lighters and reusable tubes mean less ends up in the trash.</p></div></li>
+          <li><span class="mono">C</span><div><h3>Clean from the source</h3><p>Organic hemp, no bleach, and fiber from responsibly managed forests.</p></div></li>
+        </ul>
+      </div>
+
+      <div class="trade reveal">
+        <div>
+          <p class="eyebrow">Wholesale</p>
+          <h3 class="display-m" style="margin-top:14px">Stock us in your shop</h3>
+          <p class="lede" style="margin-top:12px">Trade pricing, display units and sell-through support for retailers and distributors.</p>
+        </div>
+        <button class="btn btn-ghost btn-lg" type="button" data-open-perk="retailer">Apply for wholesale <svg class="ico ico-arrow" aria-hidden="true"><use href="#i-arrow"/></svg></button>
+      </div>
+    </div>
+  </section>
+</main>
+
+<!-- ============ FOOTER ============ -->
+<footer class="site-footer" id="contact">
+  <div class="wrap">
+    <div class="footer-top">
+      <div>
+        <p class="eyebrow">Newsletter</p>
+        <h2 class="display-m" style="margin-top:14px">Get drops first</h2>
+        <p class="lede" style="margin-top:12px">New colorways, collab launches and restocks. About two emails a month.</p>
+        <form class="newsletter" id="newsForm" novalidate>
+          <label class="sr-only" for="newsEmail">Email address</label>
+          <input id="newsEmail" name="email" type="email" placeholder="Email address" autocomplete="email">
+          <button class="btn btn-primary" type="submit">Subscribe</button>
+        </form>
+        <p class="form-note" id="newsNote" aria-live="polite"></p>
+      </div>
+      <div class="footer-cols">
+        <nav aria-label="Shop">
+          <h3>Shop</h3>
+          <ul>
+            <li><a href="#shop">Shop all</a></li>
+            <li><a href="#lighters">Lighters</a></li>
+            <li><a href="#papers">Rolling Papers</a></li>
+            <li><a href="#bestsellers">Gas</a></li>
+          </ul>
+        </nav>
+        <nav aria-label="Company">
+          <h3>Company</h3>
+          <ul>
+            <li><a href="#about">About</a></li>
+            <li><a href="#collabs">Collabs</a></li>
+            <li><a href="#">Blog</a></li>
+            <li><a href="#about">Wholesale</a></li>
+          </ul>
+        </nav>
+        <nav aria-label="Support">
+          <h3>Support</h3>
+          <ul>
+            <li><a href="#">FAQ</a></li>
+            <li><a href="#">Shipping</a></li>
+            <li><a href="#">Returns</a></li>
+            <li><a href="#contact">Contact</a></li>
+          </ul>
+        </nav>
+        <div>
+          <h3>Contact</h3>
+          <address>
+            <span data-email>hello@ascendsupply.example</span>
+            <span>Mon–Fri, 9am–6pm ET</span>
+          </address>
+          <div class="socials">
+            <a href="#" aria-label="Instagram"><svg class="ico" aria-hidden="true"><use href="#i-ig"/></svg></a>
+            <a href="#" aria-label="TikTok"><svg class="ico" aria-hidden="true"><use href="#i-tt"/></svg></a>
+            <a href="#" aria-label="X"><svg class="ico" aria-hidden="true"><use href="#i-xs"/></svg></a>
+            <a href="#" aria-label="YouTube"><svg class="ico" aria-hidden="true"><use href="#i-yt"/></svg></a>
+          </div>
+        </div>
+      </div>
+    </div>
+    <p class="footer-word" aria-hidden="true" data-brand>ASCEND</p>
+  </div>
+  <div class="wrap">
+    <div class="footer-bottom">
+      <span>© <span data-year>2026</span> <span data-brand-legal>Ascend Supply Co.</span> For use with legal smoking products only. 21+.</span>
+      <nav aria-label="Legal"><a href="#">Privacy</a><a href="#">Terms</a><a href="#">Refund policy</a></nav>
+    </div>
+  </div>
+</footer>
+
+<!-- ============ MOBILE NAV ============ -->
+<div class="layer" id="navLayer" inert aria-hidden="true">
+  <div class="scrim" data-close></div>
+  <aside class="drawer drawer-left" data-panel role="dialog" aria-modal="true" aria-label="Menu" tabindex="-1">
+    <div class="drawer-head">
+      <a href="#top" class="logo" data-close><span class="logo-mark" aria-hidden="true"></span><span data-brand>ASCEND</span></a>
+      <button class="close-btn" type="button" data-close aria-label="Close menu"><svg class="ico" aria-hidden="true"><use href="#i-close"/></svg></button>
+    </div>
+    <div class="drawer-body">
+      <nav class="mnav" aria-label="Mobile">
+        <details>
+          <summary>Shop <svg class="ico" aria-hidden="true"><use href="#i-chev"/></svg></summary>
+          <div>
+            <div><h3>Lighters</h3><ul><li><a href="#lighters" data-close>Jet Lighters</a></li><li><a href="#lighters" data-close>Collectible Editions</a></li><li><a href="#collabs" data-close>Artist Collabs</a></li></ul></div>
+            <div><h3>Rolling Papers</h3><ul><li><a href="#papers" data-close>1¼ Size</a></li><li><a href="#papers" data-close>King Size Slim</a></li><li><a href="#papers" data-close>Multi-Doob Tubes</a></li></ul></div>
+            <div><h3>Gas</h3><ul><li><a href="#bestsellers" data-close>Premium Butane 300 ml</a></li><li><a href="#bestsellers" data-close>Refill Bundles</a></li></ul></div>
+          </div>
+        </details>
+        <a href="#about" data-close>About</a>
+        <a href="#collabs" data-close>Collabs</a>
+        <a href="#contact" data-close>Contact</a>
+      </nav>
+    </div>
+    <div class="drawer-foot">
+      <a class="btn btn-ghost btn-block" href="#"><svg class="ico" aria-hidden="true"><use href="#i-user"/></svg>Log in</a>
+    </div>
+  </aside>
+</div>
+
+<!-- ============ CART DRAWER ============ -->
+<div class="layer" id="cartLayer" inert aria-hidden="true">
+  <div class="scrim" data-close></div>
+  <aside class="drawer drawer-right" data-panel role="dialog" aria-modal="true" aria-labelledby="cartTitle" tabindex="-1">
+    <div class="drawer-head">
+      <h2 class="display-s" id="cartTitle">Cart <span class="mono" style="font-size:14px;color:var(--ash)" id="cartTitleCount">(0)</span></h2>
+      <button class="close-btn" type="button" data-close aria-label="Close cart"><svg class="ico" aria-hidden="true"><use href="#i-close"/></svg></button>
+    </div>
+    <div class="ship-meter" id="shipMeter"><span id="shipText">Free US shipping on orders over <b>$50.00</b></span><div class="meter"><i id="shipBar"></i></div></div>
+    <div class="drawer-body" id="cartBody"></div>
+    <div class="drawer-foot">
+      <div class="subtotal"><span>Subtotal</span><span id="cartSubtotal">$0.00</span></div>
+      <p class="fine">Taxes, discounts and shipping calculated at checkout.</p>
+      <button class="btn btn-primary btn-block" type="button" id="checkoutBtn" disabled>Check out</button>
+      <button class="btn btn-ghost btn-block" type="button" id="viewCartBtn">View cart</button>
+    </div>
+  </aside>
+</div>
+
+<!-- ============ PERK MODAL ============ -->
+<div class="layer modal" id="perkLayer" inert aria-hidden="true">
+  <div class="scrim" data-close></div>
+  <div class="modal-card" data-panel role="dialog" aria-modal="true" aria-labelledby="perkHeading" tabindex="-1">
+    <div class="perk-visual" aria-hidden="true">
+      <p class="perk-big">15<small>%</small></p>
+      <p class="perk-sub">Off your<br class="hidden md:inline"> first order</p>
+      <p class="perk-foot">Unlocks in 3 quick steps</p>
+    </div>
+    <div class="perk-body">
+      <button class="close-btn modal-close" type="button" data-close aria-label="Close"><svg class="ico" aria-hidden="true"><use href="#i-close"/></svg></button>
+      <div class="progress">
+        <span class="progress-label" id="perkStepLabel">Step 1 of 3</span>
+        <span class="segs" aria-hidden="true"><i class="on"></i><i></i><i></i></span>
+      </div>
+
+      <!-- Step 1 -->
+      <section class="step" data-step="1" tabindex="-1" aria-labelledby="perkHeading">
+        <h2 id="perkHeading">First, please tell us who you are</h2>
+        <fieldset class="tiles">
+          <legend class="sr-only">I am a</legend>
+          <label class="tile"><input type="radio" name="role" id="roleConsumer" value="consumer"><span class="tile-ico"><svg class="ico" aria-hidden="true"><use href="#i-user"/></svg></span><span><b>Consumer</b><span class="desc">Shopping for myself</span></span><span class="tile-check"><svg class="ico" aria-hidden="true"><use href="#i-check"/></svg></span></label>
+          <label class="tile"><input type="radio" name="role" id="roleRetailer" value="retailer"><span class="tile-ico"><svg class="ico" aria-hidden="true"><use href="#i-store"/></svg></span><span><b>Retailer / Shop</b><span class="desc">I run a store or smoke shop</span></span><span class="tile-check"><svg class="ico" aria-hidden="true"><use href="#i-check"/></svg></span></label>
+          <label class="tile"><input type="radio" name="role" id="roleWholesaler" value="wholesaler"><span class="tile-ico"><svg class="ico" aria-hidden="true"><use href="#i-truck"/></svg></span><span><b>Wholesaler / Distributor</b><span class="desc">I supply other businesses</span></span><span class="tile-check"><svg class="ico" aria-hidden="true"><use href="#i-check"/></svg></span></label>
+        </fieldset>
+        <div class="step-actions">
+          <button class="btn btn-primary" type="button" id="perkNext" disabled>Next <svg class="ico ico-arrow" aria-hidden="true"><use href="#i-arrow"/></svg></button>
+        </div>
+      </section>
+
+      <!-- Step 2 -->
+      <form class="step" data-step="2" id="perkForm" tabindex="-1" novalidate hidden>
+        <h2 id="perkHeading2">Where should we send your code?</h2>
+        <p class="step-lede" id="roleNote">We'll email your code and save it to your account.</p>
+        <div class="fields">
+          <div class="field"><label for="fFirst">First name</label><input id="fFirst" name="first" autocomplete="given-name" aria-describedby="eFirst"><p class="err" id="eFirst"></p></div>
+          <div class="field"><label for="fLast">Last name</label><input id="fLast" name="last" autocomplete="family-name" aria-describedby="eLast"><p class="err" id="eLast"></p></div>
+          <div class="field full"><label for="fEmail">Email</label><input id="fEmail" name="email" type="email" autocomplete="email" inputmode="email" aria-describedby="eEmail"><p class="err" id="eEmail"></p></div>
+          <div class="field"><label for="fPhone">Phone <i>(optional)</i></label><input id="fPhone" name="phone" type="tel" autocomplete="tel" inputmode="tel" aria-describedby="ePhone"><p class="err" id="ePhone"></p></div>
+          <div class="field"><label for="fCountry">Country</label>
+            <select id="fCountry" name="country" autocomplete="country-name" aria-describedby="eCountry">
+              <option value="">Select…</option>
+              <option>United States</option><option>Canada</option><option>United Kingdom</option><option>Australia</option><option>Germany</option><option>France</option><option>Netherlands</option><option>Spain</option><option>Italy</option><option>Switzerland</option><option>Mexico</option><option>Brazil</option><option>United Arab Emirates</option><option>Lebanon</option><option>Other</option>
+            </select>
+            <p class="err" id="eCountry"></p></div>
+        </div>
+        <p class="consent">By continuing you confirm you're 21 or older and agree to receive marketing emails. Unsubscribe anytime.</p>
+        <div class="step-actions">
+          <button class="btn btn-ghost" type="button" id="perkBack">Back</button>
+          <button class="btn btn-primary" type="submit">Unlock 15% off</button>
+        </div>
+      </form>
+
+      <!-- Step 3 -->
+      <section class="step" data-step="3" tabindex="-1" hidden aria-live="polite">
+        <span class="success-ico" aria-hidden="true"><svg class="ico"><use href="#i-check"/></svg></span>
+        <h2 id="thanksTitle">Thank you!</h2>
+        <p class="step-lede" id="thanksText" style="margin-top:-6px">Here's 15% off your first order. Use it at checkout.</p>
+        <div class="code-box">
+          <code id="perkCode">HIGH15</code>
+          <button class="btn btn-ghost" type="button" id="copyCode"><svg class="ico" aria-hidden="true"><use href="#i-copy"/></svg><span>Copy</span></button>
+        </div>
+        <p class="fine" id="tradeNote" hidden>Looking for trade pricing too? Your account will be reviewed for wholesale access.</p>
+        <div class="step-actions">
+          <button class="btn btn-primary btn-lg" type="button" id="startShopping">Start shopping <svg class="ico ico-arrow" aria-hidden="true"><use href="#i-arrow"/></svg></button>
+        </div>
+      </section>
+    </div>
+  </div>
+</div>
+
+<!-- ============ FLOATING UI ============ -->
+<button class="perk-pill" type="button" id="perkPill" data-open-perk hidden><svg class="ico" aria-hidden="true"><use href="#i-tag"/></svg>Get 15% off</button>
+
+<div class="chat-panel" id="chatPanel" role="dialog" aria-label="Chat with us" inert>
+  <div class="chat-head">
+    <span class="avatar" aria-hidden="true">A</span>
+    <div><b><span data-brand-legal>Ascend Supply Co.</span> Support</b><span>Usually replies within a few hours</span></div>
+  </div>
+  <div class="chat-log" id="chatLog" aria-live="polite">
+    <p class="msg bot">Hey! What can we help with today?</p>
+  </div>
+  <div class="quick" id="chatQuick">
+    <button type="button" data-q="ship">Shipping times</button>
+    <button type="button" data-q="wholesale">Wholesale pricing</button>
+    <button type="button" data-q="refill">How do I refill?</button>
+  </div>
+  <form class="chat-form" id="chatForm">
+    <label class="sr-only" for="chatInput">Message</label>
+    <input id="chatInput" autocomplete="off" placeholder="Write a message…">
+    <button type="submit" aria-label="Send"><svg class="ico" aria-hidden="true"><use href="#i-send"/></svg></button>
+  </form>
+</div>
+<button class="chat-fab" type="button" id="chatFab" aria-label="Chat with us" aria-expanded="false" aria-controls="chatPanel">
+  <svg class="ico i-c" aria-hidden="true"><use href="#i-chat"/></svg>
+  <svg class="ico i-x" aria-hidden="true"><use href="#i-close"/></svg>
+</button>
+
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+<script>
+(() => {
+  'use strict';
+
+  /* =========================================================
+     CONFIG — swap brand, code and catalog here
+     ========================================================= */
+  const CONFIG = {
+    brand: 'ASCEND',
+    legalName: 'Ascend Supply Co.',
+    email: 'hello@ascendsupply.example',
+    discountCode: 'HIGH15',
+    freeShippingAt: 50,
+    perkDelayMs: 1400,
+    currency: 'USD'
+  };
+
+  // img: drop a URL to replace the placeholder art. ph: lighter | papers | gas | collab
+  const PRODUCTS = [
+    { id: 'jet-obsidian', name: 'Jet Lighter', variant: 'Obsidian Black', price: 34, tag: 'Lighter', ph: 'lighter', img: '' },
+    { id: 'jet-ember', name: 'Jet Lighter', variant: 'Ember Edition', price: 38, tag: 'Limited', hot: true, ph: 'lighter', img: '' },
+    { id: 'papers-114', name: 'Organic Hemp Papers', variant: '1¼ size + Multi-Doob Tube', price: 8, tag: 'Papers', ph: 'papers', img: '' },
+    { id: 'butane-300', name: 'Premium Butane', variant: '300 ml, 5× refined', price: 12, tag: 'Gas', ph: 'gas', img: '' }
+  ];
+
+  /* ---------- Utilities ---------- */
+  const $ = (s, r = document) => r.querySelector(s);
+  const $$ = (s, r = document) => [...r.querySelectorAll(s)];
+  const reduceMotion = matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const fmt = new Intl.NumberFormat('en-US', { style: 'currency', currency: CONFIG.currency });
+  const money = n => fmt.format(n);
+  const esc = s => String(s).replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+  const store = {
+    get(key, session) { try { return JSON.parse((session ? sessionStorage : localStorage).getItem(key)); } catch (e) { return null; } },
+    set(key, val, session) { try { (session ? sessionStorage : localStorage).setItem(key, JSON.stringify(val)); } catch (e) { /* storage unavailable */ } }
+  };
+
+  let toastTimer;
+  function toast(msg) {
+    const t = $('#toast');
+    t.textContent = msg;
+    t.classList.add('is-show');
+    clearTimeout(toastTimer);
+    toastTimer = setTimeout(() => t.classList.remove('is-show'), 2800);
+  }
+
+  /* ---------- Brand fill ---------- */
+  $$('[data-brand]').forEach(el => { el.textContent = CONFIG.brand; });
+  $$('[data-brand-legal]').forEach(el => { el.textContent = CONFIG.legalName; });
+  $$('[data-email]').forEach(el => { el.textContent = CONFIG.email; });
+  $$('[data-year]').forEach(el => { el.textContent = new Date().getFullYear(); });
+  $('#perkCode').textContent = CONFIG.discountCode;
+
+  // Unwired links: keep the page in place and say so
+  document.addEventListener('click', e => {
+    const a = e.target.closest('a[href="#"]');
+    if (!a) return;
+    e.preventDefault();
+    toast('Placeholder link. Point it at your page.');
+  });
+
+  /* =========================================================
+     MEDIA — placeholder art or real image
+     ========================================================= */
+  const ART = {
+    lighter: '<svg viewBox="0 0 200 260" aria-hidden="true"><path class="h" d="M100 70C88 50 94 26 100 6c6 20 12 44 0 64z"/><path class="f" d="M100 64c-5-9-3-20 0-30 3 10 5 21 0 30z"/><rect x="72" y="70" width="56" height="34" rx="6"/><circle cx="86" cy="87" r="3"/><circle cx="100" cy="87" r="3"/><circle cx="114" cy="87" r="3"/><rect x="66" y="104" width="68" height="146" rx="12"/><path d="M134 132h6v34h-6"/><path d="M84 214h32"/><path d="M84 226h20"/></svg>',
+    papers: '<svg viewBox="0 0 220 260" aria-hidden="true"><rect x="40" y="20" width="56" height="226" rx="28"/><path d="M40 62h56"/><path d="M68 92v116"/><path class="h" d="M120 112h70v118a6 6 0 0 1-6 6h-58a6 6 0 0 1-6-6z"/><path d="M128 112l8-16h44l8 16"/><path d="M120 140h70"/><path d="M136 168l12 12 12-12 12 12"/><path d="M136 196l12 12 12-12 12 12"/></svg>',
+    gas: '<svg viewBox="0 0 200 260" aria-hidden="true"><path d="M100 22v20"/><path d="M88 42h24v24H88z"/><path d="M70 66h60a10 10 0 0 1 10 10v164a10 10 0 0 1-10 10H70a10 10 0 0 1-10-10V76a10 10 0 0 1 10-10z"/><path class="h" d="M60 120h80M60 190h80"/><path d="M82 146h36M82 164h22"/></svg>',
+    collab: '<svg viewBox="0 0 220 260" aria-hidden="true"><circle cx="110" cy="128" r="74"/><circle class="h" cx="110" cy="128" r="46"/><path class="h" d="M110 60l9 40 40 9-40 9-9 40-9-40-40-9 40-9z"/><path d="M28 234h164"/></svg>'
+  };
+
+  function buildMedia(el) {
+    if (el.dataset.built) return;
+    el.dataset.built = '1';
+    const type = el.dataset.ph || 'lighter';
+    const src = (el.dataset.src || '').trim();
+    const label = el.dataset.label || '';
+    el.innerHTML =
+      '<div class="media-parallax"><div class="media-fill">' +
+        '<div class="ph">' + (ART[type] || ART.lighter) + (label ? '<span class="ph-label">' + esc(label) + '</span>' : '') + '</div>' +
+      '</div></div><div class="ticks" aria-hidden="true"></div>';
+    if (!src) return;
+    const img = new Image();
+    img.alt = el.dataset.alt || '';
+    img.loading = 'lazy';
+    img.decoding = 'async';
+    img.onload = () => { const ph = $('.ph', el); if (ph) ph.remove(); };
+    img.onerror = () => img.remove();
+    img.src = src;
+    $('.media-fill', el).appendChild(img);
+  }
+
+  // Optional hero video
+  (function heroVideo() {
+    const host = $('#heroMedia');
+    const src = (host.dataset.video || '').trim();
+    if (!src) return;
+    const v = document.createElement('video');
+    Object.assign(v, { muted: true, loop: true, playsInline: true, autoplay: !reduceMotion, src });
+    v.setAttribute('aria-hidden', 'true');
+    if (host.dataset.poster) v.poster = host.dataset.poster;
+    host.prepend(v);
+    const c = $('#embers'); if (c) c.style.opacity = '.55';
+  })();
+
+  /* =========================================================
+     PRODUCTS GRID
+     ========================================================= */
+  $('#productGrid').innerHTML = PRODUCTS.map((p, i) => `
+    <article class="card reveal" style="--d:${i * 80}ms">
+      <div class="card-media">
+        <span class="chip${p.hot ? ' hot-chip' : ''}">${esc(p.tag)}</span>
+        <figure class="media" data-ph="${p.ph}" data-src="${esc(p.img)}" data-alt="${esc(p.name + ', ' + p.variant)}" data-label="${esc(p.id)}.jpg · 1000×1000"></figure>
+      </div>
+      <div class="card-body">
+        <div><h3 class="card-title">${esc(p.name)}</h3><p class="card-variant">${esc(p.variant)}</p></div>
+        <p class="card-price">${money(p.price)}</p>
+      </div>
+      <button class="btn btn-ghost" type="button" data-add="${p.id}"><svg class="ico" aria-hidden="true"><use href="#i-plus"/></svg>Add to cart</button>
+    </article>`).join('');
+
+  $$('.media').forEach(buildMedia);
+
+  /* =========================================================
+     LAYERS — modal/drawer open, close, focus trap
+     ========================================================= */
+  const stack = [];
+  const FOCUSABLE = 'a[href],button:not([disabled]),input:not([disabled]),select:not([disabled]),textarea,[tabindex]:not([tabindex="-1"])';
+  const focusables = root => $$(FOCUSABLE, root).filter(el => !el.closest('[hidden]') && el.getClientRects().length);
+
+  function makeLayer(id) {
+    const root = document.getElementById(id);
+    const panel = $('[data-panel]', root);
+    let returnTo = null;
+    const api = {
+      root, panel, onClose: null,
+      isOpen: () => root.classList.contains('is-open'),
+      open(focusEl) {
+        if (api.isOpen()) return;
+        returnTo = document.activeElement;
+        root.inert = false;
+        root.setAttribute('aria-hidden', 'false');
+        root.classList.add('is-open');
+        stack.push(api);
+        document.documentElement.classList.add('is-locked');
+        requestAnimationFrame(() => (focusEl || panel).focus({ preventScroll: true }));
+      },
+      close() {
+        if (!api.isOpen()) return;
+        root.classList.remove('is-open');
+        root.inert = true;
+        root.setAttribute('aria-hidden', 'true');
+        stack.splice(stack.indexOf(api), 1);
+        if (!stack.length) document.documentElement.classList.remove('is-locked');
+        if (returnTo && document.contains(returnTo)) returnTo.focus({ preventScroll: true });
+        if (api.onClose) api.onClose();
+      }
+    };
+    root.addEventListener('click', e => { if (e.target.closest('[data-close]')) api.close(); });
+    return api;
+  }
+
+  document.addEventListener('keydown', e => {
+    if (e.key === 'Escape') {
+      if (stack.length) { stack[stack.length - 1].close(); return; }
+      if (megaOpen()) { setMega(false); $('#megaBtn').focus(); return; }
+      if ($('#chatPanel').classList.contains('is-open')) { setChat(false); $('#chatFab').focus(); }
+      return;
+    }
+    if (e.key !== 'Tab' || !stack.length) return;
+    const panel = stack[stack.length - 1].panel;
+    const els = focusables(panel);
+    if (!els.length) { e.preventDefault(); return; }
+    const first = els[0], last = els[els.length - 1];
+    if (e.shiftKey && (document.activeElement === first || document.activeElement === panel)) { e.preventDefault(); last.focus(); }
+    else if (!e.shiftKey && document.activeElement === last) { e.preventDefault(); first.focus(); }
+  });
+
+  /* =========================================================
+     HEADER + MEGAMENU
+     ========================================================= */
+  const header = $('#siteHeader');
+  const onScrollHeader = () => header.classList.toggle('is-scrolled', window.scrollY > 8);
+  onScrollHeader();
+  window.addEventListener('scroll', onScrollHeader, { passive: true });
+
+  const megaBtn = $('#megaBtn'), mega = $('#mega'), megaLi = $('#megaLi');
+  const canHover = matchMedia('(hover: hover) and (pointer: fine)').matches;
+  let megaTimer;
+  const megaOpen = () => mega.classList.contains('is-open');
+  function setMega(open) {
+    clearTimeout(megaTimer);
+    mega.classList.toggle('is-open', open);
+    mega.inert = !open;
+    megaBtn.setAttribute('aria-expanded', String(open));
+  }
+  megaBtn.addEventListener('click', e => {
+    setMega(!megaOpen());
+    if (megaOpen() && e.detail === 0) $('a', mega).focus(); // keyboard activation: move into the menu
+  });
+  if (canHover) {
+    [megaLi, mega].forEach(el => {
+      el.addEventListener('mouseenter', () => { clearTimeout(megaTimer); megaTimer = setTimeout(() => setMega(true), 60); });
+      el.addEventListener('mouseleave', () => { clearTimeout(megaTimer); megaTimer = setTimeout(() => setMega(false), 180); });
+    });
+  }
+  mega.addEventListener('click', e => { if (e.target.closest('a')) setMega(false); });
+  document.addEventListener('click', e => { if (megaOpen() && !e.target.closest('#mega, #megaLi')) setMega(false); });
+  mega.addEventListener('focusout', e => { if (!mega.contains(e.relatedTarget) && e.relatedTarget !== megaBtn) setMega(false); });
+
+  /* Mobile nav */
+  const navLayer = makeLayer('navLayer');
+  const burger = $('#burger');
+  burger.addEventListener('click', () => { navLayer.open(); burger.setAttribute('aria-expanded', 'true'); });
+  navLayer.onClose = () => burger.setAttribute('aria-expanded', 'false');
+
+  /* =========================================================
+     CART
+     ========================================================= */
+  const cartLayer = makeLayer('cartLayer');
+  const byId = Object.fromEntries(PRODUCTS.map(p => [p.id, p]));
+  let cart = (store.get('cart') || []).filter(l => byId[l.id] && l.qty > 0);
+
+  const saveCart = () => store.set('cart', cart);
+  const cartQty = () => cart.reduce((n, l) => n + l.qty, 0);
+  const cartTotal = () => cart.reduce((n, l) => n + l.qty * byId[l.id].price, 0);
+
+  function renderCart() {
+    const qty = cartQty(), total = cartTotal();
+    const countEl = $('#cartCount');
+    countEl.textContent = qty;
+    $('#cartTitleCount').textContent = `(${qty})`;
+    $('#cartSubtotal').textContent = money(total);
+    $('#checkoutBtn').disabled = qty === 0;
+
+    const left = Math.max(0, CONFIG.freeShippingAt - total);
+    $('#shipText').innerHTML = left === 0
+      ? '<b>You unlocked free US shipping.</b>'
+      : (qty === 0 ? `Free US shipping on orders over <b>${money(CONFIG.freeShippingAt)}</b>` : `You're <b>${money(left)}</b> away from free US shipping`);
+    $('#shipBar').style.width = Math.min(100, (total / CONFIG.freeShippingAt) * 100) + '%';
+
+    const body = $('#cartBody');
+    if (!qty) {
+      body.innerHTML = `
+        <div class="empty">
+          <span class="empty-ico"><svg class="ico" aria-hidden="true"><use href="#i-bag"/></svg></span>
+          <h3 class="display-s">Your cart is empty</h3>
+          <p>Add a lighter, papers or a can of butane to get started.</p>
+          <button class="btn btn-primary" type="button" data-shop-now style="margin-top:8px">Continue shopping</button>
+        </div>`;
+      return;
+    }
+    body.innerHTML = '<ul class="line-items">' + cart.map(l => {
+      const p = byId[l.id];
+      return `
+        <li class="line-item">
+          <figure class="media is-small" data-ph="${p.ph}" data-src="${esc(p.img)}" data-alt=""></figure>
+          <div>
+            <h4>${esc(p.name)}</h4>
+            <p class="fine">${esc(p.variant)}</p>
+            <div class="qty" role="group" aria-label="Quantity for ${esc(p.name)} ${esc(p.variant)}">
+              <button type="button" data-qty="-1" data-id="${p.id}" aria-label="Decrease"><svg class="ico" aria-hidden="true"><use href="#i-minus"/></svg></button>
+              <output aria-live="polite">${l.qty}</output>
+              <button type="button" data-qty="1" data-id="${p.id}" aria-label="Increase"><svg class="ico" aria-hidden="true"><use href="#i-plus"/></svg></button>
+            </div>
+          </div>
+          <div style="text-align:right">
+            <p class="line-price">${money(p.price * l.qty)}</p>
+            <button class="remove" type="button" data-remove="${p.id}">Remove</button>
+          </div>
+        </li>`;
+    }).join('') + '</ul>';
+    $$('.media', body).forEach(buildMedia);
+  }
+
+  function addToCart(id) {
+    const line = cart.find(l => l.id === id);
+    if (line) line.qty += 1; else cart.push({ id, qty: 1 });
+    saveCart(); renderCart();
+    const c = $('#cartCount'); c.classList.remove('bump'); void c.offsetWidth; c.classList.add('bump');
+    cartLayer.open();
+  }
+
+  document.addEventListener('click', e => {
+    const add = e.target.closest('[data-add]');
+    if (add) { addToCart(add.dataset.add); return; }
+    if (e.target.closest('[data-open-cart]')) { cartLayer.open(); return; }
+    const q = e.target.closest('[data-qty]');
+    if (q) {
+      const line = cart.find(l => l.id === q.dataset.id);
+      if (line) { line.qty += Number(q.dataset.qty); cart = cart.filter(l => l.qty > 0); saveCart(); renderCart(); }
+      const again = $(`[data-qty="${q.dataset.qty}"][data-id="${q.dataset.id}"]`);
+      (again || $('#cartLayer [data-panel]')).focus();
+      return;
+    }
+    const rm = e.target.closest('[data-remove]');
+    if (rm) { cart = cart.filter(l => l.id !== rm.dataset.remove); saveCart(); renderCart(); $('#cartLayer [data-panel]').focus(); return; }
+    if (e.target.closest('[data-shop-now]')) { cartLayer.close(); document.getElementById('bestsellers').scrollIntoView(); }
+  });
+  // Wire these to your store (Shopify checkout URL, Stripe session, etc.)
+  $('#checkoutBtn').addEventListener('click', () => toast('Checkout is not connected in this preview.'));
+  $('#viewCartBtn').addEventListener('click', () => toast('Cart page is not connected in this preview.'));
+  renderCart();
+
+  /* =========================================================
+     PERK MODAL — 3 steps
+     ========================================================= */
+  const perk = makeLayer('perkLayer');
+  const steps = $$('#perkLayer .step');
+  const segs = $$('#perkLayer .segs i');
+  const nextBtn = $('#perkNext');
+  const roleInputs = $$('input[name="role"]');
+  let step = 1;
+  let claimed = !!store.get('perkClaimed');
+
+  function goStep(n, animate = true) {
+    const dir = n >= step ? 'in-fwd' : 'in-back';
+    steps.forEach(s => {
+      const on = Number(s.dataset.step) === n;
+      s.hidden = !on;
+      s.classList.remove('in-fwd', 'in-back');
+      if (on && animate) { void s.offsetWidth; s.classList.add(dir); }
+    });
+    step = n;
+    segs.forEach((seg, i) => seg.classList.toggle('on', i < n));
+    $('#perkStepLabel').textContent = n === 3 ? 'Done' : `Step ${n} of 3`;
+    const panel = steps[n - 1];
+    $('[data-panel]', perk.root).setAttribute('aria-labelledby', ['perkHeading', 'perkHeading2', 'thanksTitle'][n - 1]);
+    if (perk.isOpen()) requestAnimationFrame(() => {
+      const target = n === 2 ? $('#fFirst') : (n === 3 ? $('#startShopping') : panel);
+      target.focus({ preventScroll: true });
+    });
+  }
+
+  function selectedRole() { const r = roleInputs.find(i => i.checked); return r ? r.value : null; }
+  function syncRole() {
+    nextBtn.disabled = !selectedRole();
+    roleInputs.forEach(i => i.closest('.tile').classList.toggle('is-checked', i.checked)); // :has() fallback
+  }
+  roleInputs.forEach(i => i.addEventListener('change', syncRole));
+
+  function openPerk(role) {
+    if (stack.length && !perk.isOpen()) stack[stack.length - 1].close();
+    if (claimed) { showThanks(store.get('perkName') || ''); goStep(3, false); }
+    else {
+      if (role) { const r = roleInputs.find(i => i.value === role); if (r) r.checked = true; }
+      syncRole();
+      goStep(1, false);
+    }
+    perk.open($('[data-panel]', perk.root));
+    $('#perkPill').hidden = true;
+  }
+  perk.onClose = () => {
+    if (!claimed) { store.set('perkDismissed', true, true); $('#perkPill').hidden = false; }
+  };
+
+  nextBtn.addEventListener('click', () => {
+    const role = selectedRole();
+    if (!role) return;
+    $('#roleNote').textContent = role === 'consumer'
+      ? "We'll email your code so it's there when you check out."
+      : "We'll email your code and pass your details to our wholesale team.";
+    goStep(2);
+  });
+  $('#perkBack').addEventListener('click', () => goStep(1));
+
+  const RULES = {
+    first: v => v.trim() ? '' : 'Enter your first name.',
+    last: v => v.trim() ? '' : 'Enter your last name.',
+    email: v => /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(v.trim()) ? '' : 'Enter a valid email, like name@example.com.',
+    phone: v => !v.trim() || /^[+()\d\s.-]{7,20}$/.test(v.trim()) ? '' : 'Use digits, spaces, dashes or a leading +.',
+    country: v => v ? '' : 'Choose your country.'
+  };
+  const ERR_IDS = { first: 'eFirst', last: 'eLast', email: 'eEmail', phone: 'ePhone', country: 'eCountry' };
+
+  function validateField(input) {
+    const msg = RULES[input.name](input.value);
+    document.getElementById(ERR_IDS[input.name]).textContent = msg;
+    input.setAttribute('aria-invalid', msg ? 'true' : 'false');
+    return !msg;
+  }
+  const form = $('#perkForm');
+  $$('input, select', form).forEach(el => {
+    el.addEventListener('blur', () => { if (el.value || el.getAttribute('aria-invalid') === 'true') validateField(el); });
+    el.addEventListener('input', () => { if (el.getAttribute('aria-invalid') === 'true') validateField(el); });
+  });
+
+  function showThanks(first) {
+    $('#thanksTitle').textContent = first ? `Thank you, ${first}!` : 'Thank you!';
+    $('#thanksText').textContent = `Here's 15% off your first order. Use it at checkout.`;
+    const role = store.get('perkRole') || selectedRole();
+    $('#tradeNote').hidden = !(role === 'retailer' || role === 'wholesaler');
+  }
+
+  form.addEventListener('submit', e => {
+    e.preventDefault();
+    const fields = $$('input, select', form);
+    const bad = fields.filter(f => !validateField(f));
+    if (bad.length) { bad[0].focus(); return; }
+    const data = Object.fromEntries(new FormData(form));
+    data.role = selectedRole();
+    // TODO: POST `data` to your email/CRM provider (Klaviyo, Shopify customer API, etc.)
+    claimed = true;
+    store.set('perkClaimed', true);
+    store.set('perkName', data.first.trim());
+    store.set('perkRole', data.role);
+    showThanks(data.first.trim());
+    goStep(3);
+  });
+
+  $('#copyCode').addEventListener('click', e => {
+    const btn = e.currentTarget, label = $('span', btn);
+    const done = () => { label.textContent = 'Copied'; setTimeout(() => { label.textContent = 'Copy'; }, 1800); };
+    const fallback = () => {
+      const r = document.createRange(); r.selectNodeContents($('#perkCode'));
+      const sel = getSelection(); sel.removeAllRanges(); sel.addRange(r);
+      toast('Code selected. Press Ctrl+C or ⌘C to copy.');
+    };
+    try { navigator.clipboard.writeText(CONFIG.discountCode).then(done, fallback); } catch (err) { fallback(); }
+  });
+  $('#startShopping').addEventListener('click', () => {
+    perk.close();
+    document.getElementById('shop').scrollIntoView();
+  });
+
+  document.addEventListener('click', e => {
+    const t = e.target.closest('[data-open-perk]');
+    if (t) openPerk(t.dataset.openPerk || null);
+  });
+
+  if (!claimed) {
+    if (store.get('perkDismissed', true)) $('#perkPill').hidden = false;
+    else setTimeout(() => { if (!stack.length) openPerk(); }, CONFIG.perkDelayMs);
+  }
+
+  /* =========================================================
+     CHAT WIDGET — replace with your provider (Gorgias, Tidio, Intercom…)
+     ========================================================= */
+  const chatPanel = $('#chatPanel'), chatFab = $('#chatFab'), chatLog = $('#chatLog');
+  function setChat(open) {
+    chatPanel.classList.toggle('is-open', open);
+    chatPanel.inert = !open;
+    chatFab.setAttribute('aria-expanded', String(open));
+    chatFab.setAttribute('aria-label', open ? 'Close chat' : 'Chat with us');
+    if (open) setTimeout(() => $('#chatInput').focus({ preventScroll: true }), 120);
+  }
+  chatFab.addEventListener('click', () => setChat(!chatPanel.classList.contains('is-open')));
+
+  const REPLIES = {
+    ship: 'US orders ship within 1–2 business days and arrive in 3–5. International delivery usually takes 7–14 days.',
+    wholesale: 'Pick "Retailer / Shop" or "Wholesaler / Distributor" in our sign-up and our trade team will send pricing.',
+    refill: 'Turn the lighter upside down, press the butane nozzle straight into the valve for about 5 seconds, then wait 2 minutes before lighting.'
+  };
+  const LABELS = { ship: 'Shipping times', wholesale: 'Wholesale pricing', refill: 'How do I refill?' };
+  function say(text, who) {
+    const m = document.createElement('p');
+    m.className = 'msg ' + who;
+    m.textContent = text;
+    chatLog.appendChild(m);
+    chatLog.scrollTop = chatLog.scrollHeight;
+  }
+  $('#chatQuick').addEventListener('click', e => {
+    const b = e.target.closest('[data-q]');
+    if (!b) return;
+    say(LABELS[b.dataset.q], 'me');
+    setTimeout(() => say(REPLIES[b.dataset.q], 'bot'), 500);
+    if (b.dataset.q === 'wholesale') setTimeout(() => { setChat(false); openPerk('retailer'); }, 1700);
+  });
+  $('#chatForm').addEventListener('submit', e => {
+    e.preventDefault();
+    const input = $('#chatInput'), v = input.value.trim();
+    if (!v) return;
+    say(v, 'me'); input.value = '';
+    setTimeout(() => say(`Thanks! A team member will reply here. You can also email us at ${CONFIG.email}.`, 'bot'), 600);
+  });
+
+  /* =========================================================
+     NEWSLETTER
+     ========================================================= */
+  $('#newsForm').addEventListener('submit', e => {
+    e.preventDefault();
+    const input = $('#newsEmail'), note = $('#newsNote');
+    if (!RULES.email(input.value)) {
+      // TODO: POST to your email provider
+      note.textContent = "Thanks, you're on the list.";
+      input.value = '';
+    } else {
+      note.textContent = 'Enter a valid email, like name@example.com.';
+      input.focus();
+    }
+  });
+
+  /* =========================================================
+     SCROLL REVEAL + PARALLAX
+     ========================================================= */
+  if (!reduceMotion && 'IntersectionObserver' in window) {
+    const io = new IntersectionObserver(entries => {
+      entries.forEach(en => { if (en.isIntersecting) { en.target.classList.remove('is-pending'); io.unobserve(en.target); } });
+    }, { rootMargin: '0px 0px -8% 0px', threshold: 0.08 });
+    $$('.reveal').forEach(el => {
+      if (el.getBoundingClientRect().top > window.innerHeight * 0.92) { el.classList.add('is-pending'); io.observe(el); }
+    });
+
+    const para = $$('[data-parallax] .media-parallax');
+    let ticking = false;
+    const runParallax = () => {
+      const vh = window.innerHeight;
+      para.forEach(el => {
+        const r = el.parentElement.getBoundingClientRect();
+        if (r.bottom < 0 || r.top > vh) return;
+        const progress = (r.top + r.height / 2 - vh / 2) / vh; // -1 … 1
+        el.style.transform = `translate3d(0, ${(progress * -r.height * 0.06).toFixed(1)}px, 0)`;
+      });
+      ticking = false;
+    };
+    window.addEventListener('scroll', () => { if (!ticking) { ticking = true; requestAnimationFrame(runParallax); } }, { passive: true });
+    runParallax();
+  }
+
+  /* =========================================================
+     HERO EMBERS (canvas)
+     ========================================================= */
+  (function embers() {
+    const canvas = $('#embers');
+    if (!canvas || !canvas.getContext) return;
+    const ctx = canvas.getContext('2d');
+    let w = 0, h = 0, parts = [], raf = 0, visible = true;
+
+    function spawn(p, anywhere) {
+      p.x = w * (0.15 + 0.85 * Math.pow(Math.random(), 0.6));
+      p.y = anywhere ? Math.random() * h : h + 10 + Math.random() * 40;
+      p.r = 0.6 + Math.random() * 2;
+      p.vy = 0.25 + Math.random() * 0.85;
+      p.sway = 0.3 + Math.random() * 0.8;
+      p.phase = Math.random() * Math.PI * 2;
+      p.hue = 14 + Math.random() * 24;
+      return p;
+    }
+    function resize() {
+      const dpr = Math.min(window.devicePixelRatio || 1, 2);
+      const r = canvas.getBoundingClientRect();
+      w = r.width; h = r.height;
+      canvas.width = Math.round(w * dpr); canvas.height = Math.round(h * dpr);
+      ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+      const n = Math.round(Math.min(90, Math.max(28, w / 16)));
+      parts = Array.from({ length: n }, () => spawn({}, true));
+    }
+    function frame(t) {
+      ctx.clearRect(0, 0, w, h);
+      ctx.globalCompositeOperation = 'lighter';
+      for (const p of parts) {
+        if (!reduceMotion) {
+          p.y -= p.vy;
+          p.x += Math.sin(t * 0.0012 * p.sway + p.phase) * 0.35;
+          if (p.y < -12) spawn(p, false);
+        }
+        const a = Math.max(0, Math.min(1, (p.y / h) * 1.5)) * (0.75 + 0.25 * Math.sin(t * 0.008 + p.phase));
+        ctx.fillStyle = `hsla(${p.hue}, 100%, 58%, ${a * 0.16})`;
+        ctx.beginPath(); ctx.arc(p.x, p.y, p.r * 4.5, 0, Math.PI * 2); ctx.fill();
+        ctx.fillStyle = `hsla(${p.hue + 12}, 100%, 72%, ${a})`;
+        ctx.beginPath(); ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2); ctx.fill();
+      }
+      if (!reduceMotion && visible) raf = requestAnimationFrame(frame);
+    }
+    const start = () => { cancelAnimationFrame(raf); raf = requestAnimationFrame(frame); };
+    resize();
+    start();
+    let rt; window.addEventListener('resize', () => { clearTimeout(rt); rt = setTimeout(() => { resize(); start(); }, 150); });
+    if (!reduceMotion && 'IntersectionObserver' in window) {
+      new IntersectionObserver(([en]) => { visible = en.isIntersecting && !document.hidden; if (visible) start(); }).observe(canvas);
+      document.addEventListener('visibilitychange', () => { visible = !document.hidden; if (visible) start(); });
+    }
+  })();
+})();
+</script>
+</body>
+</html>
