@@ -1,0 +1,1092 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>NAAR Landing Page</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Unbounded:wght@400;500;600;700;800&family=Manrope:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap">
+<script src="https://cdn.tailwindcss.com/3.4.17"></script>
+<script>
+  // ---------------------------------------------------------------
+  // Tailwind design tokens (edit here to retheme the whole page)
+  // ---------------------------------------------------------------
+  tailwind.config = {
+    theme: {
+      extend: {
+        colors: {
+          ink:   '#09090B',   // page background
+          coal:  '#121215',   // raised surfaces
+          smoke: '#1C1C21',   // cards, drawer
+          line:  '#2A2A31',   // hairlines
+          ash:   '#8E8E99',   // muted text
+          bone:  '#F3F0EA',   // primary text
+          ember: '#2E8BD6',   // accent: NAAR blue (the "high" in the headline)
+          emberDeep: '#1F6FB0',
+          violet: '#704C9F',  // --color-naar-accent
+          rose:   '#F491A3'   // --color-naar-accent-text
+        },
+        fontFamily: {
+          display: ['Unbounded', 'Manrope', 'system-ui', 'sans-serif'],
+          body:    ['Manrope', 'system-ui', 'Segoe UI', 'sans-serif'],
+          mono:    ['"JetBrains Mono"', 'ui-monospace', 'Menlo', 'monospace']
+        },
+        letterSpacing: { eyebrow: '0.18em' },
+        keyframes: {
+          floaty: { '0%,100%': { transform: 'translateY(0)' }, '50%': { transform: 'translateY(-10px)' } },
+          pulseRing: { '0%': { transform: 'scale(1)', opacity: '.6' }, '100%': { transform: 'scale(1.8)', opacity: '0' } },
+          marquee: { '0%': { transform: 'translateX(0)' }, '100%': { transform: 'translateX(-50%)' } }
+        },
+        animation: {
+          floaty: 'floaty 6s ease-in-out infinite',
+          pulseRing: 'pulseRing 2.2s ease-out infinite',
+          marquee: 'marquee 28s linear infinite'
+        }
+      }
+    }
+  }
+</script>
+<style>
+  /* Layout concept: dark full-bleed bands, a condensed display face for the brand voice,
+     electric orange reserved for one action per view. Single deliberate dark theme. */
+  :root {
+    --bg: #09090B;
+    --fg: #F3F0EA;
+    --muted: #8E8E99;
+    --surface: #121215;
+    --surface-2: #1C1C21;
+    --line: #2A2A31;
+    --accent: #2E8BD6;      /* NAAR blue */
+    --accent-deep: #1F6FB0;
+    --violet: #704C9F;      /* --color-naar-accent on the live site */
+    --rose: #F491A3;        /* --color-naar-accent-text */
+    --font-display: "Unbounded", Manrope, system-ui, sans-serif;
+    --font-body: Manrope, system-ui, "Segoe UI", sans-serif;
+    --font-mono: "JetBrains Mono", ui-monospace, Menlo, monospace;
+    --gutter-l: max(16px, env(safe-area-inset-left, 0px));
+    --gutter-r: max(16px, env(safe-area-inset-right, 0px));
+    color-scheme: dark;
+  }
+  html { scroll-behavior: smooth; }
+  body {
+    background: var(--bg);
+    color: var(--fg);
+    font-family: var(--font-body);
+    font-size: 16px;
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+    overflow-x: hidden;
+  }
+  body::before {
+    content: ""; position: fixed; inset: 0 0 auto; height: env(safe-area-inset-top, 0px);
+    background: var(--bg); z-index: 60;
+  }
+  body.no-scroll { overflow: hidden; }
+
+  .wrap {
+    max-width: 1280px; margin-inline: auto;
+    padding-left: var(--gutter-l); padding-right: var(--gutter-r);
+  }
+  .display { font-family: var(--font-display); font-weight: 700; text-transform: uppercase; line-height: 1.08; letter-spacing: .01em; text-wrap: balance; }
+  .eyebrow { font-family: var(--font-mono); font-size: 11px; letter-spacing: .18em; text-transform: uppercase; color: var(--muted); }
+
+  /* Buttons ------------------------------------------------------- */
+  .btn {
+    display: inline-flex; align-items: center; justify-content: center; gap: .6rem;
+    font-weight: 700; font-size: 14px; letter-spacing: .08em; text-transform: uppercase;
+    padding: 1rem 2rem; border-radius: 999px; border: 1px solid transparent;
+    transition: transform .25s cubic-bezier(.2,.8,.2,1), background .25s, color .25s, border-color .25s, box-shadow .25s;
+    cursor: pointer; white-space: nowrap;
+  }
+  .btn:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; }
+  .btn-primary { background: var(--fg); color: #09090B; border-color: var(--fg); box-shadow: 0 10px 40px -12px rgba(243,240,234,.35); }
+  .btn-primary:hover { background: var(--accent); border-color: var(--accent); color: #fff; transform: translateY(-2px) scale(1.03); box-shadow: 0 18px 50px -12px rgba(46,139,214,.6); }
+  .btn-ghost { background: transparent; color: var(--fg); border-color: var(--line); }
+  .btn-ghost:hover { border-color: var(--fg); background: var(--fg); color: #09090B; }
+  .btn-dark { background: var(--violet); color: #fff; }
+  .btn-dark:hover { background: var(--rose); color: #09090B; transform: translateY(-2px); }
+  .btn[disabled] { opacity: .4; cursor: not-allowed; transform: none !important; }
+
+  /* Nav ------------------------------------------------------------ */
+  .nav { position: sticky; top: env(safe-area-inset-top, 0px); z-index: 50; backdrop-filter: blur(14px); -webkit-backdrop-filter: blur(14px);
+    background: rgba(9,9,11,.72); border-bottom: 1px solid transparent; transition: border-color .3s, background .3s; }
+  .nav.is-scrolled { border-bottom-color: var(--line); background: rgba(9,9,11,.88); }
+  .nav-link { font-size: 13px; font-weight: 700; letter-spacing: .14em; text-transform: uppercase; padding: .5rem .2rem; position: relative; color: var(--fg); }
+  .nav-link::after { content: ""; position: absolute; left: 0; right: 0; bottom: 0; height: 2px; background: var(--accent); transform: scaleX(0); transform-origin: left; transition: transform .3s; }
+  .nav-link:hover::after, .nav-item.is-open > .nav-link::after { transform: scaleX(1); }
+  .mega { position: absolute; left: 50%; top: 100%; transform: translate(-50%, 8px); width: min(880px, calc(100vw - 32px));
+    background: var(--surface); border: 1px solid var(--line); border-radius: 18px; padding: 1.5rem;
+    opacity: 0; visibility: hidden; pointer-events: none; transition: opacity .25s, transform .25s, visibility .25s;
+    box-shadow: 0 30px 80px -20px rgba(0,0,0,.8); }
+  .nav-item.is-open .mega { opacity: 1; visibility: visible; pointer-events: auto; transform: translate(-50%, 0); }
+  .mega-tile { display: grid; grid-template-columns: 56px 1fr; gap: 1rem; padding: 1rem; border-radius: 14px; border: 1px solid transparent; transition: background .2s, border-color .2s; }
+  .mega-tile:hover { background: var(--surface-2); border-color: var(--line); }
+  .mega-tile .glyph { width: 56px; height: 56px; border-radius: 12px; background: var(--surface-2); display: grid; place-items: center; color: var(--accent); }
+
+  .cart-count { min-width: 18px; height: 18px; padding: 0 5px; border-radius: 999px; background: var(--accent); color: #09090B; font-size: 11px; font-weight: 800; display: grid; place-items: center; font-family: var(--font-mono); }
+
+  /* Mobile menu */
+  .mobile-menu { position: fixed; inset: 0; z-index: 55; background: var(--bg); padding-top: calc(env(safe-area-inset-top, 0px) + 5.5rem);
+    padding-left: var(--gutter-l); padding-right: var(--gutter-r); transform: translateX(100%); transition: transform .4s cubic-bezier(.2,.8,.2,1); }
+  .mobile-menu.is-open { transform: translateX(0); }
+  .mobile-menu a { display: block; font-family: var(--font-display); font-size: clamp(1.6rem, 6.5vw, 2.4rem); line-height: 1.1; text-transform: uppercase; font-weight: 700; padding: .35rem 0; }
+
+  /* Hero ----------------------------------------------------------- */
+  .hero { position: relative; min-height: min(80svh, 720px); display: grid; align-items: end; overflow: hidden; isolation: isolate; }
+  .hero-media { position: absolute; inset: 0; z-index: -2; background:
+      radial-gradient(900px 500px at 15% 20%, rgba(112,76,159,.28), transparent 60%),
+      radial-gradient(700px 500px at 85% 80%, rgba(46,139,214,.16), transparent 60%),
+      linear-gradient(180deg, #121215 0%, #09090B 100%); }
+  .hero-media video, .hero-media img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; opacity: .55; }
+  .hero-grain { position: absolute; inset: 0; z-index: -1; opacity: .35; mix-blend-mode: overlay; pointer-events: none;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='.5'/%3E%3C/svg%3E"); }
+  .hero-vignette { position: absolute; inset: 0; z-index: -1; background: linear-gradient(180deg, rgba(9,9,11,.2) 0%, rgba(9,9,11,.1) 40%, rgba(9,9,11,.95) 100%); }
+  .hero-flame { position: absolute; right: -6%; top: 8%; width: min(46vw, 560px); aspect-ratio: 1; z-index: -1; opacity: .9; pointer-events: none; }
+  .hero h1 { font-size: clamp(2rem, 6.4vw, 4.6rem); font-weight: 500; letter-spacing: .02em; line-height: 1.15; position: relative; z-index: 2; }
+  .hero h1 .hl { color: var(--accent); }
+  .hero-distort { position: absolute; inset: 0; width: 100%; height: 100%; opacity: .3; z-index: 1; pointer-events: none; }
+  .hero-block { position: relative; z-index: 2; }
+  .arrow-pulse { color: var(--fg); animation: pulse 1s ease-in-out infinite; display: inline-flex; }
+  @keyframes pulse { 0%,100% { opacity: 1; transform: scale(1); } 50% { opacity: .45; transform: scale(.92); } }
+  .scroll-cue { width: 1px; height: 56px; background: linear-gradient(var(--fg), transparent); position: relative; overflow: hidden; }
+  .scroll-cue::after { content: ""; position: absolute; inset: 0; background: var(--accent); transform: translateY(-100%); animation: cue 1.8s ease-in-out infinite; }
+  @keyframes cue { to { transform: translateY(100%); } }
+
+  /* Marquee strip */
+  .marquee { overflow: hidden; border-block: 1px solid var(--line); background: var(--surface); }
+  .marquee-track { display: flex; width: max-content; gap: 3rem; padding: .9rem 0; white-space: nowrap; animation: marquee 28s linear infinite; }
+  .marquee-track span { font-family: var(--font-display); font-weight: 600; text-transform: uppercase; font-size: .8rem; letter-spacing: .06em; color: var(--muted); }
+  .marquee-track span b { color: var(--accent); margin: 0 1.2rem; font-weight: 400; }
+
+  /* Media frames ----------------------------------------------------- */
+  .media-frame { position: relative; overflow: hidden; border-radius: 22px; border: 1px solid var(--line); background: var(--surface); aspect-ratio: 4/3; max-width: 100%; }
+  .media-frame img { width: 100%; height: 100%; object-fit: cover; display: block; transform: scale(1.04); transition: transform .9s cubic-bezier(.2,.8,.2,1); will-change: transform; }
+  .media-frame:hover img { transform: scale(1.12); }
+  .media-frame .tag { position: absolute; left: 1rem; top: 1rem; font-family: var(--font-mono); font-size: 11px; letter-spacing: .14em; text-transform: uppercase; padding: .45rem .7rem; border-radius: 999px; background: rgba(9,9,11,.7); border: 1px solid var(--line); backdrop-filter: blur(6px); }
+  .media-frame .corner { position: absolute; right: 1rem; bottom: 1rem; width: 44px; height: 44px; border-radius: 50%; background: var(--accent); color: #09090B; display: grid; place-items: center; transform: translateY(8px); opacity: 0; transition: .35s; }
+  .media-frame:hover .corner { transform: none; opacity: 1; }
+  .parallax { will-change: transform; }
+  .lighter-spin { position: absolute; left: 50%; top: 50%; width: min(60%, 400px); aspect-ratio: 400/110; transform-origin: 0% 50%;
+    transform: rotate(var(--spin, -120deg)); filter: drop-shadow(0 20px 30px rgba(0,0,0,.6)); transition: transform .1s linear; pointer-events: none; }
+  .doob-slide { position: absolute; left: 8%; bottom: 10%; width: 22%; aspect-ratio: 154/242; opacity: 0; transform: translateY(30px);
+    transition: opacity .9s cubic-bezier(.2,.8,.2,1) .25s, transform .9s cubic-bezier(.2,.8,.2,1) .25s; filter: drop-shadow(0 20px 30px rgba(0,0,0,.6)); pointer-events: none; }
+  .is-visible .doob-slide { opacity: 1; transform: none; }
+
+  .feature { display: grid; grid-template-columns: 44px 1fr; gap: 1rem; align-items: start; }
+  .feature .ico { width: 44px; height: 44px; border-radius: 12px; display: grid; place-items: center; background: var(--surface-2); border: 1px solid var(--line); color: var(--accent); flex: none; }
+  .feature h4 { font-weight: 800; font-size: 15px; letter-spacing: .02em; }
+  .feature p { color: var(--muted); font-size: 14px; line-height: 1.55; }
+
+  /* Product cards */
+  .card { background: var(--surface); border: 1px solid var(--line); border-radius: 20px; overflow: hidden; transition: transform .35s cubic-bezier(.2,.8,.2,1), border-color .35s; display: flex; flex-direction: column; }
+  .card:hover { transform: translateY(-6px); border-color: #3a3a43; }
+  .card .media-frame { border-radius: 0; border: 0; aspect-ratio: 1; }
+  .price { font-family: var(--font-mono); font-variant-numeric: tabular-nums; }
+
+  /* Scroll reveal ---------------------------------------------------- */
+  .reveal { transition: opacity .9s cubic-bezier(.2,.8,.2,1), transform .9s cubic-bezier(.2,.8,.2,1); }
+  .reveal.is-pending { opacity: 0; transform: translateY(36px); }
+  .reveal.is-visible { opacity: 1; transform: none; }
+  .reveal[data-delay="1"] { transition-delay: .12s; } .reveal[data-delay="2"] { transition-delay: .24s; } .reveal[data-delay="3"] { transition-delay: .36s; }
+
+  /* Cart drawer ------------------------------------------------------ */
+  .backdrop { position: fixed; inset: 0; z-index: 70; background: rgba(0,0,0,.6); backdrop-filter: blur(4px); opacity: 0; visibility: hidden; transition: opacity .35s, visibility .35s; }
+  .backdrop.is-open { opacity: 1; visibility: visible; }
+  .drawer { position: fixed; top: 0; right: 0; bottom: 0; z-index: 80; width: min(440px, 100vw); background: var(--surface); border-left: 1px solid var(--line);
+    transform: translateX(100%); transition: transform .45s cubic-bezier(.2,.8,.2,1); display: flex; flex-direction: column;
+    padding-top: env(safe-area-inset-top, 0px); padding-bottom: env(safe-area-inset-bottom, 0px); padding-right: env(safe-area-inset-right, 0px); }
+  .drawer.is-open { transform: translateX(0); }
+  .icon-btn { width: 40px; height: 40px; border-radius: 50%; display: grid; place-items: center; border: 1px solid var(--line); color: var(--fg); transition: .2s; background: transparent; cursor: pointer; }
+  .icon-btn:hover { background: var(--fg); color: #09090B; border-color: var(--fg); }
+  .icon-btn:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+  .qty { display: inline-flex; align-items: center; border: 1px solid var(--line); border-radius: 999px; overflow: hidden; }
+  .qty button { width: 32px; height: 32px; display: grid; place-items: center; color: var(--fg); cursor: pointer; background: transparent; }
+  .qty button:hover { background: var(--surface-2); }
+  .qty span { min-width: 28px; text-align: center; font-family: var(--font-mono); font-size: 13px; }
+
+  /* Discount modal --------------------------------------------------- */
+  .modal-backdrop { position: fixed; inset: 0; z-index: 90; background: rgba(0,0,0,.72); backdrop-filter: blur(8px); display: grid; place-items: center;
+    padding-left: var(--gutter-l); padding-right: var(--gutter-r); padding-block: 1rem; opacity: 0; visibility: hidden; transition: opacity .4s, visibility .4s; }
+  .modal-backdrop.is-open { opacity: 1; visibility: visible; }
+  .modal { width: min(560px, 100%); max-height: calc(100svh - 2rem); overflow: auto; background: var(--surface); border: 1px solid var(--line); border-radius: 24px; position: relative;
+    transform: translateY(24px) scale(.97); transition: transform .45s cubic-bezier(.2,.8,.2,1); box-shadow: 0 50px 120px -30px rgba(0,0,0,.9), 0 0 0 1px rgba(46,139,214,.08); }
+  .modal-backdrop.is-open .modal { transform: none; }
+  .modal-glow { position: absolute; inset: -1px; border-radius: inherit; pointer-events: none; background: radial-gradient(600px 220px at 50% -10%, rgba(46,139,214,.35), transparent 70%); }
+  .modal-steps { position: relative; }
+  .step { display: none; }
+  .step.is-active { display: block; animation: stepIn .45s cubic-bezier(.2,.8,.2,1); }
+  .step.is-leaving { animation: stepOut .3s ease forwards; }
+  @keyframes stepIn { from { opacity: 0; transform: translateX(24px); } to { opacity: 1; transform: none; } }
+  @keyframes stepOut { to { opacity: 0; transform: translateX(-24px); } }
+  .progress { display: flex; gap: 6px; }
+  .progress i { height: 3px; flex: 1; border-radius: 99px; background: var(--line); transition: background .4s; }
+  .progress i.is-done { background: var(--accent); }
+
+  .tile { position: relative; display: flex; flex-direction: column; gap: .6rem; padding: 1.1rem; border-radius: 16px; border: 1px solid var(--line); background: var(--surface-2); cursor: pointer; transition: border-color .2s, transform .2s, background .2s; text-align: left; }
+  .tile:hover { transform: translateY(-2px); border-color: #4a4a55; }
+  .tile.is-selected { border-color: var(--accent); background: rgba(46,139,214,.08); }
+  .tile.is-selected::after { content: ""; position: absolute; right: 12px; top: 12px; width: 10px; height: 10px; border-radius: 50%; background: var(--accent); box-shadow: 0 0 0 4px rgba(46,139,214,.25); }
+  .tile .t-ico { color: var(--accent); }
+  .tile:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+
+  .field { display: flex; flex-direction: column; gap: .35rem; }
+  .field label { font-size: 12px; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; color: var(--muted); }
+  .field input, .field select { width: 100%; background: var(--surface-2); border: 1px solid var(--line); color: var(--fg); border-radius: 12px; padding: .8rem .95rem; font-size: 15px; font-family: inherit; transition: border-color .2s, box-shadow .2s; }
+  .field input:focus, .field select:focus { outline: none; border-color: var(--accent); box-shadow: 0 0 0 3px rgba(46,139,214,.2); }
+  .field.is-invalid input, .field.is-invalid select { border-color: #ff6b6b; }
+  .field .err { font-size: 12px; color: #ff8a8a; display: none; }
+  .field.is-invalid .err { display: block; }
+
+  .code-box { display: flex; align-items: center; justify-content: space-between; gap: 1rem; border: 1px dashed var(--accent); border-radius: 14px; padding: 1rem 1.2rem; background: rgba(46,139,214,.06); }
+  .code-box code { font-family: var(--font-mono); font-size: clamp(1.3rem, 5vw, 1.8rem); letter-spacing: .14em; color: var(--accent); }
+
+  /* Footer ------------------------------------------------------------ */
+  footer a { transition: color .2s; }
+  footer a:hover { color: var(--accent); }
+  .social { width: 42px; height: 42px; border-radius: 50%; border: 1px solid var(--line); display: grid; place-items: center; transition: .25s; }
+  .social:hover { background: var(--accent); border-color: var(--accent); color: #09090B !important; transform: translateY(-3px); }
+
+  /* Chat widget -------------------------------------------------------- */
+  .chat-fab { position: fixed; right: calc(20px + env(safe-area-inset-right, 0px)); bottom: calc(20px + env(safe-area-inset-bottom, 0px)); z-index: 65;
+    width: 60px; height: 60px; border-radius: 50%; background: var(--accent); color: #09090B; display: grid; place-items: center; cursor: pointer;
+    box-shadow: 0 16px 40px -10px rgba(46,139,214,.7); transition: transform .3s cubic-bezier(.2,.8,.2,1), background .3s; border: 0; }
+  .chat-fab:hover { transform: scale(1.08) rotate(-6deg); background: var(--fg); }
+  .chat-fab::before { content: ""; position: absolute; inset: 0; border-radius: 50%; border: 2px solid var(--accent); animation: pulseRing 2.2s ease-out infinite; }
+  .chat-panel { position: fixed; right: calc(20px + env(safe-area-inset-right, 0px)); bottom: calc(92px + env(safe-area-inset-bottom, 0px)); z-index: 65;
+    width: min(340px, calc(100vw - 40px)); background: var(--surface); border: 1px solid var(--line); border-radius: 20px; overflow: hidden;
+    transform: translateY(12px) scale(.96); opacity: 0; visibility: hidden; transition: .3s; box-shadow: 0 30px 70px -20px rgba(0,0,0,.8); transform-origin: bottom right; }
+  .chat-panel.is-open { transform: none; opacity: 1; visibility: visible; }
+  .bubble { padding: .7rem .9rem; border-radius: 14px; font-size: 14px; line-height: 1.45; max-width: 85%; }
+  .bubble.them { background: var(--surface-2); border-bottom-left-radius: 4px; }
+  .bubble.me { background: var(--accent); color: #09090B; margin-left: auto; border-bottom-right-radius: 4px; }
+
+  .toast { position: fixed; left: 50%; bottom: calc(24px + env(safe-area-inset-bottom, 0px)); transform: translate(-50%, 20px); z-index: 100; background: var(--fg); color: #09090B;
+    font-weight: 700; font-size: 14px; padding: .8rem 1.2rem; border-radius: 999px; opacity: 0; visibility: hidden; transition: .3s; box-shadow: 0 20px 50px -15px rgba(0,0,0,.8); white-space: nowrap; }
+  .toast.is-open { transform: translate(-50%, 0); opacity: 1; visibility: visible; }
+
+  a:focus-visible, button:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; }
+
+  @media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after { animation-duration: .01ms !important; animation-iteration-count: 1 !important; transition-duration: .01ms !important; }
+    html { scroll-behavior: auto; }
+    .reveal.is-pending { opacity: 1; transform: none; }
+    .parallax { transform: none !important; }
+  }
+</style>
+</head>
+<body>
+
+<!-- ================================================================
+     NAVIGATION
+     ================================================================ -->
+<header class="nav" id="nav">
+  <div class="wrap flex items-center justify-between h-[72px]">
+    <!-- Brand -->
+    <a href="#top" class="display text-[1.35rem] tracking-[.08em] leading-none" aria-label="NAAR home">NAAR<span class="text-ember">.</span></a>
+
+    <!-- Desktop links -->
+    <nav class="hidden lg:flex items-center gap-9" aria-label="Primary">
+      <div class="nav-item relative" id="shopItem">
+        <button class="nav-link flex items-center gap-1.5" id="shopToggle" aria-haspopup="true" aria-expanded="false">
+          Shop
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="m6 9 6 6 6-6"/></svg>
+        </button>
+        <div class="mega" id="shopMega" role="menu">
+          <div class="grid grid-cols-3 gap-2">
+            <a href="#lighters" class="mega-tile" role="menuitem">
+              <span class="glyph"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2c1 3 4 5 4 9a4 4 0 0 1-8 0c0-2 1-3 2-4 0 2 1 3 2 3 0-3-1-5 0-8Z"/><path d="M8 22h8M10 15h4v7h-4z"/></svg></span>
+              <span><span class="block font-extrabold tracking-wide text-sm">Lighters</span><span class="block text-ash text-[13px] mt-1">Windproof jet flame. Collectible shells. Refillable forever.</span></span>
+            </a>
+            <a href="#papers" class="mega-tile" role="menuitem">
+              <span class="glyph"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="3" width="14" height="18" rx="2"/><path d="M9 8h6M9 12h6M9 16h3"/></svg></span>
+              <span><span class="block font-extrabold tracking-wide text-sm">Rolling Papers</span><span class="block text-ash text-[13px] mt-1">Organic, non-GMO, packed in the Multi-Doob tube.</span></span>
+            </a>
+            <a href="#gas" class="mega-tile" role="menuitem">
+              <span class="glyph"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M9 3h6v3h1a2 2 0 0 1 2 2v11a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h1V3Z"/><path d="M9 12h6"/></svg></span>
+              <span><span class="block font-extrabold tracking-wide text-sm">Gas</span><span class="block text-ash text-[13px] mt-1">Premium butane refills. Keep the flame alive.</span></span>
+            </a>
+          </div>
+          <div class="mt-4 pt-4 border-t border-line flex items-center justify-between gap-4 flex-wrap">
+            <p class="eyebrow">New drop · Spring collection live now</p>
+            <a href="#products" class="text-sm font-bold text-ember hover:underline">Shop all products →</a>
+          </div>
+        </div>
+      </div>
+      <a href="#about" class="nav-link">About</a>
+      <a href="#collabs" class="nav-link">Collabs</a>
+      <a href="#contact" class="nav-link">Contact</a>
+    </nav>
+
+    <!-- Right actions -->
+    <div class="flex items-center gap-3 sm:gap-5">
+      <a href="#login" class="hidden sm:inline-block nav-link">Log in</a>
+      <button class="btn btn-ghost !py-2.5 !px-4 gap-2" id="cartOpen" aria-label="Open cart">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 6h15l-1.5 9h-12z"/><path d="M6 6 5 3H2"/><circle cx="9" cy="20" r="1.5"/><circle cx="18" cy="20" r="1.5"/></svg>
+        <span class="hidden sm:inline">Cart</span>
+        <span class="cart-count" id="cartCount">0</span>
+      </button>
+      <button class="icon-btn lg:hidden" id="menuToggle" aria-label="Open menu" aria-expanded="false">
+        <svg id="menuIcon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M3 7h18M3 12h18M3 17h18"/></svg>
+      </button>
+    </div>
+  </div>
+</header>
+
+<!-- Mobile menu -->
+<div class="mobile-menu" id="mobileMenu" aria-hidden="true">
+  <a href="#products" data-close-menu>Shop</a>
+  <div class="pl-4 border-l border-line my-2 flex flex-col gap-1">
+    <a href="#lighters" data-close-menu class="!text-[1.6rem] text-ash">Lighters</a>
+    <a href="#papers" data-close-menu class="!text-[1.6rem] text-ash">Rolling Papers</a>
+    <a href="#gas" data-close-menu class="!text-[1.6rem] text-ash">Gas</a>
+  </div>
+  <a href="#about" data-close-menu>About</a>
+  <a href="#collabs" data-close-menu>Collabs</a>
+  <a href="#contact" data-close-menu>Contact</a>
+  <div class="mt-8 pt-6 border-t border-line flex gap-3">
+    <a href="#login" data-close-menu class="btn btn-ghost !text-[13px]">Log in</a>
+    <button class="btn btn-primary !text-[13px]" id="cartOpenMobile">Cart</button>
+  </div>
+</div>
+
+<main id="top">
+  <!-- ================================================================
+       HERO
+       ================================================================ -->
+  <section class="hero">
+    <div class="hero-media" aria-hidden="true">
+      <!-- Live site uses a full-bleed photo (object-position ≈ 91% 45%):
+           https://www.naarofficial.com/cdn/shop/files/For_phone_website.jpg?v=1700564996&width=3840
+           Drop it in as <img src="..." style="object-position:91% 45%"> or swap for a video:
+      <video autoplay muted loop playsinline poster="https://via.placeholder.com/1920x1080">
+        <source src="your-hero-video.mp4" type="video/mp4">
+      </video> -->
+      <svg class="hero-flame animate-floaty" viewBox="0 0 400 400" fill="none" aria-hidden="true">
+        <defs>
+          <radialGradient id="fg1" cx="50%" cy="60%" r="50%"><stop offset="0%" stop-color="#F491A3" stop-opacity=".9"/><stop offset="45%" stop-color="#704C9F" stop-opacity=".7"/><stop offset="100%" stop-color="#2E8BD6" stop-opacity="0"/></radialGradient>
+          <linearGradient id="fg2" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#F3F0EA"/><stop offset="100%" stop-color="#2E8BD6"/></linearGradient>
+        </defs>
+        <circle cx="200" cy="220" r="170" fill="url(#fg1)"/>
+        <path d="M200 60c22 60 78 95 78 165a78 78 0 0 1-156 0c0-36 18-58 36-80 2 38 18 58 42 58-4-54-26-92 0-143Z" fill="url(#fg2)" opacity=".95"/>
+        <path d="M200 200c8 26 32 40 32 70a32 32 0 0 1-64 0c0-18 10-28 18-38 1 16 8 24 16 24-2-22-10-36-2-56Z" fill="#09090B" opacity=".85"/>
+      </svg>
+    </div>
+    <div class="hero-grain"></div>
+    <div class="hero-vignette"></div>
+    <!-- Mirrors <animated-title-distort>: a canvas echo of the headline at 30% opacity -->
+    <canvas class="hero-distort" id="heroDistort" aria-hidden="true"></canvas>
+
+    <div class="wrap w-full pb-14 pt-36 md:pb-20 md:pt-44 relative">
+      <div class="hero-block mx-auto max-w-[890px] text-center flex flex-col items-center">
+        <p class="eyebrow mb-5 flex items-center gap-3"><span class="inline-block w-6 h-px bg-ember"></span>Premium smoking accessories<span class="inline-block w-6 h-px bg-ember"></span></p>
+        <h1 class="display" id="heroTitle" data-title="KEEP YOUR HEAD HIGH">Keep your head <span class="hl">high</span></h1>
+        <p class="mt-4 max-w-[62ch] text-[17px] md:text-lg leading-relaxed text-bone/85">We’ve got state-of-the-art jet lighters and exceptional organic rolling papers that will turn heads and elevate your smoking game.</p>
+        <div class="mt-6 flex items-center justify-center gap-4">
+          <span class="arrow-pulse" aria-hidden="true"><svg width="52" height="24" viewBox="0 0 52 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M50 12H4M12 4l-8 8 8 8"/></svg></span>
+          <a href="#products" class="btn btn-primary">View Products</a>
+          <span class="arrow-pulse" aria-hidden="true"><svg width="52" height="24" viewBox="0 0 52 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 12h46M40 4l8 8-8 8"/></svg></span>
+        </div>
+      </div>
+      <div class="mt-12 hidden md:flex items-center justify-center gap-4 text-ash">
+        <span class="scroll-cue"></span>
+        <span class="eyebrow">Scroll</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- Marquee -->
+  <div class="marquee" aria-hidden="true">
+    <div class="marquee-track">
+      <span>Windproof jet flame<b>✦</b>Organic rolling papers<b>✦</b>Collectible designs<b>✦</b>Refillable for life<b>✦</b>Multi-Doob tube<b>✦</b>Free shipping over $50<b>✦</b></span>
+      <span>Windproof jet flame<b>✦</b>Organic rolling papers<b>✦</b>Collectible designs<b>✦</b>Refillable for life<b>✦</b>Multi-Doob tube<b>✦</b>Free shipping over $50<b>✦</b></span>
+    </div>
+  </div>
+
+  <!-- ================================================================
+       PRODUCT SHOWCASES — "The ultimate smoker flex"
+       ================================================================ -->
+  <section id="products" class="py-20 md:py-32">
+    <div class="wrap">
+      <div class="reveal grid lg:grid-cols-[1fr_auto] gap-6 items-end mb-16 md:mb-24">
+        <div>
+          <p class="eyebrow mb-4">What we make</p>
+          <h2 class="display text-[2.1rem] sm:text-[3.2rem] lg:text-[4.2rem]">The ultimate <span class="text-ember">smoker flex</span></h2>
+        </div>
+        <p class="text-ash max-w-[38ch] lg:text-right">Two product families. Zero compromises. Built to be shown off, refilled, and passed around.</p>
+      </div>
+
+      <!-- Lighters -->
+      <article id="lighters" class="grid lg:grid-cols-2 gap-10 lg:gap-20 items-center mb-24 md:mb-36">
+        <div class="reveal media-frame parallax" data-parallax="0.08">
+          <!-- Replace src with your asset, e.g. https://via.placeholder.com/800x600 -->
+          <img src="data:image/svg+xml;utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 800 600'%3E%3Cdefs%3E%3ClinearGradient id='g' x1='0' y1='0' x2='1' y2='1'%3E%3Cstop offset='0' stop-color='%231C1C21'/%3E%3Cstop offset='1' stop-color='%2309090B'/%3E%3C/linearGradient%3E%3C/defs%3E%3Crect width='800' height='600' fill='url(%23g)'/%3E%3Crect x='330' y='120' width='140' height='360' rx='22' fill='%2326262c' stroke='%233a3a43' stroke-width='2'/%3E%3Crect x='350' y='140' width='100' height='200' rx='10' fill='%2309090B'/%3E%3Cpath d='M400 60c14 30 40 48 40 84a40 40 0 0 1-80 0c0-18 9-30 18-40 1 20 9 30 22 30-2-28-12-46 0-74Z' fill='%232E8BD6'/%3E%3Ctext x='400' y='560' text-anchor='middle' font-family='monospace' font-size='18' fill='%238E8E99' letter-spacing='4'%3EJET LIGHTER · 800×600%3C/text%3E%3C/svg%3E" alt="NAAR jet lighter product placeholder" loading="lazy" width="800" height="600">
+          <!-- Live site: a lighter PNG rotated from -120° on a left-centre pivot
+               (Dove_City_-_smaller_blue_*.png). Swap the SVG below for your PNG. -->
+          <div class="lighter-spin" id="lighterSpin" aria-hidden="true">
+            <svg viewBox="0 0 400 110" width="100%" height="100%"><rect x="2" y="25" width="396" height="60" rx="14" fill="#2E8BD6"/><rect x="18" y="38" width="250" height="34" rx="8" fill="#1F6FB0"/><rect x="300" y="30" width="70" height="50" rx="8" fill="#F3F0EA"/><circle cx="335" cy="55" r="9" fill="#09090B"/></svg>
+          </div>
+          <span class="tag">01 · Lighters</span>
+          <span class="corner"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M7 17 17 7M8 7h9v9"/></svg></span>
+        </div>
+        <div class="reveal" data-delay="1">
+          <p class="eyebrow mb-4">Jet lighters</p>
+          <h3 class="display text-[1.8rem] sm:text-[2.5rem] mb-5">Fire that <span class="text-ember">turns heads</span></h3>
+          <p class="text-ash max-w-[48ch] mb-10">A torch flame that laughs at wind, wrapped in a shell you'll actually want to pull out of your pocket. Every NAAR lighter ships with a refill port and a lifetime of flex.</p>
+          <ul class="grid sm:grid-cols-2 gap-6 mb-10">
+            <li class="feature">
+              <span class="ico"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m12 3 2.6 5.3 5.9.9-4.3 4.1 1 5.9L12 16.4 6.8 19.2l1-5.9L3.5 9.2l5.9-.9z"/></svg></span>
+              <div><h4>Collectible designs</h4><p>Limited runs with artists and collab partners. When they're gone, they're gone.</p></div>
+            </li>
+            <li class="feature">
+              <span class="ico"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 8h11a3 3 0 1 0-3-3M3 12h15a3 3 0 1 1-3 3M3 16h8a2 2 0 1 1-2 2"/></svg></span>
+              <div><h4>Windproof jet flame</h4><p>A 1300 °C blue torch that lights the same on a rooftop as it does on your couch.</p></div>
+            </li>
+            <li class="feature">
+              <span class="ico"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m15 4 5 5-11 11H4v-5z"/><path d="m13 6 5 5"/><path d="M19 3l1 1M21 7l1-1M17 2l-1 1"/></svg></span>
+              <div><h4>Multifunctional "Magic Stick"</h4><p>Built-in poker, tamper and packer. One tool for the whole session.</p></div>
+            </li>
+            <li class="feature">
+              <span class="ico"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12a9 9 0 1 1-2.6-6.4"/><path d="M21 3v6h-6"/></svg></span>
+              <div><h4>Refillable</h4><p>Standard butane port. Refill in seconds instead of binning it in weeks.</p></div>
+            </li>
+          </ul>
+          <div class="flex gap-4 flex-wrap">
+            <a href="#drops" class="btn btn-primary">Shop lighters</a>
+            <a href="#gas" class="btn btn-ghost">Get gas</a>
+          </div>
+        </div>
+      </article>
+
+      <!-- Rolling papers (mirrored) -->
+      <article id="papers" class="grid lg:grid-cols-2 gap-10 lg:gap-20 items-center">
+        <div class="reveal lg:order-2 media-frame parallax" data-parallax="-0.06">
+          <!-- Replace src with your asset, e.g. https://via.placeholder.com/800x600 -->
+          <img src="data:image/svg+xml;utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 800 600'%3E%3Cdefs%3E%3ClinearGradient id='g' x1='1' y1='0' x2='0' y2='1'%3E%3Cstop offset='0' stop-color='%231C1C21'/%3E%3Cstop offset='1' stop-color='%2309090B'/%3E%3C/linearGradient%3E%3C/defs%3E%3Crect width='800' height='600' fill='url(%23g)'/%3E%3Crect x='250' y='150' width='300' height="300" rx='18' transform='rotate(-8 400 300)' fill='%23F3F0EA'/%3E%3Crect x='270' y='170' width='260' height='40' rx='6' transform='rotate(-8 400 300)' fill='%23704C9F'/%3E%3Cg stroke='%2326262c' stroke-width='2' transform='rotate(-8 400 300)'%3E%3Cpath d='M290 250h220M290 290h220M290 330h220M290 370h160'/%3E%3C/g%3E%3Ctext x='400' y='560' text-anchor='middle' font-family='monospace' font-size='18' fill='%238E8E99' letter-spacing='4'%3EROLLING PAPERS · 800×600%3C/text%3E%3C/svg%3E" alt="NAAR organic rolling papers product placeholder" loading="lazy" width="800" height="600">
+          <!-- Live site: the "doob" tube (doob_filled.png, 154×242) fades and slides in. -->
+          <div class="doob-slide" aria-hidden="true">
+            <svg viewBox="0 0 154 242" width="100%" height="100%"><rect x="27" y="30" width="100" height="200" rx="40" fill="#F3F0EA"/><rect x="27" y="30" width="100" height="60" rx="30" fill="#704C9F"/><rect x="47" y="110" width="60" height="8" rx="4" fill="#2E8BD6"/><rect x="47" y="130" width="60" height="8" rx="4" fill="#F491A3"/><rect x="47" y="150" width="60" height="8" rx="4" fill="#2E8BD6"/></svg>
+          </div>
+          <span class="tag">02 · Rolling papers</span>
+          <span class="corner"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M7 17 17 7M8 7h9v9"/></svg></span>
+        </div>
+        <div class="reveal lg:order-1" data-delay="1">
+          <p class="eyebrow mb-4">Organic rolling papers</p>
+          <h3 class="display text-[1.8rem] sm:text-[2.5rem] mb-5">Clean paper, <span class="text-ember">loud looks</span></h3>
+          <p class="text-ash max-w-[48ch] mb-10">Ultra-thin, slow-burning, chlorine-free paper from responsibly managed forests. Packed in our signature Multi-Doob tube so the last one rolls as crisp as the first.</p>
+          <ul class="grid sm:grid-cols-2 gap-6 mb-10">
+            <li class="feature">
+              <span class="ico"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="8" y="2" width="8" height="20" rx="4"/><path d="M8 8h8M8 16h8"/></svg></span>
+              <div><h4>Packed in a Multi-Doob Tube</h4><p>Airtight, smell-proof and pocket-sized. Carries papers, tips and three pre-rolls.</p></div>
+            </li>
+            <li class="feature">
+              <span class="ico"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 19a7 7 0 1 0 0-14 7 7 0 0 0 0 14Z"/><path d="M12 5V2M12 22v-3M5 12H2M22 12h-3"/></svg></span>
+              <div><h4>Unique designs</h4><p>Every booklet is a canvas. Rotating artwork you won't find in a gas station.</p></div>
+            </li>
+            <li class="feature">
+              <span class="ico"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 20A7 7 0 0 1 4 13c0-5 5-9 16-10-1 11-5 16-9 17Z"/><path d="M4 20c3-4 6-7 10-10"/></svg></span>
+              <div><h4>Organic / Non-GMO</h4><p>Unbleached fibres, natural gum arabic, nothing added that you can taste.</p></div>
+            </li>
+            <li class="feature">
+              <span class="ico"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22V10"/><path d="m12 3 5 7H7z"/><path d="m12 8 4 6H8z"/><path d="M12 12l3 5H9z"/></svg></span>
+              <div><h4>Responsible forestry</h4><p>FSC-certified pulp. Good for the session, easier on the planet.</p></div>
+            </li>
+          </ul>
+          <div class="flex gap-4 flex-wrap">
+            <a href="#drops" class="btn btn-primary">Shop papers</a>
+          </div>
+        </div>
+      </article>
+    </div>
+  </section>
+
+  <!-- ================================================================
+       FEATURED DROPS (demo products that feed the cart drawer)
+       ================================================================ -->
+  <section id="drops" class="py-20 md:py-28 bg-coal border-y border-line">
+    <div class="wrap">
+      <div class="reveal flex items-end justify-between gap-6 flex-wrap mb-12">
+        <div>
+          <p class="eyebrow mb-4">Featured drops</p>
+          <h2 class="display text-[1.9rem] sm:text-[2.9rem]">Fresh off the <span class="text-ember">line</span></h2>
+        </div>
+        <a href="#products" class="text-sm font-bold uppercase tracking-[.14em] hover:text-ember transition">All products →</a>
+      </div>
+      <div class="grid sm:grid-cols-2 lg:grid-cols-4 gap-5" id="productGrid">
+        <!-- Product cards are rendered by JS from the PRODUCTS array below -->
+      </div>
+    </div>
+  </section>
+
+  <!-- ================================================================
+       ABOUT / COLLABS / GAS / CONTACT anchors (compact bands)
+       ================================================================ -->
+  <section id="about" class="py-20 md:py-28">
+    <div class="wrap grid lg:grid-cols-12 gap-10 items-start">
+      <div class="reveal lg:col-span-5">
+        <p class="eyebrow mb-4">About NAAR</p>
+        <h2 class="display text-[1.9rem] sm:text-[2.9rem]">Built by heads,<br>for heads</h2>
+      </div>
+      <div class="reveal lg:col-span-7 grid sm:grid-cols-3 gap-8" data-delay="1">
+        <div><p class="display text-[2rem] text-ember">1300°</p><p class="text-ash text-sm">Torch flame temperature, stable in 40 km/h wind.</p></div>
+        <div><p class="display text-[2rem] text-ember">100%</p><p class="text-ash text-sm">Organic, non-GMO paper from FSC-certified sources.</p></div>
+        <div><p class="display text-[2rem] text-ember">40+</p><p class="text-ash text-sm">Countries shipped to since our first drop.</p></div>
+      </div>
+    </div>
+  </section>
+
+  <section id="collabs" class="py-16 md:py-24 border-t border-line">
+    <div class="wrap">
+      <div class="reveal flex items-end justify-between gap-6 flex-wrap mb-10">
+        <div><p class="eyebrow mb-4">Collabs</p><h2 class="display text-[1.9rem] sm:text-[2.9rem]">Limited runs with <span class="text-ember">loud</span> partners</h2></div>
+        <p class="text-ash max-w-[36ch]">Artists, studios and brands we rate. Every collab lighter is numbered and never reprinted.</p>
+      </div>
+      <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+        <div class="reveal media-frame !aspect-[4/5]" data-delay="0"><img src="data:image/svg+xml;utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 400 500'%3E%3Crect width='400' height='500' fill='%231C1C21'/%3E%3Ccircle cx='200' cy='230' r='110' fill='%23F491A3' opacity='.9'/%3E%3Ctext x='200' y='470' text-anchor='middle' font-family='monospace' font-size='16' fill='%238E8E99' letter-spacing='3'%3ECOLLAB 400×500%3C/text%3E%3C/svg%3E" alt="Collab placeholder" loading="lazy" width="400" height="500"><span class="tag">Studio Fuoco</span></div>
+        <div class="reveal media-frame !aspect-[4/5]" data-delay="1"><img src="data:image/svg+xml;utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 400 500'%3E%3Crect width='400' height='500' fill='%23121215'/%3E%3Crect x='90' y='120' width='220' height='220' rx='30' fill='%23F3F0EA'/%3E%3Ctext x='200' y='470' text-anchor='middle' font-family='monospace' font-size='16' fill='%238E8E99' letter-spacing='3'%3ECOLLAB 400×500%3C/text%3E%3C/svg%3E" alt="Collab placeholder" loading="lazy" width="400" height="500"><span class="tag">Kaya Press</span></div>
+        <div class="reveal media-frame !aspect-[4/5]" data-delay="2"><img src="data:image/svg+xml;utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 400 500'%3E%3Crect width='400' height='500' fill='%231C1C21'/%3E%3Cpath d='M80 360 200 120l120 240z' fill='%232E8BD6' opacity='.85'/%3E%3Ctext x='200' y='470' text-anchor='middle' font-family='monospace' font-size='16' fill='%238E8E99' letter-spacing='3'%3ECOLLAB 400×500%3C/text%3E%3C/svg%3E" alt="Collab placeholder" loading="lazy" width="400" height="500"><span class="tag">Northside Skate</span></div>
+        <div class="reveal media-frame !aspect-[4/5]" data-delay="3"><img src="data:image/svg+xml;utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 400 500'%3E%3Crect width='400' height='500' fill='%23121215'/%3E%3Cg stroke='%23F3F0EA' stroke-width='14' fill='none'%3E%3Ccircle cx='200' cy='230' r='60'/%3E%3Ccircle cx='200' cy='230' r='110'/%3E%3C/g%3E%3Ctext x='200' y='470' text-anchor='middle' font-family='monospace' font-size='16' fill='%238E8E99' letter-spacing='3'%3ECOLLAB 400×500%3C/text%3E%3C/svg%3E" alt="Collab placeholder" loading="lazy" width="400" height="500"><span class="tag">Coming soon</span></div>
+      </div>
+    </div>
+  </section>
+
+  <section id="gas" class="py-16 md:py-24 border-t border-line bg-coal">
+    <div class="wrap reveal grid md:grid-cols-[1fr_auto] gap-8 items-center">
+      <div>
+        <p class="eyebrow mb-3">Gas</p>
+        <h2 class="display text-[1.7rem] sm:text-[2.3rem]">Keep the flame alive</h2>
+        <p class="text-ash max-w-[52ch] mt-3">Triple-refined butane, zero impurities, zero clogged jets. One can refills a NAAR lighter about 40 times.</p>
+      </div>
+      <button class="btn btn-dark" data-add="gas-300">Add refill · $8.00</button>
+    </div>
+  </section>
+
+  <section id="contact" class="py-20 md:py-28 border-t border-line">
+    <div class="wrap grid lg:grid-cols-2 gap-10">
+      <div class="reveal">
+        <p class="eyebrow mb-4">Contact</p>
+        <h2 class="display text-[1.9rem] sm:text-[2.9rem]">Talk to a <span class="text-ember">human</span></h2>
+        <p class="text-ash max-w-[44ch] mt-4">Orders, wholesale, collabs or just to say what's up. We answer within one business day.</p>
+        <div class="mt-8 flex flex-col gap-2 font-mono text-sm">
+          <span class="select-all">hello@naarofficial.example</span>
+          <span class="select-all">+1 (000) 000-0000</span>
+        </div>
+      </div>
+      <form class="reveal grid sm:grid-cols-2 gap-4" id="contactForm" data-delay="1" novalidate>
+        <div class="field"><label for="cName">Name</label><input id="cName" name="name" type="text" placeholder="Your name" required></div>
+        <div class="field"><label for="cEmail">Email</label><input id="cEmail" name="email" type="email" placeholder="you@email.com" required></div>
+        <div class="field sm:col-span-2"><label for="cMsg">Message</label><input id="cMsg" name="message" type="text" placeholder="What's on your mind?" required></div>
+        <div class="sm:col-span-2"><button class="btn btn-primary" type="submit">Send message</button></div>
+      </form>
+    </div>
+  </section>
+</main>
+
+<!-- ================================================================
+     FOOTER
+     ================================================================ -->
+<footer class="border-t border-line bg-coal">
+  <div class="wrap py-16 md:py-20">
+    <div class="grid md:grid-cols-12 gap-10">
+      <div class="md:col-span-4">
+        <a href="#top" class="display text-[1.7rem] leading-none">NAAR<span class="text-ember">.</span></a>
+        <p class="text-ash text-sm mt-4 max-w-[36ch]">Premium jet lighters and organic rolling papers for people who keep their head high.</p>
+        <form class="mt-6 flex gap-2 max-w-sm" id="newsletterForm" novalidate>
+          <label for="nlEmail" class="sr-only">Email</label>
+          <input id="nlEmail" type="email" placeholder="Email for drops & deals" class="flex-1 min-w-0 bg-smoke border border-line rounded-full px-4 py-3 text-sm focus:outline-none focus:border-ember" required>
+          <button class="btn btn-primary !px-5 !py-3 !text-[12px]" type="submit">Join</button>
+        </form>
+      </div>
+      <div class="md:col-span-2 md:col-start-6">
+        <p class="eyebrow mb-4">Shop</p>
+        <ul class="flex flex-col gap-2.5 text-sm font-semibold">
+          <li><a href="#products">Shop</a></li><li><a href="#lighters">Lighters</a></li><li><a href="#papers">Rolling Papers</a></li><li><a href="#gas">Gas</a></li>
+        </ul>
+      </div>
+      <div class="md:col-span-2">
+        <p class="eyebrow mb-4">Company</p>
+        <ul class="flex flex-col gap-2.5 text-sm font-semibold">
+          <li><a href="#about">About</a></li><li><a href="#collabs">Collabs</a></li><li><a href="#blog">Blog</a></li><li><a href="#wholesale">Wholesale</a></li>
+        </ul>
+      </div>
+      <div class="md:col-span-2">
+        <p class="eyebrow mb-4">Support</p>
+        <ul class="flex flex-col gap-2.5 text-sm font-semibold">
+          <li><a href="#faq">FAQ</a></li><li><a href="#shipping">Shipping</a></li><li><a href="#contact">Contact</a></li><li><a href="#login">Log in</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="mt-14 pt-8 border-t border-line flex flex-col sm:flex-row items-start sm:items-center justify-between gap-6">
+      <div class="flex gap-3">
+        <a href="https://instagram.com" target="_blank" rel="noopener" class="social" aria-label="Instagram"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="1" fill="currentColor"/></svg></a>
+        <a href="https://tiktok.com" target="_blank" rel="noopener" class="social" aria-label="TikTok"><svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M14 3h3a5 5 0 0 0 4 4v3a8 8 0 0 1-4-1.2V15a6 6 0 1 1-6-6v3a3 3 0 1 0 3 3V3Z"/></svg></a>
+        <a href="https://youtube.com" target="_blank" rel="noopener" class="social" aria-label="YouTube"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 12s0-4-.6-5.4A3 3 0 0 0 19.3 5C17.8 4.6 12 4.6 12 4.6s-5.8 0-7.3.4A3 3 0 0 0 2.6 6.6C2 8 2 12 2 12s0 4 .6 5.4a3 3 0 0 0 2.1 1.6c1.5.4 7.3.4 7.3.4s5.8 0 7.3-.4a3 3 0 0 0 2.1-1.6C22 16 22 12 22 12Z"/><path d="m10 9 5 3-5 3z" fill="currentColor"/></svg></a>
+        <a href="https://x.com" target="_blank" rel="noopener" class="social" aria-label="X"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="m4 4 16 16M20 4 4 20"/></svg></a>
+      </div>
+      <p class="text-ash text-xs font-mono">© 2026 NAAR. 21+ only. Smoke responsibly. · <a href="#privacy">Privacy</a> · <a href="#terms">Terms</a></p>
+    </div>
+  </div>
+</footer>
+
+<!-- ================================================================
+     CART DRAWER
+     ================================================================ -->
+<div class="backdrop" id="cartBackdrop"></div>
+<aside class="drawer" id="cartDrawer" role="dialog" aria-modal="true" aria-labelledby="cartTitle" aria-hidden="true">
+  <div class="flex items-center justify-between px-6 h-[72px] border-b border-line">
+    <h2 id="cartTitle" class="display text-[1.2rem] tracking-wider">Your cart <span class="text-ash text-[1.2rem]" id="cartHeaderCount"></span></h2>
+    <button class="icon-btn" id="cartClose" aria-label="Close cart"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M6 6l12 12M18 6 6 18"/></svg></button>
+  </div>
+
+  <!-- Empty state -->
+  <div class="flex-1 grid place-items-center px-8 text-center" id="cartEmpty">
+    <div>
+      <div class="w-20 h-20 rounded-full bg-smoke border border-line grid place-items-center mx-auto mb-6 text-ash">
+        <svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M6 6h15l-1.5 9h-12z"/><path d="M6 6 5 3H2"/><circle cx="9" cy="20" r="1.5"/><circle cx="18" cy="20" r="1.5"/></svg>
+      </div>
+      <p class="display text-[1.35rem]">Your cart is empty</p>
+      <p class="text-ash text-sm mt-2 max-w-[28ch] mx-auto">Nothing in here yet. Grab a lighter or a pack of papers and keep your head high.</p>
+      <button class="btn btn-primary mt-8" id="cartEmptyShop">Start shopping</button>
+    </div>
+  </div>
+
+  <!-- Line items -->
+  <div class="flex-1 overflow-auto px-6 py-4 flex flex-col gap-4" id="cartItems" hidden></div>
+
+  <!-- Summary -->
+  <div class="border-t border-line px-6 py-5 bg-ink/40">
+    <div class="flex items-center justify-between mb-1">
+      <span class="text-sm font-bold uppercase tracking-[.12em]">Subtotal</span>
+      <span class="price text-lg font-bold" id="cartSubtotal">$0.00</span>
+    </div>
+    <p class="text-ash text-xs mb-5">Shipping, taxes and discount codes calculated at checkout.</p>
+    <div class="grid gap-3">
+      <button class="btn btn-primary w-full" id="checkoutBtn" disabled>Check out</button>
+      <button class="btn btn-ghost w-full" id="continueBtn">Continue shopping</button>
+    </div>
+    <div class="flex items-center justify-center gap-3 mt-5 text-ash text-[11px] font-mono uppercase tracking-[.12em]">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="4" y="10" width="16" height="11" rx="2"/><path d="M8 10V7a4 4 0 0 1 8 0v3"/></svg>
+      Secure checkout · 21+ verified
+    </div>
+  </div>
+</aside>
+
+<!-- ================================================================
+     DISCOUNT MODAL — "The Perk Unlocker"
+     ================================================================ -->
+<div class="modal-backdrop" id="perkBackdrop">
+  <div class="modal" id="perkModal" role="dialog" aria-modal="true" aria-labelledby="perkTitle">
+    <div class="modal-glow"></div>
+    <button class="icon-btn absolute right-4 top-4 z-10 !border-0" id="perkClose" aria-label="Close">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M6 6l12 12M18 6 6 18"/></svg>
+    </button>
+
+    <div class="relative p-7 sm:p-9">
+      <div class="flex items-center gap-4 mb-6">
+        <span class="display text-[1.1rem] tracking-wider">NAAR<span class="text-ember">.</span></span>
+        <div class="progress flex-1" id="perkProgress" aria-hidden="true"><i class="is-done"></i><i></i><i></i></div>
+        <span class="eyebrow" id="perkStepLabel">Step 1 / 3</span>
+      </div>
+
+      <div class="modal-steps">
+        <!-- Step 1 -->
+        <section class="step is-active" data-step="1">
+          <p class="eyebrow mb-3 text-ember">Unlock your perk</p>
+          <h2 id="perkTitle" class="display text-[1.45rem] sm:text-[1.8rem] mb-2">First, please tell us who you are</h2>
+          <p class="text-ash text-sm mb-6">We'll tailor your pricing and your 15% welcome discount to how you buy.</p>
+          <div class="grid sm:grid-cols-3 gap-3" role="radiogroup" aria-label="Customer type" id="perkTiles">
+            <button type="button" class="tile" data-type="Consumer" role="radio" aria-checked="false">
+              <span class="t-ico"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="4"/><path d="M4 21a8 8 0 0 1 16 0"/></svg></span>
+              <span class="font-extrabold text-[15px]">Consumer</span>
+              <span class="text-ash text-xs leading-snug">Buying for yourself or a friend.</span>
+            </button>
+            <button type="button" class="tile" data-type="Retailer / Shop" role="radio" aria-checked="false">
+              <span class="t-ico"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l1.5-5h15L21 9"/><path d="M3 9h18v3a3 3 0 0 1-6 0 3 3 0 0 1-6 0 3 3 0 0 1-6 0z"/><path d="M5 14v7h14v-7"/></svg></span>
+              <span class="font-extrabold text-[15px]">Retailer / Shop</span>
+              <span class="text-ash text-xs leading-snug">Stocking NAAR in your store.</span>
+            </button>
+            <button type="button" class="tile" data-type="Wholesaler / Distributor" role="radio" aria-checked="false">
+              <span class="t-ico"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 7h11v10H3z"/><path d="M14 10h4l3 3v4h-7z"/><circle cx="7" cy="18" r="2"/><circle cx="17" cy="18" r="2"/></svg></span>
+              <span class="font-extrabold text-[15px]">Wholesaler / Distributor</span>
+              <span class="text-ash text-xs leading-snug">Moving volume across regions.</span>
+            </button>
+          </div>
+          <div class="mt-7 flex items-center justify-between gap-4 flex-wrap">
+            <button type="button" class="text-ash text-sm hover:text-bone transition" id="perkSkip">No thanks, I'll pay full price</button>
+            <button type="button" class="btn btn-primary" id="perkNext1" disabled>Next
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+            </button>
+          </div>
+        </section>
+
+        <!-- Step 2 -->
+        <section class="step" data-step="2">
+          <p class="eyebrow mb-3 text-ember" id="perkTypeEcho">Consumer</p>
+          <h2 class="display text-[1.45rem] sm:text-[1.8rem] mb-2">Where should we send your perk?</h2>
+          <p class="text-ash text-sm mb-6">One email, zero spam. Unsubscribe whenever.</p>
+          <form id="perkForm" class="grid sm:grid-cols-2 gap-4" novalidate>
+            <div class="field"><label for="pFirst">First name</label><input id="pFirst" name="firstName" type="text" autocomplete="given-name" placeholder="Jordan" required><span class="err">Please enter your first name.</span></div>
+            <div class="field"><label for="pLast">Last name</label><input id="pLast" name="lastName" type="text" autocomplete="family-name" placeholder="Reyes" required><span class="err">Please enter your last name.</span></div>
+            <div class="field sm:col-span-2"><label for="pEmail">Email</label><input id="pEmail" name="email" type="email" autocomplete="email" placeholder="jordan@email.com" required><span class="err">Enter a valid email address.</span></div>
+            <div class="field"><label for="pPhone">Phone</label><input id="pPhone" name="phone" type="tel" autocomplete="tel" placeholder="+1 555 000 0000" required><span class="err">Enter a phone number.</span></div>
+            <div class="field"><label for="pCountry">Country</label>
+              <select id="pCountry" name="country" required>
+                <option value="">Select country</option>
+                <option>United States</option><option>Canada</option><option>United Kingdom</option><option>Germany</option><option>France</option><option>Netherlands</option><option>Spain</option><option>Italy</option><option>Australia</option><option>Lebanon</option><option>United Arab Emirates</option><option>Other</option>
+              </select><span class="err">Select your country.</span>
+            </div>
+            <div class="sm:col-span-2 mt-3 flex items-center justify-between gap-4 flex-wrap">
+              <button type="button" class="text-ash text-sm hover:text-bone transition flex items-center gap-2" id="perkBack">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5M11 18l-6-6 6-6"/></svg>Back
+              </button>
+              <button type="submit" class="btn btn-primary" id="perkSubmit">Unlock 15% off</button>
+            </div>
+          </form>
+        </section>
+
+        <!-- Step 3 -->
+        <section class="step" data-step="3">
+          <div class="text-center py-2">
+            <div class="w-16 h-16 rounded-full bg-ember text-ink grid place-items-center mx-auto mb-5 shadow-[0_0_0_10px_rgba(46,139,214,.15)]">
+              <svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="m5 12 5 5L20 7"/></svg>
+            </div>
+            <h2 class="display text-[1.9rem] sm:text-[2.3rem] mb-2">Thank you<span class="text-ember">!</span></h2>
+            <p class="text-ash text-sm max-w-[36ch] mx-auto mb-7">Your perk is live, <span id="perkNameEcho" class="text-bone font-bold">friend</span>. Use this code at checkout for <strong class="text-bone">15% off</strong> your first order.</p>
+            <div class="code-box mb-6 text-left">
+              <div><p class="eyebrow mb-1">Discount code</p><code id="perkCode">HEADHIGH15</code></div>
+              <button type="button" class="btn btn-ghost !px-4 !py-2.5 !text-[12px]" id="perkCopy">Copy</button>
+            </div>
+            <button type="button" class="btn btn-primary w-full" id="perkStart">Start shopping</button>
+            <p class="text-ash text-[11px] mt-4 font-mono">Valid 14 days · one per customer · can't be combined</p>
+          </div>
+        </section>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ================================================================
+     FLOATING CHAT WIDGET
+     ================================================================ -->
+<div class="chat-panel" id="chatPanel" role="dialog" aria-label="Chat with NAAR">
+  <div class="flex items-center gap-3 px-4 py-3 border-b border-line bg-smoke">
+    <span class="relative w-9 h-9 rounded-full bg-ember text-ink display text-[.9rem] grid place-items-center">N<span class="absolute -right-0.5 -bottom-0.5 w-3 h-3 rounded-full bg-emerald-400 border-2 border-smoke"></span></span>
+    <div class="flex-1 min-w-0"><p class="font-extrabold text-sm leading-tight">NAAR Support</p><p class="text-ash text-xs">Typically replies in minutes</p></div>
+    <button class="icon-btn !w-8 !h-8" id="chatClose" aria-label="Close chat"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M6 6l12 12M18 6 6 18"/></svg></button>
+  </div>
+  <div class="p-4 flex flex-col gap-2 max-h-[260px] overflow-auto" id="chatLog">
+    <div class="bubble them">Hey! 👋 Welcome to NAAR. Need help picking a lighter, tracking an order, or talking wholesale?</div>
+  </div>
+  <form class="flex gap-2 p-3 border-t border-line" id="chatForm">
+    <label for="chatInput" class="sr-only">Message</label>
+    <input id="chatInput" type="text" placeholder="Type a message…" class="flex-1 min-w-0 bg-smoke border border-line rounded-full px-4 py-2.5 text-sm focus:outline-none focus:border-ember" autocomplete="off">
+    <button class="btn btn-primary !px-4 !py-2.5" type="submit" aria-label="Send"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></button>
+  </form>
+</div>
+<button class="chat-fab" id="chatFab" aria-label="Open chat" aria-expanded="false">
+  <svg id="chatFabIcon" width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12a8 8 0 0 1-11.6 7.1L4 21l1.9-5.4A8 8 0 1 1 21 12Z"/><path d="M8 12h.01M12 12h.01M16 12h.01"/></svg>
+</button>
+
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+<script>
+/* =====================================================================
+   NAAR landing — vanilla JS, organised as small modules.
+   Each module is self-contained; delete one and the rest keep working.
+   ===================================================================== */
+(() => {
+  const $  = (s, r = document) => r.querySelector(s);
+  const $$ = (s, r = document) => [...r.querySelectorAll(s)];
+  const money = n => '$' + n.toFixed(2);
+  const storage = {
+    get(k) { try { return localStorage.getItem(k); } catch { return null; } },
+    set(k, v) { try { localStorage.setItem(k, v); } catch {} }
+  };
+
+  /* ---------- Toast -------------------------------------------------- */
+  const Toast = (() => {
+    const el = $('#toast'); let t;
+    return { show(msg) { el.textContent = msg; el.classList.add('is-open'); clearTimeout(t); t = setTimeout(() => el.classList.remove('is-open'), 2200); } };
+  })();
+
+  /* ---------- Navigation --------------------------------------------- */
+  (function Nav() {
+    const nav = $('#nav');
+    const onScroll = () => nav.classList.toggle('is-scrolled', window.scrollY > 10);
+    onScroll(); window.addEventListener('scroll', onScroll, { passive: true });
+
+    // Shop megamenu: hover on desktop, click/keyboard everywhere
+    const item = $('#shopItem'), toggle = $('#shopToggle');
+    const open = v => { item.classList.toggle('is-open', v); toggle.setAttribute('aria-expanded', String(v)); };
+    let hoverTimer;
+    item.addEventListener('mouseenter', () => { clearTimeout(hoverTimer); open(true); });
+    item.addEventListener('mouseleave', () => { hoverTimer = setTimeout(() => open(false), 160); });
+    toggle.addEventListener('click', e => { e.preventDefault(); open(!item.classList.contains('is-open')); });
+    document.addEventListener('click', e => { if (!item.contains(e.target)) open(false); });
+    document.addEventListener('keydown', e => { if (e.key === 'Escape') open(false); });
+    $$('#shopMega a').forEach(a => a.addEventListener('click', () => open(false)));
+
+    // Mobile menu
+    const menu = $('#mobileMenu'), btn = $('#menuToggle'), icon = $('#menuIcon');
+    const setMenu = v => {
+      menu.classList.toggle('is-open', v); menu.setAttribute('aria-hidden', String(!v));
+      btn.setAttribute('aria-expanded', String(v)); document.body.classList.toggle('no-scroll', v);
+      icon.innerHTML = v ? '<path d="M6 6l12 12M18 6 6 18"/>' : '<path d="M3 7h18M3 12h18M3 17h18"/>';
+    };
+    btn.addEventListener('click', () => setMenu(!menu.classList.contains('is-open')));
+    $$('[data-close-menu]').forEach(a => a.addEventListener('click', () => setMenu(false)));
+    window.NAAR_closeMenu = () => setMenu(false);
+  })();
+
+  /* ---------- Products + Cart ---------------------------------------- */
+  const PRODUCTS = [
+    { id: 'lt-001', name: 'Ember Jet Lighter', cat: 'Lighters', price: 34, badge: 'Best seller', hue: '#2E8BD6' },
+    { id: 'lt-002', name: 'Obsidian Jet Lighter', cat: 'Lighters', price: 38, badge: 'Limited', hue: '#F3F0EA' },
+    { id: 'rp-010', name: 'Organic Papers · King Size', cat: 'Rolling papers', price: 12, badge: 'Multi-Doob tube', hue: '#8E8E99' },
+    { id: 'gas-300', name: 'Triple-Refined Butane 300ml', cat: 'Gas', price: 8, badge: 'Refill', hue: '#704C9F' }
+  ];
+  const productSVG = p => `data:image/svg+xml;utf8,` + encodeURIComponent(
+    `<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 600 600'><rect width='600' height='600' fill='#121215'/><circle cx='300' cy='290' r='150' fill='${p.hue}' opacity='.14'/><rect x='240' y='150' width='120' height='300' rx='20' fill='#1C1C21' stroke='#2A2A31' stroke-width='3'/><rect x='258' y='170' width='84' height='150' rx='8' fill='${p.hue}' opacity='.9'/><text x='300' y='540' text-anchor='middle' font-family='monospace' font-size='18' fill='#8E8E99' letter-spacing='4'>600×600</text></svg>`);
+
+  const Cart = (() => {
+    const state = { items: [] }; // {id, qty}
+    const drawer = $('#cartDrawer'), backdrop = $('#cartBackdrop');
+    const els = { count: $('#cartCount'), hcount: $('#cartHeaderCount'), empty: $('#cartEmpty'), list: $('#cartItems'), subtotal: $('#cartSubtotal'), checkout: $('#checkoutBtn') };
+    let lastFocus = null;
+
+    const find = id => PRODUCTS.find(p => p.id === id);
+    const total = () => state.items.reduce((s, i) => s + find(i.id).price * i.qty, 0);
+    const count = () => state.items.reduce((s, i) => s + i.qty, 0);
+
+    function render() {
+      const n = count();
+      els.count.textContent = n; els.hcount.textContent = n ? `(${n})` : '';
+      els.empty.hidden = n > 0; els.list.hidden = n === 0;
+      els.checkout.disabled = n === 0;
+      els.subtotal.textContent = money(total());
+      els.list.innerHTML = state.items.map(i => { const p = find(i.id); return `
+        <div class="flex gap-4 items-center">
+          <div class="w-20 h-20 rounded-xl overflow-hidden border border-line flex-none bg-ink"><img src="${productSVG(p)}" alt="" class="w-full h-full object-cover"></div>
+          <div class="flex-1 min-w-0">
+            <p class="font-extrabold text-sm leading-tight truncate">${p.name}</p>
+            <p class="text-ash text-xs mt-0.5">${p.cat}</p>
+            <div class="flex items-center justify-between mt-2 gap-3">
+              <div class="qty"><button data-qty="${p.id}" data-d="-1" aria-label="Decrease">−</button><span>${i.qty}</span><button data-qty="${p.id}" data-d="1" aria-label="Increase">+</button></div>
+              <span class="price text-sm font-bold">${money(p.price * i.qty)}</span>
+            </div>
+          </div>
+          <button class="icon-btn !w-8 !h-8 !border-0 text-ash" data-remove="${p.id}" aria-label="Remove"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M6 6l12 12M18 6 6 18"/></svg></button>
+        </div>`; }).join('');
+    }
+    function add(id, qty = 1) {
+      const row = state.items.find(i => i.id === id);
+      row ? row.qty += qty : state.items.push({ id, qty });
+      render(); Toast.show(`${find(id).name} added to cart`); open(true);
+    }
+    function change(id, d) {
+      const row = state.items.find(i => i.id === id); if (!row) return;
+      row.qty += d; if (row.qty <= 0) state.items = state.items.filter(i => i.id !== id); render();
+    }
+    function open(v) {
+      if (v) { lastFocus = document.activeElement; window.NAAR_closeMenu?.(); }
+      drawer.classList.toggle('is-open', v); backdrop.classList.toggle('is-open', v);
+      drawer.setAttribute('aria-hidden', String(!v)); document.body.classList.toggle('no-scroll', v);
+      if (v) setTimeout(() => $('#cartClose').focus(), 300); else lastFocus?.focus?.();
+    }
+
+    ['#cartOpen', '#cartOpenMobile'].forEach(s => $(s).addEventListener('click', () => open(true)));
+    ['#cartClose', '#cartBackdrop', '#continueBtn', '#cartEmptyShop'].forEach(s => $(s).addEventListener('click', () => open(false)));
+    $('#cartEmptyShop').addEventListener('click', () => $('#drops').scrollIntoView({ behavior: 'smooth' }));
+    els.checkout.addEventListener('click', () => Toast.show('Checkout is a placeholder in this demo'));
+    document.addEventListener('keydown', e => { if (e.key === 'Escape' && drawer.classList.contains('is-open')) open(false); });
+    els.list.addEventListener('click', e => {
+      const q = e.target.closest('[data-qty]'); if (q) return change(q.dataset.qty, +q.dataset.d);
+      const r = e.target.closest('[data-remove]'); if (r) return change(r.dataset.remove, -999);
+    });
+    document.addEventListener('click', e => { const b = e.target.closest('[data-add]'); if (b) add(b.dataset.add); });
+
+    render();
+    return { add, open };
+  })();
+
+  // Render product grid
+  $('#productGrid').innerHTML = PRODUCTS.map((p, i) => `
+    <article class="card reveal" data-delay="${i % 4}">
+      <div class="media-frame">
+        <!-- Replace with your product image, e.g. https://via.placeholder.com/600x600 -->
+        <img src="${productSVG(p)}" alt="${p.name} placeholder" loading="lazy" width="600" height="600">
+        <span class="tag">${p.badge}</span>
+      </div>
+      <div class="p-5 flex flex-col gap-3 flex-1">
+        <div><p class="eyebrow mb-1">${p.cat}</p><h3 class="font-extrabold text-[15px] leading-snug">${p.name}</h3></div>
+        <div class="mt-auto flex items-center justify-between gap-3">
+          <span class="price font-bold">${money(p.price)}</span>
+          <button class="btn btn-ghost !px-4 !py-2 !text-[12px]" data-add="${p.id}">Add to cart</button>
+        </div>
+      </div>
+    </article>`).join('');
+
+  /* ---------- Scroll reveal ------------------------------------------ */
+  (function Reveal() {
+    const els = $$('.reveal');
+    const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+    if (reduce || !('IntersectionObserver' in window)) { els.forEach(e => e.classList.add('is-visible')); return; }
+    const vh = window.innerHeight;
+    els.forEach(e => { const r = e.getBoundingClientRect(); e.classList.add(r.top < vh * 0.92 ? 'is-visible' : 'is-pending'); });
+    const io = new IntersectionObserver(entries => entries.forEach(en => {
+      if (en.isIntersecting) { en.target.classList.remove('is-pending'); en.target.classList.add('is-visible'); io.unobserve(en.target); }
+    }), { threshold: 0.12, rootMargin: '0px 0px -8% 0px' });
+    els.forEach(e => e.classList.contains('is-pending') && io.observe(e));
+  })();
+
+  /* ---------- Parallax (subtle) -------------------------------------- */
+  (function Parallax() {
+    const els = $$('.parallax'); if (!els.length || matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+    let ticking = false;
+    const update = () => {
+      const vh = window.innerHeight;
+      els.forEach(el => {
+        const r = el.getBoundingClientRect(); const mid = r.top + r.height / 2 - vh / 2;
+        const f = parseFloat(el.dataset.parallax || '0.08');
+        el.style.setProperty('--py', `${(-mid * f).toFixed(1)}px`);
+        el.style.transform = el.classList.contains('is-visible') ? `translateY(var(--py))` : '';
+      }); ticking = false;
+    };
+    window.addEventListener('scroll', () => { if (!ticking) { requestAnimationFrame(update); ticking = true; } }, { passive: true });
+    window.addEventListener('resize', update); setTimeout(update, 50);
+  })();
+
+  /* ---------- Rotating lighter (scroll-driven, -120° → 0°) ----------- */
+  (function LighterSpin() {
+    const el = $('#lighterSpin'); if (!el) return;
+    if (matchMedia('(prefers-reduced-motion: reduce)').matches) { el.style.setProperty('--spin', '-20deg'); return; }
+    const frame = el.closest('.media-frame');
+    const update = () => {
+      const r = frame.getBoundingClientRect(), vh = window.innerHeight;
+      const t = Math.min(1, Math.max(0, (vh - r.top) / (vh + r.height)));     // 0 below viewport → 1 above
+      el.style.setProperty('--spin', `${-120 + t * 110}deg`);
+    };
+    window.addEventListener('scroll', update, { passive: true }); window.addEventListener('resize', update); update();
+  })();
+
+  /* ---------- Hero title distort (canvas echo of the headline) ------- */
+  (function TitleDistort() {
+    const c = $('#heroDistort'), title = $('#heroTitle'); if (!c || !title) return;
+    if (matchMedia('(prefers-reduced-motion: reduce)').matches) { c.remove(); return; }
+    const ctx = c.getContext('2d'); let w, h, t = 0, raf;
+    const size = () => { const r = c.parentElement.getBoundingClientRect(); w = c.width = r.width; h = c.height = r.height; };
+    size(); window.addEventListener('resize', size);
+    const draw = () => {
+      t += 0.012; ctx.clearRect(0, 0, w, h);
+      const text = title.dataset.title, fs = Math.min(w / 7.5, 150);
+      ctx.font = `700 ${fs}px Unbounded, Manrope, sans-serif`; ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
+      ctx.fillStyle = '#ffffff';
+      const y = h * 0.34, slices = 36, sh = fs * 1.3 / slices;
+      for (let i = 0; i < slices; i++) {
+        const dx = Math.sin(t * 2 + i * 0.35) * 14 + Math.cos(t + i * 0.1) * 6;
+        ctx.save(); ctx.beginPath(); ctx.rect(0, y - fs * 0.65 + i * sh, w, sh + 1); ctx.clip();
+        ctx.fillText(text, w / 2 + dx, y); ctx.restore();
+      }
+      raf = requestAnimationFrame(draw);
+    };
+    const start = () => { cancelAnimationFrame(raf); draw(); };
+    (document.fonts && document.fonts.ready ? document.fonts.ready : Promise.resolve()).then(start);
+    document.addEventListener('visibilitychange', () => document.hidden ? cancelAnimationFrame(raf) : start());
+  })();
+
+  /* ---------- Discount modal (3 steps) ------------------------------- */
+  (function Perk() {
+    const bd = $('#perkBackdrop'), steps = $$('.step'), bars = $$('#perkProgress i'), label = $('#perkStepLabel');
+    const state = { step: 1, type: null };
+    let lastFocus;
+
+    function go(n) {
+      const cur = steps.find(s => s.classList.contains('is-active'));
+      const next = steps.find(s => +s.dataset.step === n);
+      if (cur === next) return;
+      cur.classList.add('is-leaving');
+      setTimeout(() => {
+        cur.classList.remove('is-active', 'is-leaving'); next.classList.add('is-active');
+        bars.forEach((b, i) => b.classList.toggle('is-done', i < n));
+        label.textContent = `Step ${n} / 3`; state.step = n;
+        const f = next.querySelector('input, button.tile, button.btn'); f?.focus?.();
+      }, 260);
+    }
+    function open(v) {
+      if (v) lastFocus = document.activeElement;
+      bd.classList.toggle('is-open', v); document.body.classList.toggle('no-scroll', v);
+      if (v) setTimeout(() => $('#perkTiles .tile').focus(), 400); else lastFocus?.focus?.();
+    }
+
+    // Step 1: tiles
+    const tiles = $$('#perkTiles .tile'), next1 = $('#perkNext1');
+    tiles.forEach(t => t.addEventListener('click', () => {
+      tiles.forEach(x => { x.classList.remove('is-selected'); x.setAttribute('aria-checked', 'false'); });
+      t.classList.add('is-selected'); t.setAttribute('aria-checked', 'true');
+      state.type = t.dataset.type; next1.disabled = false; $('#perkTypeEcho').textContent = state.type;
+    }));
+    next1.addEventListener('click', () => go(2));
+    $('#perkSkip').addEventListener('click', () => { storage.set('naar_perk_seen', '1'); open(false); });
+
+    // Step 2: form
+    const form = $('#perkForm');
+    const validate = () => {
+      let ok = true;
+      $$('.field', form).forEach(f => {
+        const input = f.querySelector('input, select'); let valid = input.value.trim() !== '';
+        if (input.type === 'email') valid = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(input.value.trim());
+        f.classList.toggle('is-invalid', !valid); if (!valid) ok = false;
+      }); return ok;
+    };
+    form.addEventListener('input', e => e.target.closest('.field')?.classList.remove('is-invalid'));
+    form.addEventListener('submit', e => {
+      e.preventDefault(); if (!validate()) { $('.is-invalid input, .is-invalid select', form)?.focus(); return; }
+      const btn = $('#perkSubmit'); btn.disabled = true; btn.textContent = 'Unlocking…';
+      setTimeout(() => {
+        btn.disabled = false; btn.textContent = 'Unlock 15% off';
+        $('#perkNameEcho').textContent = $('#pFirst').value.trim() || 'friend';
+        storage.set('naar_perk_seen', '1'); go(3);
+      }, 700);
+    });
+    $('#perkBack').addEventListener('click', () => go(1));
+
+    // Step 3
+    $('#perkCopy').addEventListener('click', async () => {
+      const code = $('#perkCode').textContent;
+      try { await navigator.clipboard.writeText(code); Toast.show('Code copied'); }
+      catch { const r = document.createRange(); r.selectNodeContents($('#perkCode')); const s = getSelection(); s.removeAllRanges(); s.addRange(r); Toast.show('Select and copy the code'); }
+    });
+    $('#perkStart').addEventListener('click', () => { open(false); $('#products').scrollIntoView({ behavior: 'smooth' }); });
+
+    // Close
+    $('#perkClose').addEventListener('click', () => { storage.set('naar_perk_seen', '1'); open(false); });
+    bd.addEventListener('click', e => { if (e.target === bd) { storage.set('naar_perk_seen', '1'); open(false); } });
+    document.addEventListener('keydown', e => { if (e.key === 'Escape' && bd.classList.contains('is-open')) open(false); });
+
+    // Show on load (once per browser). Remove the storage check to show on every visit.
+    if (!storage.get('naar_perk_seen')) setTimeout(() => open(true), 1400);
+    window.NAAR_openPerk = () => open(true);
+  })();
+
+  /* ---------- Chat widget -------------------------------------------- */
+  (function Chat() {
+    const panel = $('#chatPanel'), fab = $('#chatFab'), log = $('#chatLog'), form = $('#chatForm'), input = $('#chatInput');
+    const open = v => { panel.classList.toggle('is-open', v); fab.setAttribute('aria-expanded', String(v)); if (v) setTimeout(() => input.focus(), 250); };
+    fab.addEventListener('click', () => open(!panel.classList.contains('is-open')));
+    $('#chatClose').addEventListener('click', () => open(false));
+    const replies = ['Got it! A teammate will jump in shortly. Meanwhile, every lighter is windproof and refillable 🔥', 'Looking for wholesale? Pick “Retailer / Shop” in the welcome perk and we’ll send tiered pricing.', 'Orders over $50 ship free. Tracking lands in your inbox the moment it leaves our warehouse.'];
+    let i = 0;
+    form.addEventListener('submit', e => {
+      e.preventDefault(); const t = input.value.trim(); if (!t) return;
+      log.insertAdjacentHTML('beforeend', `<div class="bubble me"></div>`); log.lastElementChild.textContent = t; input.value = '';
+      log.scrollTop = log.scrollHeight;
+      setTimeout(() => { log.insertAdjacentHTML('beforeend', `<div class="bubble them"></div>`); log.lastElementChild.textContent = replies[i++ % replies.length]; log.scrollTop = log.scrollHeight; }, 800);
+    });
+  })();
+
+  /* ---------- Misc forms (placeholders) ------------------------------ */
+  $('#newsletterForm').addEventListener('submit', e => { e.preventDefault(); const v = $('#nlEmail').value.trim(); if (!v) return; $('#nlEmail').value = ''; Toast.show('You\'re on the list'); });
+  $('#contactForm').addEventListener('submit', e => { e.preventDefault(); Toast.show('Message sent (demo)'); e.target.reset(); });
+})();
+</script>
+</body>
+</html>
